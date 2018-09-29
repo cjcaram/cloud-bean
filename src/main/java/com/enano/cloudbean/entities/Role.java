@@ -28,6 +28,11 @@ public class Role{
     this.name = name;
     this.description = description;
   }
+  
+  public Role(String name, String description) {
+    this.name = name;
+    this.description = description;
+  }
 
   public Long getId() {
     return id;
@@ -51,6 +56,16 @@ public class Role{
 
   public void setDescription(String description) {
     this.description = description;
+  }
+  
+  @Override
+  public boolean equals(Object object)
+  {
+      return (object != null && 
+          object instanceof Role && 
+          this.name != ((Role) object).name && 
+          this.description != ((Role) object).description && 
+          this.description != ((Role) object).description);
   }
     
 }

@@ -3,11 +3,13 @@ package com.enano.cloudbean.entities;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
@@ -23,8 +25,9 @@ public class User {
   @Column (name = "MODIFICATION_DATE")
   private Date modificationDate;
   
-  @Column (name = "ROLE_ID")
-  private Long rolId;
+  @ManyToOne
+  @JoinColumn(name = "ROLE_ID")
+  private Role role;
   
   @Column (name = "ACTIVE")
   private boolean active;
@@ -37,22 +40,22 @@ public class User {
     
   }
   
-  public User(Long id, String userName, String password, Date modificationDate, Long rolId,
+  public User(Long id, String userName, String password, Date modificationDate, Role role,
       boolean active) {
     this.id = id;
     this.userName = userName;
     this.password = password;
     this.modificationDate = modificationDate;
-    this.rolId = rolId;
+    this.role = role;
     this.active = active;
   }
   
-  public User(String userName, String password, Long rolId,
+  public User(String userName, String password, Role role,
       boolean active) {
     this.userName = userName;
     this.password = password;
     this.modificationDate = new Date();
-    this.rolId = rolId;
+    this.role = role;
     this.active = active;
   }
 
@@ -85,12 +88,12 @@ public class User {
     this.modificationDate = modificationDate;
   }
 
-  public Long getRolId() {
-    return rolId;
+  public Role getRole() {
+    return role;
   }
 
-  public void setRolId(Long rolId) {
-    this.rolId = rolId;
+  public void setRole(Role role) {
+    this.role = role;
   }
 
   public boolean isActive() {

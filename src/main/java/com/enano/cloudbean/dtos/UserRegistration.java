@@ -1,14 +1,18 @@
 package com.enano.cloudbean.dtos;
 
+import com.enano.cloudbean.entities.Role;
+
 public class UserRegistration extends UserProfile{
+  private Integer id;
   private String password;
   private String passwordConfirmation;
   
   public UserRegistration() {
   }
 
-  public UserRegistration(String username, String role, String password, String passwordConfirmation) {
+  public UserRegistration(String username, Role role, Integer id,String password, String passwordConfirmation) {
     super(username, role);
+    this.id = id;
     this.password = password;
     this.passwordConfirmation = passwordConfirmation;
   }
@@ -27,5 +31,13 @@ public class UserRegistration extends UserProfile{
 
   public void setPasswordConfirmation(String passwordConfirmation) {
       this.passwordConfirmation = passwordConfirmation;
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
   }
 }

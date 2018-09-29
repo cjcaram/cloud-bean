@@ -1,12 +1,14 @@
 package com.enano.cloudbean.dtos;
 
+import com.enano.cloudbean.entities.Role;
+
 public class UserProfile {
   private String username;
-  private String role;
+  private Role role;
   
   public UserProfile () {}
   
-  public UserProfile(String username, String role) {
+  public UserProfile(String username, Role role) {
     this.username = username;
     this.role = role;
   }
@@ -18,11 +20,11 @@ public class UserProfile {
   public void setUsername(String username) {
     this.username = username;
   }
-  public String getRole() {
+  public Role getRole() {
     return role;
   }
 
-  public void setRole(String role) {
+  public void setRole(Role role) {
     this.role = role;
   }
 
