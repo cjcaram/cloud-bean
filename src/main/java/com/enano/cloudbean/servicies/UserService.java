@@ -37,8 +37,8 @@ public class UserService {
       return repo.findByUserName(username).get();
     }
 
-    public User setUserAsInactived(int id) {
-      User oldUser = repo.findById(Long.valueOf(id)).get();
+    public User setUserAsInactived(Integer id) {
+      User oldUser = repo.getOne(id.longValue());
       oldUser.setActive(false);
       return repo.saveAndFlush(oldUser);
     }
@@ -46,7 +46,7 @@ public class UserService {
     public User save(UserRegistration userRegistration){
       User newUser = getUserFromUserRegistration(userRegistration);
       newUser.setPassword(passwordEncoder.encode(userRegistration.getPassword()));
-      return repo.save(getUserFromUserRegistration(userRegistration));
+      return repo.saveAndFlush(getUserFromUserRegistration(userRegistration));
     }
     
     public User updateUserWithNoPswrd(UserRegistration userRegistration) {

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -106,9 +107,18 @@ public class UserController {
     return userService.getUserProfileByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
   }
   
-  @GetMapping(value = "/deleteUser")
-  public User setUserAsInactived(@PathVariable int id) {
-    return userService.setUserAsInactived(id);
+  @DeleteMapping(value = "/disableUser")
+  public ResponseEntity<?> setUserAsInactived(@RequestBody UserRegistration userToDisable) {
+    ResponseEntity<?> response = null;
+    Integer id = userToDisable.getId();
+    try {
+      response = ResponseEntity.ok(userService.setUserAsInactived(id));
+    }catch(Exception e) {
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to Disable User with id " + id);
+      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      LOGGER.error(httpErrorBody);
+    }
+    return response;
   }
   
   @PostMapping(value = "/logoutCurrentUser")

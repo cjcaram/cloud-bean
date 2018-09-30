@@ -16,6 +16,13 @@ public class HttpErrorBody {
     this.exeption = exeption;
     this.httpStatus = httpStatus;
   }
+  
+  public HttpErrorBody(HttpStatus httpStatus, Exception exeption, String knownErro) {
+    this.exceptionErrorMsg = exeption.getMessage();
+    this.knownErros.add(knownErro);
+    this.exeption = exeption;
+    this.httpStatus = httpStatus;
+  }
 
   public String getExceptionErrorMsg() {
     return exceptionErrorMsg;
