@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.enano.cloudbean.entities.Role;
-import com.enano.cloudbean.servicies.RoleService;
+import com.enano.cloudbean.services.RoleService;
 
 @RestController
 @RequestMapping("/role")

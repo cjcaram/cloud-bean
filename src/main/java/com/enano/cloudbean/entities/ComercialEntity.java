@@ -6,43 +6,48 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="entidad_comercial")
-public class EnitdadComercial {
+public class ComercialEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Column(name="nombre")
-  private String nombre;
+  private String name;
   @Column(name="cuit")
   private String cuit;
   @OneToOne
   @JoinColumn(name = "ubicacion")
-  private OrigenDestino ubicacion;
+  private Location location;
   @Column(name="telefono")
-  private String telefono;
+  private String phone;
   @Column(name="mail")
   private String mail;
   @Column(name="observaciones")
   private String obs;
+  @ManyToOne
+  @JoinColumn(name = "responsible_type_id")
+  private ResponsibleType responsibleType;
   
-  public EnitdadComercial() {
+  public ComercialEntity() {
     
   }
   
-  public EnitdadComercial(Long id, String nombre, String cuit, OrigenDestino ubicacion,
-      String telefono, String mail, String obs) {
+  public ComercialEntity(Long id, String name, String cuit, Location location,
+      String phone, String mail, String obs, ResponsibleType responsibleType) {
     this.id = id;
-    this.nombre = nombre;
+    this.name = name;
     this.cuit = cuit;
-    this.ubicacion = ubicacion;
-    this.telefono = telefono;
+    this.location = location;
+    this.phone = phone;
     this.mail = mail;
     this.obs = obs;
+    this.responsibleType = responsibleType;
   }
 
   public Long getId() {
@@ -53,12 +58,12 @@ public class EnitdadComercial {
     this.id = id;
   }
 
-  public String getNombre() {
-    return nombre;
+  public String getName() {
+    return name;
   }
 
-  public void setNombre(String nombre) {
-    this.nombre = nombre;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getCuit() {
@@ -69,20 +74,20 @@ public class EnitdadComercial {
     this.cuit = cuit;
   }
 
-  public OrigenDestino getUbicacion() {
-    return ubicacion;
+  public Location getLocation() {
+    return location;
   }
 
-  public void setUbicacion(OrigenDestino ubicacion) {
-    this.ubicacion = ubicacion;
+  public void setLocation(Location location) {
+    this.location = location;
   }
 
-  public String getTelefono() {
-    return telefono;
+  public String getPhone() {
+    return phone;
   }
 
-  public void setTelefono(String telefono) {
-    this.telefono = telefono;
+  public void setPhone(String phone) {
+    this.phone = phone;
   }
 
   public String getMail() {
@@ -99,6 +104,14 @@ public class EnitdadComercial {
 
   public void setObs(String obs) {
     this.obs = obs;
+  }
+
+  public ResponsibleType getResponsibleType() {
+    return responsibleType;
+  }
+
+  public void setResponsibleType(ResponsibleType responsibleType) {
+    this.responsibleType = responsibleType;
   }
   
 }

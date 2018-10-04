@@ -1,4 +1,4 @@
-package com.enano.cloudbean.servicies;
+package com.enano.cloudbean.services;
 
 import java.util.List;
 

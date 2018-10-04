@@ -12,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +22,8 @@ import com.enano.cloudbean.dtos.UserProfile;
 import com.enano.cloudbean.dtos.UserRegistration;
 import com.enano.cloudbean.entities.Role;
 import com.enano.cloudbean.entities.User;
-import com.enano.cloudbean.servicies.RoleService;
-import com.enano.cloudbean.servicies.UserService;
+import com.enano.cloudbean.services.RoleService;
+import com.enano.cloudbean.services.UserService;
 import com.enano.cloudbean.validations.UserValidation;
 
 @RestController
@@ -51,7 +50,7 @@ public class UserController {
     try {
       roleList =  roleService.getAllRoles();
       userValidator.setRoles(roleList);
-      if (isEdition(userRegistration) ) {
+      if (ZUtils.isEdition(userRegistration.getId())) {
         response = editUser(userRegistration, userValidator);
       } else {
         response = addNewUser(userRegistration, userValidator);
@@ -84,10 +83,6 @@ public class UserController {
     return response;
   }
 
-  private boolean isEdition(UserRegistration userRegistration) {
-    return userRegistration.getId() != null && userRegistration.getId() > 0;
-  }
-  
   private boolean isPswrdUpdateRequired(UserRegistration userRegistration) {
     return (!userRegistration.getPassword().isEmpty() && !userRegistration.getPasswordConfirmation().isEmpty());
   }

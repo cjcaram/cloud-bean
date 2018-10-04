@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.enano.cloudbean.dtos.UserRegistration;
 import com.enano.cloudbean.entities.Role;
-import com.enano.cloudbean.servicies.UserService;
+import com.enano.cloudbean.services.UserService;
 
 @SpringBootApplication
 public class CloudBeanApplication {

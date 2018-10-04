@@ -16,9 +16,9 @@ import com.enano.cloudbean.dtos.CommentDto;
 import com.enano.cloudbean.entities.Comment;
 import com.enano.cloudbean.entities.Post;
 import com.enano.cloudbean.entities.User;
-import com.enano.cloudbean.servicies.CommentService;
-import com.enano.cloudbean.servicies.PostService;
-import com.enano.cloudbean.servicies.UserService;
+import com.enano.cloudbean.services.CommentService;
+import com.enano.cloudbean.services.PostService;
+import com.enano.cloudbean.services.UserService;
 
 @RestController
 public class BlogController {
