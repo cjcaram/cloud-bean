@@ -41,7 +41,7 @@ public class LocationController {
       }
     } catch (Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error adding or updating Location");
-      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      response = new ResponseEntity<>(httpErrorBody.getKnownErros(), httpErrorBody.getHttpStatus());
       LOGGER.error(httpErrorBody);
     }
     return response;

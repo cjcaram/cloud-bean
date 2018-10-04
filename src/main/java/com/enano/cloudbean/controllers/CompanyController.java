@@ -41,7 +41,7 @@ public class CompanyController {
       }
     } catch (Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error adding or updating Company");
-      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
     return response;
@@ -55,7 +55,7 @@ public class CompanyController {
       response = ResponseEntity.ok(companyService.listAll());
     }catch(Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to fetch all companies");
-      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
     return response;
@@ -70,7 +70,7 @@ public class CompanyController {
       response = ResponseEntity.ok("Company with id ${id} has been deleted");
     }catch(Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to Delete Company id " + id);
-      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
     return response;

@@ -31,7 +31,7 @@ public class ResponsibleTypeController {
       response = ResponseEntity.ok(responsibleTypeService.listAll());
     }catch (Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Listing All Responsible Types");
-      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
     return response;

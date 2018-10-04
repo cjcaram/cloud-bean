@@ -57,7 +57,7 @@ public class UserController {
       }
     } catch (Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, userValidator.getErrorMessage());
-      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
     return response;
@@ -75,10 +75,10 @@ public class UserController {
     ResponseEntity<?> response;
     if (isPswrdUpdateRequired(userRegistration)) {
       userValidator.checkIfNewUserIsValid();
-      response = ResponseEntity.ok(userService.updateUserWithNoPswrd(userRegistration));
+      response = ResponseEntity.ok(userService.updateUser(userRegistration));
     } else {
       userValidator.checkIfNewUserIsValid(true);
-      response = ResponseEntity.ok(userService.updateUser(userRegistration));
+      response = ResponseEntity.ok(userService.updateUserWithNoPswrd(userRegistration));
     }
     return response;
   }
@@ -110,7 +110,7 @@ public class UserController {
       response = ResponseEntity.ok(userService.setUserAsInactived(id));
     }catch(Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to Disable User with id " + id);
-      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
     return response;
