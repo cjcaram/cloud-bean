@@ -19,9 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.enano.cloudbean.dtos.HttpErrorBody;
 import com.enano.cloudbean.dtos.UserProfile;
-import com.enano.cloudbean.dtos.UserRegistration;
+import com.enano.cloudbean.dtos.UserDto;
 import com.enano.cloudbean.entities.Role;
-import com.enano.cloudbean.entities.User;
 import com.enano.cloudbean.services.RoleService;
 import com.enano.cloudbean.services.UserService;
 import com.enano.cloudbean.validations.UserValidation;
@@ -43,7 +42,7 @@ public class UserController {
   private static final Logger LOGGER = LogManager.getLogger(UserController.class);
   
   @PostMapping(value = "/save")
-  public ResponseEntity<?> register(@RequestBody UserRegistration userRegistration) {
+  public ResponseEntity<?> register(@RequestBody UserDto userRegistration) {
     ResponseEntity<?> response = null;
     List<Role> roleList = new ArrayList<>();
     UserValidation userValidator = new UserValidation(userRegistration);
@@ -63,14 +62,14 @@ public class UserController {
     return response;
   }
 
-  private ResponseEntity<?> addNewUser(UserRegistration userRegistration, UserValidation userValidator)
+  private ResponseEntity<?> addNewUser(UserDto userRegistration, UserValidation userValidator)
       throws Exception {
     userValidator.checkIfNewUserIsValid();
     userRegistration.setId(null);
     return ResponseEntity.ok(userService.save(userRegistration));
   }
 
-  private ResponseEntity<?> editUser(UserRegistration userRegistration,
+  private ResponseEntity<?> editUser(UserDto userRegistration,
       UserValidation userValidator) throws Exception {
     ResponseEntity<?> response;
     if (isPswrdUpdateRequired(userRegistration)) {
@@ -83,17 +82,13 @@ public class UserController {
     return response;
   }
 
-  private boolean isPswrdUpdateRequired(UserRegistration userRegistration) {
+  private boolean isPswrdUpdateRequired(UserDto userRegistration) {
     return (!userRegistration.getPassword().isEmpty() && !userRegistration.getPasswordConfirmation().isEmpty());
   }
   
-  @GetMapping(value = "/users")
-  public List<User> getUsers() {
-    return userService.getAllUsers();
-  }
   
   @GetMapping(value = "/activeUsers")
-  public List<User> getActiveUsers() {
+  public List<UserDto> getActiveUsers() {
     return userService.getActiveUsers();
   }
   
@@ -103,7 +98,7 @@ public class UserController {
   }
   
   @DeleteMapping(value = "/disableUser")
-  public ResponseEntity<?> setUserAsInactived(@RequestBody UserRegistration userToDisable) {
+  public ResponseEntity<?> setUserAsInactived(@RequestBody UserDto userToDisable) {
     ResponseEntity<?> response = null;
     Integer id = userToDisable.getId();
     try {

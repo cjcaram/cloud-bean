@@ -4,26 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.enano.cloudbean.dtos.UserRegistration;
+import com.enano.cloudbean.dtos.UserDto;
 import com.enano.cloudbean.entities.Role;
 
 public class UserValidation {
   
-  private UserRegistration user;
+  private UserDto user;
   private List<String> errorMessage = new ArrayList<>();
   private boolean isValidUser = true;
   private List<Role> roleList;
-  //private boolean skipPswdCheck = false;
-  
-//  public void setSkipPswdCheck(boolean skipPswdCheck) {
-//    this.skipPswdCheck = skipPswdCheck;
-//  }
 
-  public UserValidation(UserRegistration userRegistration) {
+  public UserValidation(UserDto userRegistration) {
     this.user = userRegistration;
   }
   
-  public UserValidation(UserRegistration userRegistration, List<Role> allRoles) {
+  public UserValidation(UserDto userRegistration, List<Role> allRoles) {
     this.roleList = allRoles;
     this.user = userRegistration;
   }
@@ -41,14 +36,14 @@ public class UserValidation {
   }
   
   public void checkIfNewUserIsValid(boolean skipPswdCheck) throws Exception {
-    if (user.getUsername().isEmpty()) {
+    if (user.getUsername() == null || user.getUsername().isEmpty()) {
       errorMessage.add("User Name can not be empty.");
       isValidUser = false;
     } else if (!roleList.contains(user.getRole())) {
       errorMessage.add("The specified role does not exist.");
       isValidUser = false;
-    } else if (user.getUsername().isEmpty()) {
-      errorMessage.add("User Name can not be empty.");
+    } else if (user.getCompany().getId() == null || user.getCompany().getId() < 0) {
+      errorMessage.add("Company can not be empty.");
       isValidUser = false;
     } else if (!roleList.contains(user.getRole())) {
       errorMessage.add("The specified role does not exist.");

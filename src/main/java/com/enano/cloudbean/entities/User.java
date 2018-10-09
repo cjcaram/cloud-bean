@@ -25,40 +25,45 @@ public class User {
   @Column (name = "MODIFICATION_DATE")
   private Date modificationDate;
   
+  @Column (name = "ACTIVE")
+  private boolean active;
+
   @ManyToOne
   @JoinColumn(name = "ROLE_ID")
   private Role role;
   
-  @Column (name = "ACTIVE")
-  private boolean active;
-
-  public Long getId() {
-    return id;
-  }
+  @ManyToOne
+  @JoinColumn(name = "COMPANY_ID")
+  private ComercialEntity company;
   
   public User() {
     
   }
   
   public User(Long id, String userName, String password, Date modificationDate, Role role,
-      boolean active) {
+      boolean active, ComercialEntity company) {
     this.id = id;
     this.userName = userName;
     this.password = password;
     this.modificationDate = modificationDate;
     this.role = role;
     this.active = active;
+    this.company = company;
   }
   
   public User(String userName, String password, Role role,
-      boolean active) {
+      boolean active, ComercialEntity company) {
     this.userName = userName;
     this.password = password;
     this.modificationDate = new Date();
     this.role = role;
     this.active = active;
+    this.company = company;
   }
-
+  
+  public Long getId() {
+    return id;
+  }
   public void setId(Long id) {
     this.id = id;
   }
@@ -102,6 +107,14 @@ public class User {
 
   public void setActive(boolean active) {
     this.active = active;
+  }
+
+  public ComercialEntity getCompany() {
+    return company;
+  }
+
+  public void setCompany(ComercialEntity company) {
+    this.company = company;
   }
 }
 

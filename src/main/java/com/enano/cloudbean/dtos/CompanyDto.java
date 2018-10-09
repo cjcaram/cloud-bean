@@ -4,7 +4,8 @@ public class CompanyDto {
   private Integer id;
   private String name;
   private String cuit;
-  private long locationId;
+  private Integer locationId;
+  private Integer responsibleType;
   private String phone;
   private String mail;
   private String obs;
@@ -12,15 +13,20 @@ public class CompanyDto {
   public CompanyDto(){
   }
 
-  public CompanyDto(Integer id, String name, String cuit, long locationId, String phone, String mail,
-      String obs) {
+  public CompanyDto(Integer id, String name, String cuit, Integer locationId, String phone, 
+      Integer responsibleType, String mail, String obs) {
     this.id = id;
     this.name = name;
     this.cuit = cuit;
     this.locationId = locationId;
+    this.responsibleType = responsibleType;
     this.phone = phone;
     this.mail = mail;
     this.obs = obs;
+  }
+  
+  public CompanyDto(Integer id) {
+    this.id = id;
   }
 
   public Integer getId() {
@@ -47,11 +53,11 @@ public class CompanyDto {
       this.cuit = cuit;
   }
 
-  public long getLocationId() {
+  public Integer getLocationId() {
       return locationId;
   }
 
-  public void setLocationId(long locationId) {
+  public void setLocationId(Integer locationId) {
       this.locationId = locationId;
   }
 
@@ -77,5 +83,13 @@ public class CompanyDto {
 
   public void setObs(String obs) {
       this.obs = obs;
+  }
+
+  public Integer getResponsibleType() {
+    return responsibleType;
+  }
+
+  public void setResponsibleType(Integer responsibleType) {
+    this.responsibleType = responsibleType;
   }
 }

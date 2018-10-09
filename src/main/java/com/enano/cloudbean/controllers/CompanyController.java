@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.enano.cloudbean.dtos.HttpErrorBody;
 import com.enano.cloudbean.dtos.CompanyDto;
-import com.enano.cloudbean.services.ComercialEntityService;
+import com.enano.cloudbean.services.CompanyService;
 
 @RestController
 @RequestMapping("/company")
 public class CompanyController {
   
   @Autowired
-  private ComercialEntityService companyService;
+  private CompanyService companyService;
   
   private HttpErrorBody httpErrorBody;
   private static final Logger LOGGER = LogManager.getLogger(CompanyController.class);
@@ -51,10 +51,24 @@ public class CompanyController {
   public ResponseEntity<?> getCompanies() {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info("Listing All Companies.");
+      LOGGER.info("Listing All Companies from list..");
       response = ResponseEntity.ok(companyService.listAll());
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to fetch all companies");
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to fetch all companies from list.");
+      response = ZUtils.getErrorResponse(httpErrorBody);
+      LOGGER.error(httpErrorBody);
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/basic-list")
+  public ResponseEntity<?> getCompaniesDto() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info("Listing All Companies Dtos from basic-list.");
+      response = ResponseEntity.ok(companyService.listAllCompanyDto());
+    }catch(Exception e) {
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to fetch all companies dtos from basic-list.");
       response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }

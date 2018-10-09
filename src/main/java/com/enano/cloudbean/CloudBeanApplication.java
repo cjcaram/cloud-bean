@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.enano.cloudbean.dtos.UserRegistration;
+import com.enano.cloudbean.dtos.CompanyDto;
+import com.enano.cloudbean.dtos.UserDto;
 import com.enano.cloudbean.entities.Role;
 import com.enano.cloudbean.services.UserService;
 
@@ -23,12 +24,13 @@ public class CloudBeanApplication {
 	  if (service.getAllUsers().size() == 0) {
 	    
       return args -> {
-          service.save(new UserRegistration(
+          service.save(new UserDto(
                   "admin", //userName
                   new Role("ADMIN", ""),//role 
                   null, // id
                   "123", //password
-                  "123"//Active
+                  "123",//Active
+                  new CompanyDto() //Company
           ));
       };
 	  }

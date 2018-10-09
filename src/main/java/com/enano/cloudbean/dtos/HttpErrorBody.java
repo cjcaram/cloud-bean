@@ -56,7 +56,7 @@ public class HttpErrorBody {
   public String toString() {
     return "Http Status Code: " + httpStatus.value() + "\n" +
         "Http Status phrase:" + httpStatus.getReasonPhrase() + "\n" +
-        "Error List :" + knownErros.toArray().toString() + "\n" +
+        "Error List :" + String.join(", ", knownErros) + "\n" +
         "Exception Message: " + exceptionErrorMsg;
   }
   
