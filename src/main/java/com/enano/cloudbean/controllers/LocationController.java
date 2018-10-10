@@ -1,6 +1,8 @@
 package com.enano.cloudbean.controllers;
 
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enano.cloudbean.dtos.CompanyDto;
 import com.enano.cloudbean.dtos.HttpErrorBody;
 import com.enano.cloudbean.dtos.LocationDto;
 import com.enano.cloudbean.services.LocationService;
@@ -41,7 +44,7 @@ public class LocationController {
       }
     } catch (Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error adding or updating Location");
-      response = new ResponseEntity<>(httpErrorBody.getKnownErros(), httpErrorBody.getHttpStatus());
+      response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
     return response;
@@ -55,23 +58,36 @@ public class LocationController {
       response = ResponseEntity.ok(locationService.listAll());
     }catch(Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to Locations");
-      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
     return response;
   }
   
   @DeleteMapping(value = "/remove/{id}")
-  public ResponseEntity<?> deleteCompany(@PathVariable long id) {
+  public ResponseEntity<?> deleteCompany(@PathVariable Integer id) {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info("Editing Location.");
-      locationService.deleteOne(id);
-      response = ResponseEntity.ok("Compnay with id ${id} has been deleted");
+      response = deleteIfNoDependeciesExist(id);
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Delete Location " + id);
-      response = new ResponseEntity<>(httpErrorBody, HttpStatus.INTERNAL_SERVER_ERROR);
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Deleting Location " + id);
+      response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
+    }
+    return response;
+  }
+
+  private ResponseEntity<?> deleteIfNoDependeciesExist(Integer id) {
+    ResponseEntity<?> response;
+    LOGGER.info("Checking Location dependencies.");
+    List<CompanyDto> companyList = locationService.getCompaniesAssociatedWithLocationId(id);
+    if (companyList.size() > 0) {
+      LOGGER.info("Dependencies Founds.");
+      response = new ResponseEntity<>(companyList, HttpStatus.FAILED_DEPENDENCY);
+    } else {
+      LOGGER.info("Deleting Location.");
+      locationService.deleteOne(id);
+      response = ResponseEntity.ok("Company with id ${id} has been deleted");
     }
     return response;
   }

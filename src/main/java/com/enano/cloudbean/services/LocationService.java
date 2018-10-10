@@ -1,12 +1,16 @@
 package com.enano.cloudbean.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.enano.cloudbean.dtos.CompanyDto;
 import com.enano.cloudbean.dtos.LocationDto;
+import com.enano.cloudbean.entities.ComercialEntity;
 import com.enano.cloudbean.entities.Location;
+import com.enano.cloudbean.repositories.ComercialEntityRepository;
 import com.enano.cloudbean.repositories.LocationRepository;
 
 @Service
@@ -14,6 +18,9 @@ public class LocationService {
 
   @Autowired
   private LocationRepository repo;
+  
+  @Autowired
+  private ComercialEntityRepository companyRepo;
 
   public Location getLocationById(long id){
     return repo.getOne(id);
@@ -23,21 +30,45 @@ public class LocationService {
     return repo.findAll();
   }
 
-  public Location save(LocationDto location) {
-    Location locationEntity = new Location();
-    // transform to dto
-    
-    return repo.saveAndFlush(locationEntity);
+  public Location save(LocationDto locationDto) {
+    locationDto.setId(null);
+    return repo.saveAndFlush(getLocationFromLocationDto(locationDto));
   }
   
-  public Location edit(LocationDto location) {
-    Location locationEntity = new Location();
-    // transform to dto
-    
-    return repo.saveAndFlush(locationEntity);
+  public Location edit(LocationDto locationDto) {
+    Location location = getLocationFromLocationDto(locationDto);
+    location.setId(locationDto.getId().longValue());
+    return repo.saveAndFlush(location);
   }
 
-  public void deleteOne(long id) {
-    repo.deleteById(id);
+  public void deleteOne(Integer id) {
+    repo.deleteById(id.longValue());
+  }
+  
+  public List<CompanyDto> getCompaniesAssociatedWithLocationId (Integer id){
+    List<ComercialEntity> companyList = companyRepo.findByLocation(repo.getOne(id.longValue()));
+    List<CompanyDto> companyDtoList = companyList.stream().map(item -> {
+      CompanyDto companyDto = new CompanyDto();
+      companyDto.setCuit(item.getCuit());
+      companyDto.setName(item.getName());
+      return companyDto;
+    }).collect(Collectors.toList());
+    
+    return companyDtoList;
+  }
+  
+  private Location getLocationFromLocationDto(LocationDto item) {
+    Location location = new Location();
+    location.setAddress(item.getAddress());
+    location.setCity(item.getCity());
+    location.setProvince(item.getProvince());
+    location.setCountry(item.getCountry());
+    location.setIsDestiny(item.getIsDestiny());
+    location.setIsOrigin(item.getIsOrigin());
+    location.setPostalCode(item.getPostalCode());
+    location.setName(item.getName());
+    location.setObs(item.getObs());
+    
+    return location;
   }
 }

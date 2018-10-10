@@ -58,19 +58,19 @@ public class Location {
     this.id = id;
   }
 
-  public boolean isOrigin() {
+  public boolean getIsOrigin() {
     return isOrigin;
   }
 
-  public void setOrigin(boolean isOrigin) {
+  public void setIsOrigin(boolean isOrigin) {
     this.isOrigin = isOrigin;
   }
 
-  public boolean isDestiny() {
+  public boolean getIsDestiny() {
     return isDestiny;
   }
 
-  public void setDestiny(boolean isDestiny) {
+  public void setIsDestiny(boolean isDestiny) {
     this.isDestiny = isDestiny;
   }
 
