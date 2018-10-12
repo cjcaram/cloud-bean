@@ -36,14 +36,14 @@ public class LocationController {
     ResponseEntity<?> response = null;
     try {
       if (ZUtils.isEdition(location.getId())) {
-        LOGGER.info("Edditing Location.");
+        LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
         response = ResponseEntity.ok(locationService.edit(location));
       } else {
-        LOGGER.info("Adding Location.");
+        LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
         response = ResponseEntity.ok(locationService.save(location));
       }
     } catch (Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error adding or updating Location");
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
       response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
@@ -51,13 +51,13 @@ public class LocationController {
   }
 
   @GetMapping(value = "/list")
-  public ResponseEntity<?> getCompanies() {
+  public ResponseEntity<?> getLocations() {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info("Listing All Location.");
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
       response = ResponseEntity.ok(locationService.listAll());
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to Locations");
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
       response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
@@ -65,12 +65,12 @@ public class LocationController {
   }
   
   @DeleteMapping(value = "/remove/{id}")
-  public ResponseEntity<?> deleteCompany(@PathVariable Integer id) {
+  public ResponseEntity<?> deleteLocation(@PathVariable Integer id) {
     ResponseEntity<?> response = null;
     try {
       response = deleteIfNoDependeciesExist(id);
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Deleting Location " + id);
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
       response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
@@ -79,15 +79,15 @@ public class LocationController {
 
   private ResponseEntity<?> deleteIfNoDependeciesExist(Integer id) {
     ResponseEntity<?> response;
-    LOGGER.info("Checking Location dependencies.");
+    LOGGER.info(ZUtils.CHECKING_DEPENDENCIES_MSG);
     List<CompanyDto> companyList = locationService.getCompaniesAssociatedWithLocationId(id);
     if (companyList.size() > 0) {
-      LOGGER.info("Dependencies Founds.");
+      LOGGER.info(ZUtils.DEPENDENCIES_FOUNDS_MSG);
       response = new ResponseEntity<>(companyList, HttpStatus.FAILED_DEPENDENCY);
     } else {
-      LOGGER.info("Deleting Location.");
+      LOGGER.info(ZUtils.REMOVING_ENTITY_MSG);
       locationService.deleteOne(id);
-      response = ResponseEntity.ok("Company with id ${id} has been deleted");
+      response = ResponseEntity.ok(ZUtils.ENTITY_REMOVED_MSG);
     }
     return response;
   }

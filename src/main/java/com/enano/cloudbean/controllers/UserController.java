@@ -50,8 +50,10 @@ public class UserController {
       roleList =  roleService.getAllRoles();
       userValidator.setRoles(roleList);
       if (ZUtils.isEdition(userRegistration.getId())) {
+        LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
         response = editUser(userRegistration, userValidator);
       } else {
+        LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
         response = addNewUser(userRegistration, userValidator);
       }
     } catch (Exception e) {

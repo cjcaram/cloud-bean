@@ -1,6 +1,8 @@
 package com.enano.cloudbean.controllers;
 
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.enano.cloudbean.dtos.HttpErrorBody;
-import com.enano.cloudbean.dtos.CompanyDto;
+import com.enano.cloudbean.entities.ComercialEntity;
 import com.enano.cloudbean.services.CompanyService;
 
 @RestController
@@ -29,18 +31,19 @@ public class CompanyController {
   private static final Logger LOGGER = LogManager.getLogger(CompanyController.class);
   
   @PostMapping(value = "/save")
-  public ResponseEntity<?> AddOrModifyCompany(@RequestBody CompanyDto company) {
+  public ResponseEntity<?> AddOrModifyCompany(@RequestBody ComercialEntity company) {
     ResponseEntity<?> response = null;
     try {
-      if (ZUtils.isEdition(company.getId())) {
-        LOGGER.info("Editing Company.");
+      if (ZUtils.isEdition(company.getId().intValue())) {
+        LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
         response = ResponseEntity.ok(companyService.edit(company));
       } else {
-        LOGGER.info("Adding Company.");
+        LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
         response = ResponseEntity.ok(companyService.save(company));
       }
     } catch (Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error adding or updating Company");
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
+          ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
       response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
@@ -51,10 +54,11 @@ public class CompanyController {
   public ResponseEntity<?> getCompanies() {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info("Listing All Companies from list..");
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
       response = ResponseEntity.ok(companyService.listAll());
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to fetch all companies from list.");
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
+          ZUtils.ERROR_FETCHING_ENTITIES_MSG);
       response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
@@ -65,10 +69,11 @@ public class CompanyController {
   public ResponseEntity<?> getCompaniesDto() {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info("Listing All Companies Dtos from basic-list.");
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG + "(basic-list)");
       response = ResponseEntity.ok(companyService.listAllCompanyDto());
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to fetch all companies dtos from basic-list.");
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
+          ZUtils.ERROR_FETCHING_ENTITIES_MSG + "(basic-list)");
       response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
     }
@@ -76,16 +81,30 @@ public class CompanyController {
   }
   
   @DeleteMapping(value = "/remove/{id}")
-  public ResponseEntity<?> deleteCompany(@PathVariable long id) {
+  public ResponseEntity<?> deleteCompany(@PathVariable Integer id) {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info("Deleting Company.");
-      companyService.deleteOne(id);
-      response = ResponseEntity.ok("Company with id ${id} has been deleted");
+      response = deleteIfNoDependeciesExist(id);
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to Delete Company id " + id);
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
+          ZUtils.ERROR_REMOVING_ENTITY_MSG);
       response = ZUtils.getErrorResponse(httpErrorBody);
       LOGGER.error(httpErrorBody);
+    }
+    return response;
+  }
+
+  private ResponseEntity<?> deleteIfNoDependeciesExist(Integer id) {
+    ResponseEntity<?> response;
+    LOGGER.info(ZUtils.CHECKING_DEPENDENCIES_MSG);
+    List<String> userList = companyService.getUsersAssociatedWithCompanyId(id);
+    if (userList.size() > 0) {
+      LOGGER.info(ZUtils.DEPENDENCIES_FOUNDS_MSG);
+      response = new ResponseEntity<>(userList, HttpStatus.FAILED_DEPENDENCY);
+    } else {
+      LOGGER.info(ZUtils.REMOVING_ENTITY_MSG);
+      companyService.deleteOne(id);
+      response = ResponseEntity.ok(ZUtils.ENTITY_REMOVED_MSG);
     }
     return response;
   }

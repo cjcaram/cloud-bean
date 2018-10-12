@@ -13,12 +13,16 @@ import com.enano.cloudbean.entities.User;
  * User repository for CRUD operations.
  */
 public interface UserRepository extends JpaRepository<User,Long> {
-  // @Query("SELECT NEW com.enano.cloudbean.dtos.UserProfile(u.userName, r.name) FROM User u JOIN Role r on u.rolId = r.id WHERE u.userName = ?1")
-  @Query("SELECT NEW com.enano.cloudbean.dtos.UserProfile(u.userName, u.role) FROM User u WHERE u.userName = ?1")
+  @Query("SELECT NEW com.enano.cloudbean.dtos.UserProfile(u.userName, u.role) FROM User u WHERE u.userName = ?1 and u.active = true")
   UserProfile getUserProfile(String userName);
   
   Optional<User> findByUserName(String username);
   
   @Query("FROM User u WHERE u.active = true")
   List<User> getUsersWhereUserIsActive();
+  
+  @Query(value = "SELECT u.USER_NAME FROM users u WHERE u.COMPANY_ID = ?1 AND u.ACTIVE = true",
+      nativeQuery = true)
+  List<String> getUserProfilesByCompanyId(Integer company);
+  
 }

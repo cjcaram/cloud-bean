@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 import com.enano.cloudbean.dtos.CompanyDto;
 import com.enano.cloudbean.entities.ComercialEntity;
 import com.enano.cloudbean.repositories.ComercialEntityRepository;
-import com.enano.cloudbean.repositories.LocationRepository;
-import com.enano.cloudbean.repositories.ResponsibleTypeRepository;
+import com.enano.cloudbean.repositories.UserRepository;
 
 @Service
 public class CompanyService {
@@ -19,11 +18,8 @@ public class CompanyService {
   private ComercialEntityRepository repo;
   
   @Autowired
-  private LocationRepository locationRepo;
+  private UserRepository userRepo;
   
-  @Autowired
-  private ResponsibleTypeRepository respTypeRepo;
-
   public ComercialEntity getCompanyById(long id){
     return repo.getOne(id);
   }
@@ -49,28 +45,19 @@ public class CompanyService {
     return company;
   }
 
-  public ComercialEntity save(CompanyDto company) {
-    return repo.saveAndFlush(getComercialEntityFromCompanyDto(company));
+  public ComercialEntity save(ComercialEntity company) {
+    return repo.saveAndFlush(company);
   }
 
-  public ComercialEntity edit(CompanyDto company) {
-    ComercialEntity comercialEntity = getComercialEntityFromCompanyDto(company);
-    comercialEntity.setId(company.getId().longValue());
-    return repo.saveAndFlush(comercialEntity);
+  public ComercialEntity edit(ComercialEntity company) {
+    return repo.saveAndFlush(company);
   }
   
-  private ComercialEntity getComercialEntityFromCompanyDto(CompanyDto company) {
-    ComercialEntity comercialEntity = new ComercialEntity();
-    comercialEntity.setCuit(company.getCuit());
-    comercialEntity.setMail(company.getMail());
-    comercialEntity.setName(company.getName());
-    comercialEntity.setObs(company.getObs());
-    comercialEntity.setPhone(company.getPhone());
-    comercialEntity.setLocation(locationRepo.getOne(company.getLocationId().longValue()));
-    comercialEntity.setResponsibleType(respTypeRepo.getOne(company.getResponsibleType().longValue()));
-    return comercialEntity;
+  public List<String> getUsersAssociatedWithCompanyId (Integer id){
+    List<String> userList = userRepo.getUserProfilesByCompanyId(id);
+    return userList;
   }
-
+  
   public void deleteOne(long id) {
     repo.deleteById(id);
   }
