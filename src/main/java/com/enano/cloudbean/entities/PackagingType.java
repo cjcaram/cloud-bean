@@ -8,22 +8,24 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name= "post")
-public class EmpaqueTipo {
-
-  
+@Table(name= "empaque_tipo")
+public class PackagingType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Column(name = "tipo_empaque")
-  private String tipoEmpaque;
+  private String packagingType;
   
-  EmpaqueTipo(){
-    
+  PackagingType(){
   }
 
-  public EmpaqueTipo(String tipoEmpaque) {
-    this.tipoEmpaque = tipoEmpaque;
+  public PackagingType(Long id, String packagingType) {
+    this.id = id;
+    this.packagingType = packagingType;
+  }
+  
+  public PackagingType(String packagingType) {
+    this.packagingType = packagingType;
   }
 
   public Long getId() {
@@ -34,13 +36,11 @@ public class EmpaqueTipo {
     this.id = id;
   }
 
-  public String getTipoEmpaque() {
-    return tipoEmpaque;
+  public String getPackagingType() {
+    return packagingType;
   }
 
-  public void setTipoEmpaque(String tipoEmpaque) {
-    this.tipoEmpaque = tipoEmpaque;
+  public void setPackagingType(String packagingType) {
+    this.packagingType = packagingType;
   }
-  
-  
 }
