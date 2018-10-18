@@ -30,7 +30,7 @@ public class Income {
   @Column(name="peso_bruto")
   private int grossWeight;
   @Column(name="peso_tara")
-  private String truckWeight;
+  private int truckWeight;
   @Column(name="chofer")
   private String driverName;
   @Column(name="patente_camion")
@@ -70,7 +70,7 @@ public class Income {
   }
   
   public Income(Long id, int analysisId, int incomeNo, String waybill, String depositCertificate,
-      String ctg, int grossWeight, String truckWeight, String driverName, String truckPatent,
+      String ctg, int grossWeight, int truckWeight, String driverName, String truckPatent,
       String trailerPatent, int waybillOwnerId, int commercialSenderId, int receiverId,
       int transporterId, int originId, GrainType grainType, int bagQuantity,
       PackagingType packaginType, String locationInPlant, Date downloadDate, Date modificationDate,
@@ -157,11 +157,11 @@ public class Income {
     this.grossWeight = grossWeight;
   }
 
-  public String getTruckWeight() {
+  public int getTruckWeight() {
     return truckWeight;
   }
 
-  public void setTruckWeight(String truckWeight) {
+  public void setTruckWeight(int truckWeight) {
     this.truckWeight = truckWeight;
   }
 
