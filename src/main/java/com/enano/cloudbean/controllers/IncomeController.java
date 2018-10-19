@@ -26,10 +26,10 @@ public class IncomeController {
   private static final Logger LOGGER = LogManager.getLogger(IncomeController.class);
   
   @PostMapping(value = "/save")
-  public ResponseEntity<?> AddOrModifyCompany(@RequestBody Income income) {
+  public ResponseEntity<?> AddOrModifyIncome(@RequestBody Income income) {
     ResponseEntity<?> response = null;
     try {
-      if (ZUtils.isEdition((int) income.getId())) {
+      if (ZUtils.isEdition(income.getId().intValue())) {
         LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
         response = ResponseEntity.ok(incomeService.edit(income));
       } else {
@@ -40,7 +40,7 @@ public class IncomeController {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
           ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
       response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      LOGGER.error(httpErrorBody, e);
     }
     return response;
   }
@@ -55,7 +55,7 @@ public class IncomeController {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
           ZUtils.ERROR_FETCHING_ENTITIES_MSG);
       response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      LOGGER.error(httpErrorBody, e);
     }
     return response;
   }

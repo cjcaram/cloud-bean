@@ -101,7 +101,7 @@ public class Income {
     this.imgDir = imgDir;
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 

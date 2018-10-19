@@ -1,5 +1,6 @@
 package com.enano.cloudbean.dtos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,10 @@ public class HttpErrorBody {
     this.httpStatus = httpStatus;
   }
   
-  public HttpErrorBody(HttpStatus httpStatus, Exception exeption, String knownErro) {
+  public HttpErrorBody(HttpStatus httpStatus, Exception exeption, String knownError) {
     this.exceptionErrorMsg = exeption.getMessage();
-    this.knownErros.add(knownErro);
+    this.knownErros = new ArrayList<>();
+    this.knownErros.add(knownError);
     this.exeption = exeption;
     this.httpStatus = httpStatus;
   }
