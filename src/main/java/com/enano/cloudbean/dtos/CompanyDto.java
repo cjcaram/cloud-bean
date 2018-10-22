@@ -1,8 +1,6 @@
 package com.enano.cloudbean.dtos;
 
-public class CompanyDto {
-  private Integer id;
-  private String name;
+public class CompanyDto extends BaseCompanyDto{
   private String cuit;
   private Integer locationId;
   private Integer responsibleType;
@@ -15,8 +13,7 @@ public class CompanyDto {
 
   public CompanyDto(Integer id, String name, String cuit, Integer locationId, String phone, 
       Integer responsibleType, String mail, String obs) {
-    this.id = id;
-    this.name = name;
+    super(id, name);
     this.cuit = cuit;
     this.locationId = locationId;
     this.responsibleType = responsibleType;
@@ -25,26 +22,6 @@ public class CompanyDto {
     this.obs = obs;
   }
   
-  public CompanyDto(Integer id) {
-    this.id = id;
-  }
-
-  public Integer getId() {
-      return id;
-  }
-
-  public void setId(Integer id) {
-      this.id = id;
-  }
-
-  public String getName() {
-      return name;
-  }
-
-  public void setName(String name) {
-      this.name = name;
-  }
-
   public String getCuit() {
       return cuit;
   }
