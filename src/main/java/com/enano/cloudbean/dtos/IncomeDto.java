@@ -2,6 +2,9 @@ package com.enano.cloudbean.dtos;
 
 import java.util.Date;
 
+import com.enano.cloudbean.entities.GrainType;
+import com.enano.cloudbean.entities.PackagingType;
+
 public class IncomeDto {
   private Integer id;
   private Integer analysisId;
@@ -14,22 +17,14 @@ public class IncomeDto {
   private String driverName;
   private String truckPatent;
   private String trailerPatent;
-  private Integer waybillOwnerId;
-  private String waybillOwner;
-  private Integer commercialSenderId;
-  private String commercialSender;
-  private Integer receiverId;
-  private String receiver;
-  private Integer transporterId;
-  private String transporter;
-  private Integer originId;
-  private String origin;
-  private Integer grainTypeId;
-  private String grainType;
-  private String grainTypeVariety;
+  private BaseCompanyDto waybillOwner;
+  private BaseCompanyDto commercialSender;
+  private BaseCompanyDto receiver;
+  private BaseCompanyDto transporter;
+  private BaseLocationDto origin;
+  private GrainType grainType;
   private Integer bagQuantity;
-  private Integer packaginTypeId;
-  private String packaginType;
+  private PackagingType packagingType;
   private String locationInPlant;
   private Date downloadDate;
   private Date modificationDate;
@@ -39,14 +34,23 @@ public class IncomeDto {
   public IncomeDto() {
   }
   
+  public IncomeDto(Integer id,
+      Integer analysisId,
+      Integer incomeNo,
+      String waybill) {
+    this.id = id;
+    this.analysisId = analysisId;
+    this.incomeNo = incomeNo;
+    this.waybill = waybill;
+  }
+  
   public IncomeDto(Integer id, Integer analysisId, Integer incomeNo, String waybill,
       String depositCertificate, String ctg, Integer grossWeight, Integer truckWeight,
-      String driverName, String truckPatent, String trailerPatent, Integer waybillOwnerId,
-      String waybillOwner, Integer commercialSenderId, String commercialSender, Integer receiverId,
-      String receiver, Integer transporterId, String transporter, Integer originId, String origin,
-      Integer grainTypeId, String grainType, String grainTypeVariety, Integer bagQuantity,
-      Integer packaginTypeId, String packaginType, String locationInPlant, Date downloadDate,
-      Date modificationDate, String obs, String imgDir) {
+      String driverName, String truckPatent, String trailerPatent, BaseCompanyDto waybillOwner, 
+      BaseCompanyDto commercialSender, BaseCompanyDto receiver, BaseCompanyDto transporter, 
+      BaseLocationDto origin, GrainType grainType, String grainTypeVariety, 
+      Integer bagQuantity, PackagingType packagingType, String locationInPlant, 
+      Date downloadDate, Date modificationDate, String obs, String imgDir) {
     this.id = id;
     this.analysisId = analysisId;
     this.incomeNo = incomeNo;
@@ -58,22 +62,14 @@ public class IncomeDto {
     this.driverName = driverName;
     this.truckPatent = truckPatent;
     this.trailerPatent = trailerPatent;
-    this.waybillOwnerId = waybillOwnerId;
     this.waybillOwner = waybillOwner;
-    this.commercialSenderId = commercialSenderId;
     this.commercialSender = commercialSender;
-    this.receiverId = receiverId;
     this.receiver = receiver;
-    this.transporterId = transporterId;
     this.transporter = transporter;
-    this.originId = originId;
     this.origin = origin;
-    this.grainTypeId = grainTypeId;
     this.grainType = grainType;
-    this.grainTypeVariety = grainTypeVariety;
     this.bagQuantity = bagQuantity;
-    this.packaginTypeId = packaginTypeId;
-    this.packaginType = packaginType;
+    this.packagingType = packagingType;
     this.locationInPlant = locationInPlant;
     this.downloadDate = downloadDate;
     this.modificationDate = modificationDate;
@@ -169,108 +165,52 @@ public class IncomeDto {
     this.trailerPatent = trailerPatent;
   }
 
-  public Integer getWaybillOwnerId() {
-    return waybillOwnerId;
-  }
-
-  public void setWaybillOwnerId(Integer waybillOwnerId) {
-    this.waybillOwnerId = waybillOwnerId;
-  }
-
-  public String getWaybillOwner() {
+  public BaseCompanyDto getWaybillOwner() {
     return waybillOwner;
   }
 
-  public void setWaybillOwner(String waybillOwner) {
+  public void setWaybillOwner(BaseCompanyDto waybillOwner) {
     this.waybillOwner = waybillOwner;
   }
 
-  public Integer getCommercialSenderId() {
-    return commercialSenderId;
-  }
-
-  public void setCommercialSenderId(Integer commercialSenderId) {
-    this.commercialSenderId = commercialSenderId;
-  }
-
-  public String getCommercialSender() {
+  public BaseCompanyDto getCommercialSender() {
     return commercialSender;
   }
 
-  public void setCommercialSender(String commercialSender) {
+  public void setCommercialSender(BaseCompanyDto commercialSender) {
     this.commercialSender = commercialSender;
   }
 
-  public Integer getReceiverId() {
-    return receiverId;
-  }
-
-  public void setReceiverId(Integer receiverId) {
-    this.receiverId = receiverId;
-  }
-
-  public String getReceiver() {
+  public BaseCompanyDto getReceiver() {
     return receiver;
   }
 
-  public void setReceiver(String receiver) {
+  public void setReceiver(BaseCompanyDto receiver) {
     this.receiver = receiver;
   }
 
-  public Integer getTransporterId() {
-    return transporterId;
-  }
-
-  public void setTransporterId(Integer transporterId) {
-    this.transporterId = transporterId;
-  }
-
-  public String getTransporter() {
+  public BaseCompanyDto getTransporter() {
     return transporter;
   }
 
-  public void setTransporter(String transporter) {
+  public void setTransporter(BaseCompanyDto transporter) {
     this.transporter = transporter;
   }
 
-  public Integer getOriginId() {
-    return originId;
-  }
-
-  public void setOriginId(Integer originId) {
-    this.originId = originId;
-  }
-
-  public String getOrigin() {
+  public BaseLocationDto getOrigin() {
     return origin;
   }
 
-  public void setOrigin(String origin) {
+  public void setOrigin(BaseLocationDto origin) {
     this.origin = origin;
   }
 
-  public Integer getGrainTypeId() {
-    return grainTypeId;
-  }
-
-  public void setGrainTypeId(Integer grainTypeId) {
-    this.grainTypeId = grainTypeId;
-  }
-
-  public String getGrainType() {
+  public GrainType getGrainType() {
     return grainType;
   }
 
-  public void setGrainType(String grainType) {
+  public void setGrainType(GrainType grainType) {
     this.grainType = grainType;
-  }
-
-  public String getGrainTypeVariety() {
-    return grainTypeVariety;
-  }
-
-  public void setGrainTypeVariety(String grainTypeVariety) {
-    this.grainTypeVariety = grainTypeVariety;
   }
 
   public Integer getBagQuantity() {
@@ -281,20 +221,12 @@ public class IncomeDto {
     this.bagQuantity = bagQuantity;
   }
 
-  public Integer getPackaginTypeId() {
-    return packaginTypeId;
+  public PackagingType getPackagingType() {
+    return packagingType;
   }
 
-  public void setPackaginTypeId(Integer packaginTypeId) {
-    this.packaginTypeId = packaginTypeId;
-  }
-
-  public String getPackaginType() {
-    return packaginType;
-  }
-
-  public void setPackaginType(String packaginType) {
-    this.packaginType = packaginType;
+  public void setPackagingType(PackagingType packagingType) {
+    this.packagingType = packagingType;
   }
 
   public String getLocationInPlant() {

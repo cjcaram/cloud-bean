@@ -16,6 +16,8 @@ public class ZUtils {
   public static final String ERROR_REMOVING_ENTITY_MSG = "There was an error trying to remove the entity.";
   public static final String ERROR_FETCHING_ENTITIES_MSG = "There was an error trying to fetch all entities.";
   public static final String ERROR_ADD_EDIT_ENTITY_MSG = "Error adding or updating entity";
+  public static final String BASE_LIST_PART_MSG = "(base-list)";
+  public static final String BASIC_LIST_PART_MSG = "(basic-list)";
   
   public static boolean isEdition(Integer id) {
     return id != null && id > 0;

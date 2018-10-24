@@ -41,14 +41,12 @@ public class CompanyController {
         response = ResponseEntity.ok(companyService.save(company));
       }
     } catch (Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
-          ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
-      response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
     }
     return response;
   }
 
+  
   @GetMapping(value = "/list")
   public ResponseEntity<?> getCompanies() {
     ResponseEntity<?> response = null;
@@ -56,10 +54,7 @@ public class CompanyController {
       LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
       response = ResponseEntity.ok(companyService.listAll());
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
-          ZUtils.ERROR_FETCHING_ENTITIES_MSG);
-      response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
     }
     return response;
   }
@@ -71,10 +66,19 @@ public class CompanyController {
       LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG + "(basic-list)");
       response = ResponseEntity.ok(companyService.listAllCompanyDto());
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
-          ZUtils.ERROR_FETCHING_ENTITIES_MSG + "(basic-list)");
-      response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG + " (basic-list)");
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/base-list")
+  public ResponseEntity<?> getBaseCompaniesDto() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG + "(base-list)");
+      response = ResponseEntity.ok(companyService.listAllBaseCompanyDto());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG + " (base-list)");
     }
     return response;
   }
@@ -85,10 +89,7 @@ public class CompanyController {
     try {
       response = deleteIfNoDependeciesExist(id);
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
-          ZUtils.ERROR_REMOVING_ENTITY_MSG);
-      response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
     }
     return response;
   }
@@ -107,4 +108,13 @@ public class CompanyController {
     }
     return response;
   }
+  
+  private ResponseEntity<?> getErrorResponseAndLog(Exception e, String errorMsg) {
+    ResponseEntity<?> response;
+    httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, errorMsg);
+    response = ZUtils.getErrorResponse(httpErrorBody);
+    LOGGER.error(httpErrorBody);
+    return response;
+  }
+
 }

@@ -2,6 +2,7 @@ package com.enano.cloudbean.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+
 
 @Entity
 @Table(name = "entrada")
@@ -37,22 +40,27 @@ public class Income {
   private String truckPatent;
   @Column(name="patente_acoplado")
   private String trailerPatent;
-  @Column(name="titular_CP")
-  private int waybillOwnerId;
-  @Column(name="remitente_comercial")
-  private int commercialSenderId;
-  @Column(name="destinatario")
-  private int receiverId;
-  @Column(name="transporte")
-  private int transporterId;
-  @Column(name="procedencia")
-  private int originId;
-  @ManyToOne
+  @ManyToOne(cascade=CascadeType.PERSIST )
+  @JoinColumn(name="titular_CP", nullable = true)
+  private ComercialEntity waybillOwnerId;
+  @ManyToOne(cascade=CascadeType.PERSIST )
+  @JoinColumn(name="remitente_comercial", nullable = true)
+  private ComercialEntity commercialSenderId;
+  @ManyToOne(cascade=CascadeType.PERSIST )
+  @JoinColumn(name="destinatario", nullable = true)
+  private ComercialEntity receiverId;
+  @ManyToOne(cascade=CascadeType.PERSIST )
+  @JoinColumn(name="transporte", nullable = true)
+  private ComercialEntity transporterId;
+  @ManyToOne(cascade=CascadeType.PERSIST )
+  @JoinColumn(name="procedencia", nullable = true)
+  private Location origin;
+  @ManyToOne(cascade=CascadeType.PERSIST )
   @JoinColumn(name = "grano_especie_id")
   private GrainType grainType;
   @Column(name="cantidad_bolsa")
   private int bagQuantity;
-  @ManyToOne
+  @ManyToOne(cascade=CascadeType.PERSIST )
   @JoinColumn(name = "tipo_bolsa")
   private PackagingType packaginType;
   @Column(name="ubicacion")
@@ -71,8 +79,8 @@ public class Income {
   
   public Income(Long id, int analysisId, int incomeNo, String waybill, String depositCertificate,
       String ctg, int grossWeight, int truckWeight, String driverName, String truckPatent,
-      String trailerPatent, int waybillOwnerId, int commercialSenderId, int receiverId,
-      int transporterId, int originId, GrainType grainType, int bagQuantity,
+      String trailerPatent, ComercialEntity waybillOwnerId, ComercialEntity commercialSenderId, ComercialEntity receiverId,
+      ComercialEntity transporterId, Location origin, GrainType grainType, int bagQuantity,
       PackagingType packaginType, String locationInPlant, Date downloadDate, Date modificationDate,
       String obs, String imgDir) {
     this.id = id;
@@ -90,7 +98,7 @@ public class Income {
     this.commercialSenderId = commercialSenderId;
     this.receiverId = receiverId;
     this.transporterId = transporterId;
-    this.originId = originId;
+    this.origin = origin;
     this.grainType = grainType;
     this.bagQuantity = bagQuantity;
     this.packaginType = packaginType;
@@ -189,44 +197,44 @@ public class Income {
     this.trailerPatent = trailerPatent;
   }
 
-  public int getWaybillOwnerId() {
+  public ComercialEntity getWaybillOwnerId() {
     return waybillOwnerId;
   }
 
-  public void setWaybillOwnerId(int waybillOwnerId) {
+  public void setWaybillOwnerId(ComercialEntity waybillOwnerId) {
     this.waybillOwnerId = waybillOwnerId;
   }
 
-  public int getCommercialSenderId() {
+  public ComercialEntity getCommercialSenderId() {
     return commercialSenderId;
   }
 
-  public void setCommercialSenderId(int commercialSenderId) {
+  public void setCommercialSenderId(ComercialEntity commercialSenderId) {
     this.commercialSenderId = commercialSenderId;
   }
 
-  public int getReceiverId() {
+  public ComercialEntity getReceiverId() {
     return receiverId;
   }
 
-  public void setReceiverId(int receiverId) {
+  public void setReceiverId(ComercialEntity receiverId) {
     this.receiverId = receiverId;
   }
 
-  public int getTransporterId() {
+  public ComercialEntity getTransporterId() {
     return transporterId;
   }
 
-  public void setTransporterId(int transporterId) {
+  public void setTransporterId(ComercialEntity transporterId) {
     this.transporterId = transporterId;
   }
 
-  public int getOriginId() {
-    return originId;
+  public Location getOrigin() {
+    return origin;
   }
 
-  public void setOriginId(int originId) {
-    this.originId = originId;
+  public void setOriginId(Location origin) {
+    this.origin = origin;
   }
 
   public GrainType getGrainType() {

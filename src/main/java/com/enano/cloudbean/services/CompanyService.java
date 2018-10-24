@@ -3,9 +3,11 @@ package com.enano.cloudbean.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.enano.cloudbean.dtos.BaseCompanyDto;
 import com.enano.cloudbean.dtos.CompanyDto;
 import com.enano.cloudbean.entities.ComercialEntity;
 import com.enano.cloudbean.repositories.ComercialEntityRepository;
@@ -20,6 +22,8 @@ public class CompanyService {
   @Autowired
   private UserRepository userRepo;
   
+  private ModelMapper modelMapper = new ModelMapper();
+  
   public ComercialEntity getCompanyById(long id){
     return repo.getOne(id);
   }
@@ -31,18 +35,17 @@ public class CompanyService {
   public List<CompanyDto> listAllCompanyDto() {
     List<ComercialEntity> comercialEntityList = repo.findAll();
     List<CompanyDto> companyDtoList = comercialEntityList.stream()
-        .map(item -> getCompanyDtoFromComercialEntity(item))
+        .map(item -> modelMapper.map(item, CompanyDto.class))
         .collect(Collectors.toList());
     return companyDtoList;
   }
-
-  private CompanyDto getCompanyDtoFromComercialEntity(ComercialEntity item) {
-    CompanyDto company = new CompanyDto();
-    company.setId(item.getId().intValue());
-    company.setCuit(item.getCuit());
-    company.setName(item.getName());
-    company.setLocationId(item.getLocation().getId().intValue());
-    return company;
+  
+  public List<BaseCompanyDto> listAllBaseCompanyDto() {
+    List<ComercialEntity> comercialEntityList = repo.findAll();
+    List<BaseCompanyDto> baseCompanyDtoList = comercialEntityList.stream()
+        .map(item -> modelMapper.map(item, BaseCompanyDto.class))
+        .collect(Collectors.toList());
+    return baseCompanyDtoList;
   }
 
   public ComercialEntity save(ComercialEntity company) {

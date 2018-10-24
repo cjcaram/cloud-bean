@@ -6,4 +6,4 @@ import com.enano.cloudbean.entities.Income;
 
 public interface IncomeRepository extends JpaRepository<Income, Long> {
 
-}
+ }

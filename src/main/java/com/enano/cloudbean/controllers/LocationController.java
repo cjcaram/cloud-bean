@@ -43,9 +43,7 @@ public class LocationController {
         response = ResponseEntity.ok(locationService.save(location));
       }
     } catch (Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
-      response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
     }
     return response;
   }
@@ -57,9 +55,19 @@ public class LocationController {
       LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
       response = ResponseEntity.ok(locationService.listAll());
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
-      response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/base-list")
+  public ResponseEntity<?> getCompaniesDto() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG + ZUtils.BASE_LIST_PART_MSG);
+      response = ResponseEntity.ok(locationService.listAllBaseLocationDto());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG + ZUtils.BASE_LIST_PART_MSG);
     }
     return response;
   }
@@ -70,9 +78,7 @@ public class LocationController {
     try {
       response = deleteIfNoDependeciesExist(id);
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
-      response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
     }
     return response;
   }
@@ -89,6 +95,14 @@ public class LocationController {
       locationService.deleteOne(id);
       response = ResponseEntity.ok(ZUtils.ENTITY_REMOVED_MSG);
     }
+    return response;
+  }
+  
+  private ResponseEntity<?> getErrorResponseAndLog(Exception e, String errorMsg) {
+    ResponseEntity<?> response;
+    httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, errorMsg);
+    response = ZUtils.getErrorResponse(httpErrorBody);
+    LOGGER.error(httpErrorBody, e);
     return response;
   }
 }

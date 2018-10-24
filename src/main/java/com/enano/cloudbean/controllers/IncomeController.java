@@ -50,7 +50,7 @@ public class IncomeController {
     ResponseEntity<?> response = null;
     try {
       LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
-      response = ResponseEntity.ok(incomeService.listAll());
+      response = ResponseEntity.ok(incomeService.listAllIncomeDto());
     }catch(Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
           ZUtils.ERROR_FETCHING_ENTITIES_MSG);

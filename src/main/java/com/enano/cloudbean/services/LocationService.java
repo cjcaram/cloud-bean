@@ -3,9 +3,11 @@ package com.enano.cloudbean.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.enano.cloudbean.dtos.BaseLocationDto;
 import com.enano.cloudbean.dtos.CompanyDto;
 import com.enano.cloudbean.dtos.LocationDto;
 import com.enano.cloudbean.entities.ComercialEntity;
@@ -21,7 +23,7 @@ public class LocationService {
   
   @Autowired
   private ComercialEntityRepository companyRepo;
-
+  
   public Location getLocationById(long id){
     return repo.getOne(id);
   }
@@ -57,6 +59,15 @@ public class LocationService {
     return companyDtoList;
   }
   
+  public List<BaseLocationDto> listAllBaseLocationDto() {
+    ModelMapper modelMapper = new ModelMapper();
+    List<Location> locationList = repo.findAll();
+    List<BaseLocationDto> baseLocationDtoList = locationList.stream()
+        .map(item -> modelMapper.map(item, BaseLocationDto.class))
+        .collect(Collectors.toList());
+    return baseLocationDtoList;
+  }
+
   private Location getLocationFromLocationDto(LocationDto item) {
     Location location = new Location();
     location.setAddress(item.getAddress());
@@ -71,4 +82,5 @@ public class LocationService {
     
     return location;
   }
+
 }
