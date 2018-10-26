@@ -2,7 +2,6 @@ package com.enano.cloudbean.entities;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -40,33 +41,34 @@ public class Income {
   private String truckPatent;
   @Column(name="patente_acoplado")
   private String trailerPatent;
-  @ManyToOne(cascade=CascadeType.PERSIST )
+  @ManyToOne
   @JoinColumn(name="titular_CP", nullable = true)
-  private ComercialEntity waybillOwnerId;
-  @ManyToOne(cascade=CascadeType.PERSIST )
+  private ComercialEntity waybillOwner;
+  @ManyToOne
   @JoinColumn(name="remitente_comercial", nullable = true)
-  private ComercialEntity commercialSenderId;
-  @ManyToOne(cascade=CascadeType.PERSIST )
+  private ComercialEntity commercialSender;
+  @ManyToOne
   @JoinColumn(name="destinatario", nullable = true)
-  private ComercialEntity receiverId;
-  @ManyToOne(cascade=CascadeType.PERSIST )
+  private ComercialEntity receiver;
+  @ManyToOne
   @JoinColumn(name="transporte", nullable = true)
-  private ComercialEntity transporterId;
-  @ManyToOne(cascade=CascadeType.PERSIST )
+  private ComercialEntity transporter;
+  @ManyToOne
   @JoinColumn(name="procedencia", nullable = true)
   private Location origin;
-  @ManyToOne(cascade=CascadeType.PERSIST )
+  @ManyToOne
   @JoinColumn(name = "grano_especie_id")
   private GrainType grainType;
   @Column(name="cantidad_bolsa")
   private int bagQuantity;
-  @ManyToOne(cascade=CascadeType.PERSIST )
+  @ManyToOne
   @JoinColumn(name = "tipo_bolsa")
-  private PackagingType packaginType;
+  private PackagingType packagingType;
   @Column(name="ubicacion")
   private String locationInPlant;
   @Column(name="fecha_descarga")
   private Date downloadDate;
+  @JsonIgnore
   @Column(name="fecha_modificacion")
   private Date modificationDate;
   @Column(name="observaciones")
@@ -79,9 +81,9 @@ public class Income {
   
   public Income(Long id, int analysisId, int incomeNo, String waybill, String depositCertificate,
       String ctg, int grossWeight, int truckWeight, String driverName, String truckPatent,
-      String trailerPatent, ComercialEntity waybillOwnerId, ComercialEntity commercialSenderId, ComercialEntity receiverId,
-      ComercialEntity transporterId, Location origin, GrainType grainType, int bagQuantity,
-      PackagingType packaginType, String locationInPlant, Date downloadDate, Date modificationDate,
+      String trailerPatent, ComercialEntity waybillOwner, ComercialEntity commercialSender, ComercialEntity receiver,
+      ComercialEntity transporter, Location origin, GrainType grainType, int bagQuantity,
+      PackagingType packagingType, String locationInPlant, Date downloadDate, Date modificationDate,
       String obs, String imgDir) {
     this.id = id;
     this.analysisId = analysisId;
@@ -94,14 +96,14 @@ public class Income {
     this.driverName = driverName;
     this.truckPatent = truckPatent;
     this.trailerPatent = trailerPatent;
-    this.waybillOwnerId = waybillOwnerId;
-    this.commercialSenderId = commercialSenderId;
-    this.receiverId = receiverId;
-    this.transporterId = transporterId;
+    this.waybillOwner = waybillOwner;
+    this.commercialSender = commercialSender;
+    this.receiver = receiver;
+    this.transporter = transporter;
     this.origin = origin;
     this.grainType = grainType;
     this.bagQuantity = bagQuantity;
-    this.packaginType = packaginType;
+    this.packagingType = packagingType;
     this.locationInPlant = locationInPlant;
     this.downloadDate = downloadDate;
     this.modificationDate = modificationDate;
@@ -197,36 +199,36 @@ public class Income {
     this.trailerPatent = trailerPatent;
   }
 
-  public ComercialEntity getWaybillOwnerId() {
-    return waybillOwnerId;
+  public ComercialEntity getWaybillOwner() {
+    return waybillOwner;
   }
 
-  public void setWaybillOwnerId(ComercialEntity waybillOwnerId) {
-    this.waybillOwnerId = waybillOwnerId;
+  public void setWaybillOwner(ComercialEntity waybillOwner) {
+    this.waybillOwner = waybillOwner;
   }
 
-  public ComercialEntity getCommercialSenderId() {
-    return commercialSenderId;
+  public ComercialEntity getCommercialSender() {
+    return commercialSender;
   }
 
-  public void setCommercialSenderId(ComercialEntity commercialSenderId) {
-    this.commercialSenderId = commercialSenderId;
+  public void setCommercialSender(ComercialEntity commercialSender) {
+    this.commercialSender = commercialSender;
   }
 
-  public ComercialEntity getReceiverId() {
-    return receiverId;
+  public ComercialEntity getReceiver() {
+    return receiver;
   }
 
-  public void setReceiverId(ComercialEntity receiverId) {
-    this.receiverId = receiverId;
+  public void setReceiver(ComercialEntity receiver) {
+    this.receiver = receiver;
   }
 
-  public ComercialEntity getTransporterId() {
-    return transporterId;
+  public ComercialEntity getTransporter() {
+    return transporter;
   }
 
-  public void setTransporterId(ComercialEntity transporterId) {
-    this.transporterId = transporterId;
+  public void setTransporter(ComercialEntity transporter) {
+    this.transporter = transporter;
   }
 
   public Location getOrigin() {
@@ -253,12 +255,12 @@ public class Income {
     this.bagQuantity = bagQuantity;
   }
 
-  public PackagingType getPackaginType() {
-    return packaginType;
+  public PackagingType getPackagingType() {
+    return packagingType;
   }
 
-  public void setPackaginType(PackagingType packaginType) {
-    this.packaginType = packaginType;
+  public void setPackagingType(PackagingType packagingType) {
+    this.packagingType = packagingType;
   }
 
   public String getLocationInPlant() {

@@ -11,8 +11,10 @@ public class ZUtils {
   public static final String CHECKING_DEPENDENCIES_MSG = "Checking dependencies.";
   public static final String ENTITY_REMOVED_MSG = "Entity deleted.";
   public static final String FETCHING_ENTITIES_MSG = "Fetching all entities.";
+  public static final String FETCHING_ENTITY_MSG = "Fetching entity.";
   public static final String ADDING_ENTITY_MSG = "Adding entity.";
   public static final String EDITING_ENTITY_MSG = "Editing entity.";
+  public static final String ERROR_FETCHING_ENTITY_MSG = "There was an error trying to fetching the entity.";
   public static final String ERROR_REMOVING_ENTITY_MSG = "There was an error trying to remove the entity.";
   public static final String ERROR_FETCHING_ENTITIES_MSG = "There was an error trying to fetch all entities.";
   public static final String ERROR_ADD_EDIT_ENTITY_MSG = "Error adding or updating entity";

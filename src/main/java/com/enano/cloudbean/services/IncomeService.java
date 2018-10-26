@@ -1,5 +1,6 @@
 package com.enano.cloudbean.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,7 @@ public class IncomeService {
   private ModelMapper modelMapper = new ModelMapper();
 
   public Income edit(Income income) {
+    income.setModificationDate(new Date());
     return repo.saveAndFlush(income); 
   }
 

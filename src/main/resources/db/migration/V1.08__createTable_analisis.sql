@@ -30,7 +30,6 @@ CREATE TABLE `analisis` (
   `humedad` FLOAT NULL,
   `gramaje` FLOAT NULL,
   `hidratacion` FLOAT NULL,
-  `especie_id` INT NULL,
   `fecha_realizacion` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_modificacion` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`));

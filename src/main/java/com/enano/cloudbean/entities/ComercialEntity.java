@@ -1,6 +1,5 @@
 package com.enano.cloudbean.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,7 +23,7 @@ public class ComercialEntity {
   private String name;
   @Column(name="cuit")
   private String cuit;
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @ManyToOne
   @JoinColumn(name = "ubicacion")
   private Location location;
   @Column(name="telefono")
