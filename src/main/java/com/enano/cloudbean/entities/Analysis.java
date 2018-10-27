@@ -11,74 +11,76 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name= "analisis")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Analysis {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Column(name="zaranda")
-  private float zaranda;
+  private Float zaranda;
   @Column(name="caida_zaranda")
-  private float caidaZaranda;
+  private Float caidaZaranda;
   @Column(name="incomestible")
-  private float incomestible;
+  private Float incomestible;
   @Column(name="terron")
-  private float terron;
+  private Float terron;
   @Column(name="manchado")
-  private float manchado;
+  private Float manchado;
   @Column(name="partido")
-  private float partido;
+  private Float partido;
   @Column(name="helado")
-  private float helado;
+  private Float helado;
   @Column(name="chuzo")
-  private float chuzo;
-  @Column(name="marron")
-  private float marron;
+  private Float chuzo;
+  @Column(name="tiempo_de_coccion")
+  private Float tiempoCoccion;
   @Column(name="roido")
-  private float roido;
-  @Column(name="p_de_c")
-  private float pDeC; //picado de campo
+  private Float roido;
+  @Column(name="picado_de_campo")
+  private Float picadoCampo;
   @Column(name="contrastante")
-  private float contrastante;
+  private Float contrastante;
   @Column(name="leve_A")
-  private float leveA;
+  private Float leveA;
   @Column(name="leve_B")
-  private float leveB;
+  private Float leveB;
   @Column(name="descorticado")
-  private float descorticado;
+  private Float descorticado;
   @Column(name="cascado")
-  private float cascado;
+  private Float cascado;
   @Column(name="arrugado")
-  private float arrugado;
+  private Float arrugado;
   @Column(name="revolcado")
-  private float revolcado;
+  private Float revolcado;
   @Column(name="manchado_maquina")
-  private float manchadoMaquina;
+  private Float manchadoMaquina;
   @Column(name="punta_chaucha")
-  private float puntaChaucha;
+  private Float puntaChaucha;
   @Column(name="pinto")
-  private float pinto;
+  private Float pinto;
   @Column(name="bolita")
-  private float bolita;
+  private Float bolita;
   @Column(name="oxidado")
-  private float oxidado;
+  private Float oxidado;
   @Column(name="quebrado")
-  private float quebrado;
+  private Float quebrado;
   @Column(name="brotado")
-  private float brotado;
+  private Float brotado;
   @Column(name="venoso")
-  private float venoso;
+  private Float venoso;
   @Column(name="decolorido")
-  private float decolorido;
+  private Float decolorido;
   @Column(name="humedad")
-  private float humedad;
+  private Float humedad;
   @Column(name="gramaje")
-  private float gramaje;
+  private Float gramaje;
   @Column(name="hidratacion")
-  private float hidratacion;
+  private Float hidratacion;
   @Column(name="fecha_realizacion")
   private Date analysisDate;
   @JsonIgnore
@@ -88,12 +90,12 @@ public class Analysis {
   public Analysis () {
   }
 
-  public Analysis(Long id, float zaranda, float caidaZaranda, float incomestible, float terron,
-      float manchado, float partido, float helado, float chuzo, float marron, float roido,
-      float pDeC, float contrastante, float leveA, float leveB, float descorticado, float cascado,
-      float arrugado, float revolcado, float manchadoMaquina, float puntaChaucha, float pinto,
-      float bolita, float oxidado, float quebrado, float brotado, float venoso, float decolorido,
-      float humedad, float gramaje, float hidratacion, Date analysisDate,
+  public Analysis(Long id, Float zaranda, Float caidaZaranda, Float incomestible, Float terron,
+      Float manchado, Float partido, Float helado, Float chuzo, Float tiempoCoccion, Float roido,
+      Float picadoCampo, Float contrastante, Float leveA, Float leveB, Float descorticado, Float cascado,
+      Float arrugado, Float revolcado, Float manchadoMaquina, Float puntaChaucha, Float pinto,
+      Float bolita, Float oxidado, Float quebrado, Float brotado, Float venoso, Float decolorido,
+      Float humedad, Float gramaje, Float hidratacion, Date analysisDate,
       Date modificationDate) {
     this.id = id;
     this.zaranda = zaranda;
@@ -104,9 +106,9 @@ public class Analysis {
     this.partido = partido;
     this.helado = helado;
     this.chuzo = chuzo;
-    this.marron = marron;
+    this.tiempoCoccion = tiempoCoccion;
     this.roido = roido;
-    this.pDeC = pDeC;
+    this.picadoCampo = picadoCampo;
     this.contrastante = contrastante;
     this.leveA = leveA;
     this.leveB = leveB;
@@ -138,243 +140,243 @@ public class Analysis {
     this.id = id;
   }
 
-  public float getZaranda() {
+  public Float getZaranda() {
     return zaranda;
   }
 
-  public void setZaranda(float zaranda) {
+  public void setZaranda(Float zaranda) {
     this.zaranda = zaranda;
   }
 
-  public float getCaidaZaranda() {
+  public Float getCaidaZaranda() {
     return caidaZaranda;
   }
 
-  public void setCaidaZaranda(float caidaZaranda) {
+  public void setCaidaZaranda(Float caidaZaranda) {
     this.caidaZaranda = caidaZaranda;
   }
 
-  public float getIncomestible() {
+  public Float getIncomestible() {
     return incomestible;
   }
 
-  public void setIncomestible(float incomestible) {
+  public void setIncomestible(Float incomestible) {
     this.incomestible = incomestible;
   }
 
-  public float getTerron() {
+  public Float getTerron() {
     return terron;
   }
 
-  public void setTerron(float terron) {
+  public void setTerron(Float terron) {
     this.terron = terron;
   }
 
-  public float getManchado() {
+  public Float getManchado() {
     return manchado;
   }
 
-  public void setManchado(float manchado) {
+  public void setManchado(Float manchado) {
     this.manchado = manchado;
   }
 
-  public float getPartido() {
+  public Float getPartido() {
     return partido;
   }
 
-  public void setPartido(float partido) {
+  public void setPartido(Float partido) {
     this.partido = partido;
   }
 
-  public float getHelado() {
+  public Float getHelado() {
     return helado;
   }
 
-  public void setHelado(float helado) {
+  public void setHelado(Float helado) {
     this.helado = helado;
   }
 
-  public float getChuzo() {
+  public Float getChuzo() {
     return chuzo;
   }
 
-  public void setChuzo(float chuzo) {
+  public void setChuzo(Float chuzo) {
     this.chuzo = chuzo;
   }
 
-  public float getMarron() {
-    return marron;
+  public Float getTiempoCoccion() {
+    return tiempoCoccion;
   }
 
-  public void setMarron(float marron) {
-    this.marron = marron;
+  public void setTiempoCoccion(Float tiempoCoccion) {
+    this.tiempoCoccion = tiempoCoccion;
   }
 
-  public float getRoido() {
+  public Float getRoido() {
     return roido;
   }
 
-  public void setRoido(float roido) {
+  public void setRoido(Float roido) {
     this.roido = roido;
   }
 
-  public float getpDeC() {
-    return pDeC;
+  public Float getPicadoCampo() {
+    return picadoCampo;
   }
 
-  public void setpDeC(float pDeC) {
-    this.pDeC = pDeC;
+  public void setPicadoCampo(Float picadoCampo) {
+    this.picadoCampo = picadoCampo;
   }
 
-  public float getContrastante() {
+  public Float getContrastante() {
     return contrastante;
   }
 
-  public void setContrastante(float contrastante) {
+  public void setContrastante(Float contrastante) {
     this.contrastante = contrastante;
   }
 
-  public float getLeveA() {
+  public Float getLeveA() {
     return leveA;
   }
 
-  public void setLeveA(float leveA) {
+  public void setLeveA(Float leveA) {
     this.leveA = leveA;
   }
 
-  public float getLeveB() {
+  public Float getLeveB() {
     return leveB;
   }
 
-  public void setLeveB(float leveB) {
+  public void setLeveB(Float leveB) {
     this.leveB = leveB;
   }
 
-  public float getDescorticado() {
+  public Float getDescorticado() {
     return descorticado;
   }
 
-  public void setDescorticado(float descorticado) {
+  public void setDescorticado(Float descorticado) {
     this.descorticado = descorticado;
   }
 
-  public float getCascado() {
+  public Float getCascado() {
     return cascado;
   }
 
-  public void setCascado(float cascado) {
+  public void setCascado(Float cascado) {
     this.cascado = cascado;
   }
 
-  public float getArrugado() {
+  public Float getArrugado() {
     return arrugado;
   }
 
-  public void setArrugado(float arrugado) {
+  public void setArrugado(Float arrugado) {
     this.arrugado = arrugado;
   }
 
-  public float getRevolcado() {
+  public Float getRevolcado() {
     return revolcado;
   }
 
-  public void setRevolcado(float revolcado) {
+  public void setRevolcado(Float revolcado) {
     this.revolcado = revolcado;
   }
 
-  public float getManchadoMaquina() {
+  public Float getManchadoMaquina() {
     return manchadoMaquina;
   }
 
-  public void setManchadoMaquina(float manchadoMaquina) {
+  public void setManchadoMaquina(Float manchadoMaquina) {
     this.manchadoMaquina = manchadoMaquina;
   }
 
-  public float getPuntaChaucha() {
+  public Float getPuntaChaucha() {
     return puntaChaucha;
   }
 
-  public void setPuntaChaucha(float puntaChaucha) {
+  public void setPuntaChaucha(Float puntaChaucha) {
     this.puntaChaucha = puntaChaucha;
   }
 
-  public float getPinto() {
+  public Float getPinto() {
     return pinto;
   }
 
-  public void setPinto(float pinto) {
+  public void setPinto(Float pinto) {
     this.pinto = pinto;
   }
 
-  public float getBolita() {
+  public Float getBolita() {
     return bolita;
   }
 
-  public void setBolita(float bolita) {
+  public void setBolita(Float bolita) {
     this.bolita = bolita;
   }
 
-  public float getOxidado() {
+  public Float getOxidado() {
     return oxidado;
   }
 
-  public void setOxidado(float oxidado) {
+  public void setOxidado(Float oxidado) {
     this.oxidado = oxidado;
   }
 
-  public float getQuebrado() {
+  public Float getQuebrado() {
     return quebrado;
   }
 
-  public void setQuebrado(float quebrado) {
+  public void setQuebrado(Float quebrado) {
     this.quebrado = quebrado;
   }
 
-  public float getBrotado() {
+  public Float getBrotado() {
     return brotado;
   }
 
-  public void setBrotado(float brotado) {
+  public void setBrotado(Float brotado) {
     this.brotado = brotado;
   }
 
-  public float getVenoso() {
+  public Float getVenoso() {
     return venoso;
   }
 
-  public void setVenoso(float venoso) {
+  public void setVenoso(Float venoso) {
     this.venoso = venoso;
   }
 
-  public float getDecolorido() {
+  public Float getDecolorido() {
     return decolorido;
   }
 
-  public void setDecolorido(float decolorido) {
+  public void setDecolorido(Float decolorido) {
     this.decolorido = decolorido;
   }
 
-  public float getHumedad() {
+  public Float getHumedad() {
     return humedad;
   }
 
-  public void setHumedad(float humedad) {
+  public void setHumedad(Float humedad) {
     this.humedad = humedad;
   }
 
-  public float getGramaje() {
+  public Float getGramaje() {
     return gramaje;
   }
 
-  public void setGramaje(float gramaje) {
+  public void setGramaje(Float gramaje) {
     this.gramaje = gramaje;
   }
 
-  public float getHidratacion() {
+  public Float getHidratacion() {
     return hidratacion;
   }
 
-  public void setHidratacion(float hidratacion) {
+  public void setHidratacion(Float hidratacion) {
     this.hidratacion = hidratacion;
   }
 

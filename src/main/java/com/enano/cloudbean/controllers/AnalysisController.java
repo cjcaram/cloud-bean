@@ -24,10 +24,10 @@ public class AnalysisController {
   private AnalysisService analysisService;
   
   private HttpErrorBody httpErrorBody;
-  private static final Logger LOGGER = LogManager.getLogger(LocationController.class);
+  private static final Logger LOGGER = LogManager.getLogger(AnalysisController.class);
   
   @PostMapping(value = "/save")
-  public ResponseEntity<?> AddOrModifyLocation(@RequestBody Analysis analysis) {
+  public ResponseEntity<?> AddOrModifyAnalysis(@RequestBody Analysis analysis) {
     ResponseEntity<?> response = null;
     try {
       if (ZUtils.isEdition(analysis.getId().intValue())) {
@@ -44,7 +44,7 @@ public class AnalysisController {
   }
 
   @GetMapping(value = "/list")
-  public ResponseEntity<?> getLocations() {
+  public ResponseEntity<?> getAllAnalisis() {
     ResponseEntity<?> response = null;
     try {
       LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
@@ -56,7 +56,7 @@ public class AnalysisController {
   }
   
   @GetMapping(value = "/{id}")
-  public ResponseEntity<?> getCompaniesDto(@PathVariable Integer id) {
+  public ResponseEntity<?> getAnalysisById(@PathVariable Integer id) {
     ResponseEntity<?> response = null;
     try {
       LOGGER.info(ZUtils.FETCHING_ENTITY_MSG);
