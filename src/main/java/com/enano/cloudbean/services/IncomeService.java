@@ -33,6 +33,12 @@ public class IncomeService {
   public List<Income> listAll() {
     return repo.findAll();
   }
+  
+  public void updateAnalysis(Integer id, Integer analysisID) {
+    Income income = repo.getOne(id.longValue());
+    income.setAnalysisId(analysisID);
+    repo.saveAndFlush(income).getId();
+  }
 
   public List<IncomeDto> listAllIncomeDto() {
     List<Income> incomeList = repo.findAll();

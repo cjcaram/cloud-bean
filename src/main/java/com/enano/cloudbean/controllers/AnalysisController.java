@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.enano.cloudbean.dtos.HttpErrorBody;
 import com.enano.cloudbean.entities.Analysis;
 import com.enano.cloudbean.services.AnalysisService;
+import com.enano.cloudbean.services.IncomeService;
 
 @RestController
 @RequestMapping("/analysis")
@@ -23,20 +24,29 @@ public class AnalysisController {
   @Autowired
   private AnalysisService analysisService;
   
+  @Autowired
+  private IncomeService incomeService;
+  
   private HttpErrorBody httpErrorBody;
   private static final Logger LOGGER = LogManager.getLogger(AnalysisController.class);
   
-  @PostMapping(value = "/save")
-  public ResponseEntity<?> AddOrModifyAnalysis(@RequestBody Analysis analysis) {
+  @PostMapping(value = "/save/{incomeId}")
+  public ResponseEntity<?> AddOrModifyAnalysis(@RequestBody Analysis analysis, @PathVariable Integer incomeId) {
     ResponseEntity<?> response = null;
+    Analysis result = new Analysis();
     try {
       if (ZUtils.isEdition(analysis.getId().intValue())) {
         LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
-        response = ResponseEntity.ok(analysisService.edit(analysis));
+        result = analysisService.edit(analysis);
       } else {
         LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
-        response = ResponseEntity.ok(analysisService.save(analysis));
+        result = analysisService.save(analysis);
+        if (incomeId != null && incomeId > 0) {
+          LOGGER.info("Updating AnalysisId in parent Income.");
+          incomeService.updateAnalysis(incomeId, result.getId().intValue());
+        }
       }
+      response = ResponseEntity.ok(result);
     } catch (Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
     }
