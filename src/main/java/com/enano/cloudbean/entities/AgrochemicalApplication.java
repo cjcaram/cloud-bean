@@ -15,7 +15,7 @@ public class AgrochemicalApplication {
 
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
-  private long id;
+  private Long id;
   
   @Column(name="APLICACION_NRO")
   private int applicationNumber;
@@ -41,7 +41,7 @@ public class AgrochemicalApplication {
   public AgrochemicalApplication() {
   }
   
-  public AgrochemicalApplication(long id, int applicationNumber,
+  public AgrochemicalApplication(Long id, int applicationNumber,
       AgrochemicalAppType applicationType, Agrochemical agrochemical, LandBatch landBatch,
       int haAmount, Double dosage) {
     this.id = id;
@@ -53,11 +53,11 @@ public class AgrochemicalApplication {
     this.dosage = dosage;
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

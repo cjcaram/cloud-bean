@@ -17,7 +17,7 @@ public class RemoveAgrochemical {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Long id;
   @Column(name="ORDEN_TRABAJO")
   private String workOrderId;
   @Column(name="CANTIDAD")
@@ -31,7 +31,7 @@ public class RemoveAgrochemical {
   public RemoveAgrochemical() {
   }
   
-  public RemoveAgrochemical(int id, String workOrderId, int amount, Date date, Agrochemical agrochemical) {
+  public RemoveAgrochemical(Long id, String workOrderId, int amount, Date date, Agrochemical agrochemical) {
     this.id = id;
     this.workOrderId = workOrderId;
     this.amount = amount;
@@ -39,11 +39,11 @@ public class RemoveAgrochemical {
     this.agrochemical = agrochemical;
   }
 
-  public int getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
