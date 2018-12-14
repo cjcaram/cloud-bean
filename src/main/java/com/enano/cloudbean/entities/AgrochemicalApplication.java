@@ -35,7 +35,7 @@ public class AgrochemicalApplication {
   @Column(name="CANT_HA")
   private int haAmount;
   
-  @Column(name="CANT_HA")
+  @Column(name="DOSIS")
   private Double dosage;
 
   public AgrochemicalApplication() {
