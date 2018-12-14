@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.enano.cloudbean.dtos.IncomeDto;
+import com.enano.cloudbean.dtos.IncomeFiltersDto;
 import com.enano.cloudbean.entities.Income;
 import com.enano.cloudbean.repositories.IncomeRepository;
 
@@ -42,12 +43,21 @@ public class IncomeService {
 
   public List<IncomeDto> listAllIncomeDto() {
     List<Income> incomeList = repo.findAll();
+    return incomeListToIncomeDtoList(incomeList);
+  }
+
+  public List<IncomeDto> listIncomesByFilter( IncomeFiltersDto filters) {
+    List<Income> incomeList = repo.findIncomesUsingFilters(filters);
+    return incomeListToIncomeDtoList(incomeList);
+  }
+
+  private List<IncomeDto> incomeListToIncomeDtoList(List<Income> incomeList) {
     List<IncomeDto> incomeDtoList = incomeList.stream()
         .map(item -> getIncomeDtoFromIncomeEntity(item))
         .collect(Collectors.toList());
     return incomeDtoList;
   }
-
+  
   private IncomeDto getIncomeDtoFromIncomeEntity(Income item) {
    IncomeDto incomeDto = modelMapper.map(item, IncomeDto.class);
    return incomeDto;

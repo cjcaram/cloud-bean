@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.enano.cloudbean.dtos.HttpErrorBody;
+import com.enano.cloudbean.dtos.IncomeFiltersDto;
 import com.enano.cloudbean.entities.Income;
 import com.enano.cloudbean.services.IncomeService;
 
@@ -51,6 +52,21 @@ public class IncomeController {
     try {
       LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
       response = ResponseEntity.ok(incomeService.listAllIncomeDto());
+    }catch(Exception e) {
+      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
+          ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+      response = ZUtils.getErrorResponse(httpErrorBody);
+      LOGGER.error(httpErrorBody, e);
+    }
+    return response;
+  }
+  
+  @PostMapping(value = "/filter")
+  public ResponseEntity<?> getIncomes(@RequestBody IncomeFiltersDto filters) {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(incomeService.listIncomesByFilter(filters));
     }catch(Exception e) {
       httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, 
           ZUtils.ERROR_FETCHING_ENTITIES_MSG);
