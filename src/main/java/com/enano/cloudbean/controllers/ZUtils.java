@@ -25,6 +25,10 @@ public class ZUtils {
     return id != null && id > 0;
   }
   
+  public static boolean isEdition(Long id) {
+    return id != null && id > 0;
+  }
+  
   public static ResponseEntity<?> getErrorResponse(HttpErrorBody httpErrorBody) {
     return new ResponseEntity<>(httpErrorBody.getKnownErros(), httpErrorBody.getHttpStatus());
   }

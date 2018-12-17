@@ -35,7 +35,7 @@ public class AnalysisController {
     ResponseEntity<?> response = null;
     Analysis result = new Analysis();
     try {
-      if (ZUtils.isEdition(analysis.getId().intValue())) {
+      if (ZUtils.isEdition(analysis.getId())) {
         LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
         result = analysisService.edit(analysis);
       } else {

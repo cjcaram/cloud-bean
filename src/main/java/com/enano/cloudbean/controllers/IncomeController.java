@@ -30,7 +30,7 @@ public class IncomeController {
   public ResponseEntity<?> AddOrModifyIncome(@RequestBody Income income) {
     ResponseEntity<?> response = null;
     try {
-      if (ZUtils.isEdition(income.getId().intValue())) {
+      if (ZUtils.isEdition(income.getId())) {
         LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
         response = ResponseEntity.ok(incomeService.edit(income));
       } else {

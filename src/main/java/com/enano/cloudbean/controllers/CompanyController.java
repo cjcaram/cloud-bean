@@ -33,7 +33,7 @@ public class CompanyController {
   public ResponseEntity<?> AddOrModifyCompany(@RequestBody ComercialEntity company) {
     ResponseEntity<?> response = null;
     try {
-      if (ZUtils.isEdition(company.getId().intValue())) {
+      if (ZUtils.isEdition(company.getId())) {
         LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
         response = ResponseEntity.ok(companyService.edit(company));
       } else {
