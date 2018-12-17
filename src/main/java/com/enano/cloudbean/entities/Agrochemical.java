@@ -15,11 +15,11 @@ import javax.persistence.Table;
 @Table(name = "AGROQUIMICO")
 public class Agrochemical {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
   
   @Column (name = "NOMBRE")
-  private String nombre;
+  private String name;
   
   @Column (name = "NOTA")
   private String nota;
@@ -38,9 +38,6 @@ public class Agrochemical {
   
   @Column (name = "FECHA_COMPRA")
   private Date purchaseDate;
-  
-  @Column (name = "CATEGORIA")
-  private int categoria;
   
   @Column (name = "PRINCIPIO_ACTIVO")
   private String activePrincipie;
@@ -66,19 +63,18 @@ public class Agrochemical {
   
   public Agrochemical() { }
 
-  public Agrochemical(Long id, String nombre, String nota, Integer amount, int measurementUnit,
-      Date modificationDate, Date expirationDate, Date purchaseDate, int categoria,
+  public Agrochemical(Long id, String name, String nota, Integer amount, int measurementUnit,
+      Date modificationDate, Date expirationDate, Date purchaseDate,
       String activePrincipie, float principeActiveConcentration, Double price, String laboratory,
       String bill, String batchCode, AgrochemicalType agrochemicalType) {
     this.id = id;
-    this.nombre = nombre;
+    this.name = name;
     this.nota = nota;
     this.amount = amount;
     this.measurementUnit = measurementUnit;
     this.modificationDate = modificationDate;
     this.expirationDate = expirationDate;
     this.purchaseDate = purchaseDate;
-    this.categoria = categoria;
     this.activePrincipie = activePrincipie;
     this.principeActiveConcentration = principeActiveConcentration;
     this.price = price;
@@ -96,12 +92,12 @@ public class Agrochemical {
     this.id = id;
   }
 
-  public String getNombre() {
-    return nombre;
+  public String getName() {
+    return name;
   }
 
-  public void setNombre(String nombre) {
-    this.nombre = nombre;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getNota() {
@@ -150,14 +146,6 @@ public class Agrochemical {
 
   public void setPurchaseDate(Date purchaseDate) {
     this.purchaseDate = purchaseDate;
-  }
-
-  public int getCategoria() {
-    return categoria;
-  }
-
-  public void setCategoria(int categoria) {
-    this.categoria = categoria;
   }
 
   public String getActivePrincipie() {

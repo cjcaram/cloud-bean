@@ -14,19 +14,19 @@ import javax.persistence.UniqueConstraint;
 public class AgrochemicalType {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
   @Column (name = "NOMBRE")
-  private String nombre;
+  private String name;
   @Column (name = "DESCRIPCION")
   private String descripcion;
   
   public AgrochemicalType(){}
   
-  public AgrochemicalType(Long id, String nombre, String descripcion) {
+  public AgrochemicalType(Long id, String name, String descripcion) {
     super();
     this.id = id;
-    this.nombre = nombre;
+    this.name = name;
     this.descripcion = descripcion;
   }
   
@@ -38,12 +38,12 @@ public class AgrochemicalType {
     this.id = id;
   }
 
-  public String getNombre() {
-    return nombre;
+  public String getName() {
+    return name;
   }
 
-  public void setNombre(String nombre) {
-    this.nombre = nombre;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getDescripcion() {

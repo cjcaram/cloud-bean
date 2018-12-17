@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name= "APLICACION_TIPO")
 public class AgrochemicalAppType {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
   @Column (name = "NOMBRE")
   private String name;
