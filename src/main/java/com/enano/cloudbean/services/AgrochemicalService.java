@@ -19,8 +19,12 @@ public class AgrochemicalService {
     return repo.findAll();
   }
   
-  public Agrochemical getOne(Integer id) {
-    return repo.getOne(id.longValue());
+  public Agrochemical getOne(Long id) {
+    return repo.getOne(id);
+  }
+  
+  public void deleteOne(Long id) {
+    repo.deleteById(id);
   }
   
   public Agrochemical save(Agrochemical agrochemical) {
@@ -31,5 +35,16 @@ public class AgrochemicalService {
   public Agrochemical edit(Agrochemical agrochemical) {
     agrochemical.setModificationDate(new Date());
     return repo.saveAndFlush(agrochemical);
+  }
+
+  public Agrochemical addAmountToStock(Long id, Integer amount) {
+    Agrochemical agrochemical = null;
+    if (amount != null && amount > 0) {
+      agrochemical = repo.getOne(id);
+      agrochemical.setModificationDate(new Date());
+      agrochemical.setAmount(agrochemical.getAmount() + amount);
+      agrochemical = repo.saveAndFlush(agrochemical);
+    }
+    return agrochemical;
   }
 }

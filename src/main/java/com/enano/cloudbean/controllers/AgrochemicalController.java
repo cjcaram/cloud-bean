@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,13 +59,37 @@ public class AgrochemicalController {
   }
   
   @GetMapping(value = "/{id}")
-  public ResponseEntity<?> getAgrochemicalById(@PathVariable Integer id) {
+  public ResponseEntity<?> getAgrochemicalById(@PathVariable Long id) {
     ResponseEntity<?> response = null;
     try {
       LOGGER.info(ZUtils.FETCHING_ENTITY_MSG);
       response = ResponseEntity.ok(agroService.getOne(id));
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITY_MSG);
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/sum/{id}/{amount}")
+  public ResponseEntity<?> getAgrochemicalById(@PathVariable Long id, @PathVariable Integer amount) {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
+      response = ResponseEntity.ok(agroService.addAmountToStock(id, amount));
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
+    }
+    return response;
+  }
+  
+  @DeleteMapping(value = "/remove/{id}")
+  public ResponseEntity<?> deleteLocation(@PathVariable Long id) {
+    ResponseEntity<?> response = null;
+    try {
+      agroService.deleteOne(id);
+      response = ResponseEntity.ok(HttpStatus.ACCEPTED.getReasonPhrase());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
     }
     return response;
   }
