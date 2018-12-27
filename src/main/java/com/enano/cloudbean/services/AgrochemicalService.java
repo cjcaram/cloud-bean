@@ -60,7 +60,7 @@ public class AgrochemicalService {
     return agrochemical;
   }
 
-  public List<RemoveAgrochemical> withdrawAgrochemicals(WithdrawAgrochemicalDto withdrawOrder) throws Exception {
+  public List<RemoveAgrochemical> withdrawAgrochemicals(WithdrawAgrochemicalDto withdrawOrder){
     List<RemoveAgrochemical> removeAgrochemicalList = new ArrayList<>();
     List<Agrochemical> agrochemicalList = new ArrayList<>();
     Agrochemical agrochemical;
@@ -78,6 +78,10 @@ public class AgrochemicalService {
     }
     agrochemicalList = repo.saveAll(agrochemicalList);
     return repoWithdraw.saveAll(removeAgrochemicalList); 
+  }
+  
+  public List<RemoveAgrochemical> listAllWithdrawedAgrochemicals() {
+    return repoWithdraw.findAll(); 
   }
 
   private boolean checkIfStockExist(Agrochemical agrochemical, int withdrawAmt) {

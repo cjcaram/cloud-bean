@@ -57,6 +57,18 @@ public class AgrochemicalController extends BaseController {
     }
     return response;
   }
+  
+  @GetMapping(value = "/withdraw")
+  public ResponseEntity<?> getAllWithdrawedAgrochemicals() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(agroService.listAllWithdrawedAgrochemicals());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+    }
+    return response;
+  }
 
   @GetMapping(value = "/list")
   public ResponseEntity<?> getAllAgrochemicals() {
