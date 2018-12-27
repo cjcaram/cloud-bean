@@ -7,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,19 +22,25 @@ public class RemoveAgrochemical {
   private int amount;
   @Column(name="FECHA")
   private Date date;
-  @ManyToOne
-  @JoinColumn(name="AGROQUIMICO_ID")
-  private Agrochemical agrochemical;
+  @Column(name="AGROQUIMICO_ID")
+  private Long agrochemicalId;
   
   public RemoveAgrochemical() {
   }
   
-  public RemoveAgrochemical(Long id, String workOrderId, int amount, Date date, Agrochemical agrochemical) {
+  public RemoveAgrochemical(Long id, String workOrderId, int amount, Date date, Long agrochemicalId) {
     this.id = id;
     this.workOrderId = workOrderId;
     this.amount = amount;
     this.date = date;
-    this.agrochemical = agrochemical;
+    this.agrochemicalId = agrochemicalId;
+  }
+  
+  public RemoveAgrochemical(String workOrderId, Long agrochemicalId, int amount) {
+    this.workOrderId = workOrderId;
+    this.amount = amount;
+    this.date = new Date();
+    this.agrochemicalId = agrochemicalId;
   }
 
   public Long getId() {
@@ -71,11 +75,11 @@ public class RemoveAgrochemical {
     this.date = date;
   }
 
-  public Agrochemical getAgrochemical() {
-    return agrochemical;
+  public Long getAgrochemicalId() {
+    return agrochemicalId;
   }
 
-  public void setAgrochemical(Agrochemical agrochemical) {
-    this.agrochemical = agrochemical;
+  public void setAgrochemicalId(Long agrochemicalId) {
+    this.agrochemicalId = agrochemicalId;
   }
 }

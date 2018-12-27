@@ -13,18 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.enano.cloudbean.dtos.HttpErrorBody;
+import com.enano.cloudbean.dtos.WithdrawAgrochemicalDto;
 import com.enano.cloudbean.entities.Agrochemical;
 import com.enano.cloudbean.services.AgrochemicalService;
 
 @RestController
 @RequestMapping("/agrochemical")
-public class AgrochemicalController {
+public class AgrochemicalController extends BaseController {
   
   @Autowired
   private AgrochemicalService agroService;
   
-  private HttpErrorBody httpErrorBody;
   private static final Logger LOGGER = LogManager.getLogger(AgrochemicalController.class);
   
   @PostMapping(value = "/save")
@@ -40,6 +39,19 @@ public class AgrochemicalController {
         result = agroService.save(agrochemical);
       }
       response = ResponseEntity.ok(result);
+    } catch (Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
+    }
+    return response;
+  }
+  
+  @PostMapping(value = "/withdraw")
+  public ResponseEntity<?> withdrawAgrochemical(@RequestBody WithdrawAgrochemicalDto withdrawOrder) {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
+      LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
+      response = ResponseEntity.ok(agroService.withdrawAgrochemicals(withdrawOrder));
     } catch (Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
     }
@@ -70,6 +82,18 @@ public class AgrochemicalController {
     return response;
   }
   
+  @GetMapping(value = "/names")
+  public ResponseEntity<?> getAllDistincAgrochemicalNames() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(agroService.listAllDistincAgrochemicalNames());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+    }
+    return response;
+  }
+  
   @GetMapping(value = "/sum/{id}/{amount}")
   public ResponseEntity<?> getAgrochemicalById(@PathVariable Long id, @PathVariable Integer amount) {
     ResponseEntity<?> response = null;
@@ -91,14 +115,6 @@ public class AgrochemicalController {
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
     }
-    return response;
-  }
-  
-  private ResponseEntity<?> getErrorResponseAndLog(Exception e, String errorMsg) {
-    ResponseEntity<?> response;
-    httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, errorMsg);
-    response = ZUtils.getErrorResponse(httpErrorBody);
-    LOGGER.error(httpErrorBody, e);
     return response;
   }
 
