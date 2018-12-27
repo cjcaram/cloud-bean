@@ -1,22 +1,22 @@
 package com.enano.cloudbean.dtos;
 
 public class BaseCompanyDto {
-  private Integer id;
+  private Long id;
   private String name;
   
   public BaseCompanyDto() {
   }
   
-  public BaseCompanyDto(Integer id, String name) {
+  public BaseCompanyDto(Long id, String name) {
     this.id = id;
     this.name = name;
   }
 
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

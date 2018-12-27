@@ -17,18 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.enano.cloudbean.dtos.CompanyDto;
-import com.enano.cloudbean.dtos.HttpErrorBody;
 import com.enano.cloudbean.dtos.LocationDto;
 import com.enano.cloudbean.services.LocationService;
 
 @RestController
 @RequestMapping("/location")
-public class LocationController {
+public class LocationController extends BaseController {
   
   @Autowired
   private LocationService locationService;
   
-  private HttpErrorBody httpErrorBody;
   private static final Logger LOGGER = LogManager.getLogger(LocationController.class);
   
   @PostMapping(value = "/save")
@@ -95,14 +93,6 @@ public class LocationController {
       locationService.deleteOne(id);
       response = ResponseEntity.ok(ZUtils.ENTITY_REMOVED_MSG);
     }
-    return response;
-  }
-  
-  private ResponseEntity<?> getErrorResponseAndLog(Exception e, String errorMsg) {
-    ResponseEntity<?> response;
-    httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, errorMsg);
-    response = ZUtils.getErrorResponse(httpErrorBody);
-    LOGGER.error(httpErrorBody, e);
     return response;
   }
 }

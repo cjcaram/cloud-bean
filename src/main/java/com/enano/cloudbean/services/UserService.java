@@ -50,7 +50,7 @@ public class UserService {
       userDto.setRole(tmpUsr.getRole());
       userDto.setUsername(tmpUsr.getUserName());
       CompanyDto companyDto = new CompanyDto();
-      companyDto.setId(tmpUsr.getCompany().getId().intValue());
+      companyDto.setId(tmpUsr.getCompany().getId());
       companyDto.setName(tmpUsr.getCompany().getName());
       userDto.setCompany(companyDto);
       return userDto;

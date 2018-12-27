@@ -1,9 +1,11 @@
 package com.enano.cloudbean.dtos;
 
+import com.enano.cloudbean.entities.ResponsibleType;
+
 public class CompanyDto extends BaseCompanyDto{
   private String cuit;
   private Integer locationId;
-  private Integer responsibleType;
+  private ResponsibleType responsibleType;
   private String phone;
   private String mail;
   private String obs;
@@ -11,8 +13,8 @@ public class CompanyDto extends BaseCompanyDto{
   public CompanyDto(){
   }
 
-  public CompanyDto(Integer id, String name, String cuit, Integer locationId, String phone, 
-      Integer responsibleType, String mail, String obs) {
+  public CompanyDto(Long id, String name, String cuit, Integer locationId, String phone, 
+      ResponsibleType responsibleType, String mail, String obs) {
     super(id, name);
     this.cuit = cuit;
     this.locationId = locationId;
@@ -62,11 +64,11 @@ public class CompanyDto extends BaseCompanyDto{
       this.obs = obs;
   }
 
-  public Integer getResponsibleType() {
+  public ResponsibleType getResponsibleType() {
     return responsibleType;
   }
 
-  public void setResponsibleType(Integer responsibleType) {
+  public void setResponsibleType(ResponsibleType responsibleType) {
     this.responsibleType = responsibleType;
   }
 }

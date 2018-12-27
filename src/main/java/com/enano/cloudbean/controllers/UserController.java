@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.enano.cloudbean.dtos.HttpErrorBody;
 import com.enano.cloudbean.dtos.UserProfile;
 import com.enano.cloudbean.dtos.UserDto;
 import com.enano.cloudbean.entities.Role;
@@ -27,7 +25,7 @@ import com.enano.cloudbean.validations.UserValidation;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BaseController {
   
   @Autowired
   private UserService userService;
@@ -38,7 +36,6 @@ public class UserController {
   @Autowired
   private TokenStore tokenStore;
   
-  private HttpErrorBody httpErrorBody;
   private static final Logger LOGGER = LogManager.getLogger(UserController.class);
   
   @PostMapping(value = "/save")
@@ -57,9 +54,7 @@ public class UserController {
         response = addNewUser(userRegistration, userValidator);
       }
     } catch (Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, userValidator.getErrorMessage());
-      response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      response = getErrorResponseAndLog(e, userValidator.getErrorMessage());
     }
     return response;
   }
@@ -106,9 +101,7 @@ public class UserController {
     try {
       response = ResponseEntity.ok(userService.setUserAsInactived(id));
     }catch(Exception e) {
-      httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, "Error Trying to Disable User with id " + id);
-      response = ZUtils.getErrorResponse(httpErrorBody);
-      LOGGER.error(httpErrorBody);
+      response = getErrorResponseAndLog(e, "Error Trying to Disable User with id " + id);
     }
     return response;
   }

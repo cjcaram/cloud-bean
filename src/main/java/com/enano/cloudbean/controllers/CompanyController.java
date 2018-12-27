@@ -15,18 +15,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.enano.cloudbean.dtos.HttpErrorBody;
 import com.enano.cloudbean.entities.ComercialEntity;
 import com.enano.cloudbean.services.CompanyService;
 
 @RestController
 @RequestMapping("/company")
-public class CompanyController {
+public class CompanyController extends BaseController {
   
   @Autowired
   private CompanyService companyService;
   
-  private HttpErrorBody httpErrorBody;
   private static final Logger LOGGER = LogManager.getLogger(CompanyController.class);
   
   @PostMapping(value = "/save")
@@ -63,10 +61,10 @@ public class CompanyController {
   public ResponseEntity<?> getCompaniesDto() {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG + "(basic-list)");
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG + ZUtils.BASIC_LIST_PART_MSG);
       response = ResponseEntity.ok(companyService.listAllCompanyDto());
     }catch(Exception e) {
-      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG + " (basic-list)");
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG + ZUtils.BASIC_LIST_PART_MSG);
     }
     return response;
   }
@@ -75,10 +73,10 @@ public class CompanyController {
   public ResponseEntity<?> getBaseCompaniesDto() {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG + "(base-list)");
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG + ZUtils.BASE_LIST_PART_MSG);
       response = ResponseEntity.ok(companyService.listAllBaseCompanyDto());
     }catch(Exception e) {
-      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG + " (base-list)");
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG + ZUtils.BASE_LIST_PART_MSG);
     }
     return response;
   }
@@ -108,13 +106,4 @@ public class CompanyController {
     }
     return response;
   }
-  
-  private ResponseEntity<?> getErrorResponseAndLog(Exception e, String errorMsg) {
-    ResponseEntity<?> response;
-    httpErrorBody = new HttpErrorBody(HttpStatus.INTERNAL_SERVER_ERROR, e, errorMsg);
-    response = ZUtils.getErrorResponse(httpErrorBody);
-    LOGGER.error(httpErrorBody);
-    return response;
-  }
-
 }
