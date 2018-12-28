@@ -60,23 +60,21 @@ public class AgrochemicalService {
     return agrochemical;
   }
 
-  public List<RemoveAgrochemical> withdrawAgrochemicals(WithdrawAgrochemicalDto withdrawOrder){
+  public List<RemoveAgrochemical> withdrawAgrochemicals(WithdrawAgrochemicalDto withdrawOrder) throws Exception{
     List<RemoveAgrochemical> removeAgrochemicalList = new ArrayList<>();
-    List<Agrochemical> agrochemicalList = new ArrayList<>();
     Agrochemical agrochemical;
     String workOrder = withdrawOrder.getWorkOrder();
     int withdrawAmt = 0;
-    Long itemId = null;
     for (WithdrawItemDto item : withdrawOrder.getItems()) {
       withdrawAmt = item.getWithdrawAmt();
-      itemId = item.getId();
-      agrochemical = repo.getOne(itemId);
+      agrochemical = repo.getOne(item.getId());
       if (checkIfStockExist(agrochemical, withdrawAmt)) {
-        agrochemicalList.add(getWithdrawedAgrochemical(agrochemical, withdrawAmt));
-        removeAgrochemicalList.add(new RemoveAgrochemical(workOrder, itemId, withdrawAmt));
+        agrochemical = getWithdrawedAgrochemical(agrochemical, withdrawAmt);
+        removeAgrochemicalList.add(new RemoveAgrochemical(workOrder, agrochemical, withdrawAmt));
+      } else {
+        throw new Exception("One or many agrochemical were not found.");
       }
     }
-    agrochemicalList = repo.saveAll(agrochemicalList);
     return repoWithdraw.saveAll(removeAgrochemicalList); 
   }
   

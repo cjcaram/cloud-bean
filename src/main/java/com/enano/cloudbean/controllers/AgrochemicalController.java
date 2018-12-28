@@ -50,7 +50,6 @@ public class AgrochemicalController extends BaseController {
     ResponseEntity<?> response = null;
     try {
       LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
-      LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
       response = ResponseEntity.ok(agroService.withdrawAgrochemicals(withdrawOrder));
     } catch (Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
