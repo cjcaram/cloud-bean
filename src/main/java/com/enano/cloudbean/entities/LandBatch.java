@@ -2,12 +2,15 @@ package com.enano.cloudbean.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name= "FINCA_LOTE")
@@ -16,15 +19,17 @@ public class LandBatch {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="FINCA_ID")
+  //@JsonManagedReference
+  @JsonIgnore
   private Location land;
   
   @Column(name="NOMBRE")
   private String name;
   
   @Column(name="CANT_HA")
-  private String haAmount;
+  private int haAmount;
   
   @Column(name="NOTA")
   private String note;
@@ -32,7 +37,7 @@ public class LandBatch {
   public LandBatch() {
   }
   
-  public LandBatch(Long id, Location land, String name, String haAmount, String note) {
+  public LandBatch(Long id, Location land, String name, int haAmount, String note) {
     this.id = id;
     this.land = land;
     this.name = name;
@@ -64,11 +69,11 @@ public class LandBatch {
     this.name = name;
   }
 
-  public String getHaAmount() {
+  public int getHaAmount() {
     return haAmount;
   }
 
-  public void setHaAmount(String haAmount) {
+  public void setHaAmount(int haAmount) {
     this.haAmount = haAmount;
   }
 

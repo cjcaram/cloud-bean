@@ -67,7 +67,7 @@ public class AgrochemicalService {
     int withdrawAmt = 0;
     for (WithdrawItemDto item : withdrawOrder.getItems()) {
       withdrawAmt = item.getWithdrawAmt();
-      agrochemical = repo.getOne(item.getId());
+      agrochemical = repo.findById(item.getId()).get();
       if (checkIfStockExist(agrochemical, withdrawAmt)) {
         agrochemical = getWithdrawedAgrochemical(agrochemical, withdrawAmt);
         removeAgrochemicalList.add(new RemoveAgrochemical(workOrder, agrochemical, withdrawAmt));

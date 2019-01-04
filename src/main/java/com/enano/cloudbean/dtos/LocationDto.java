@@ -2,8 +2,6 @@ package com.enano.cloudbean.dtos;
 
 
 public class LocationDto extends BaseLocationDto{
-  private boolean isOrigin;
-  private boolean isDestiny;
   private String city;
   private String province;
   private String address;
@@ -14,33 +12,15 @@ public class LocationDto extends BaseLocationDto{
   public LocationDto() {
   }
   
-  public LocationDto(Integer id, boolean isOrigin, boolean isDestiny, String name, String city,
-      String province, String address, String country, String postalCode, String obs) {
+  public LocationDto(Integer id, String name, String city, String province, 
+      String address, String country, String postalCode, String obs) {
     super(id, name);
-    this.isOrigin = isOrigin;
-    this.isDestiny = isDestiny;
     this.city = city;
     this.province = province;
     this.address = address;
     this.country = country;
     this.postalCode = postalCode;
     this.obs = obs;
-  }
-
-  public boolean getIsOrigin() {
-    return isOrigin;
-  }
-
-  public void setIsOrigin(boolean isOrigin) {
-    this.isOrigin = isOrigin;
-  }
-
-  public boolean getIsDestiny() {
-    return isDestiny;
-  }
-
-  public void setIsDestiny(boolean isDestiny) {
-    this.isDestiny = isDestiny;
   }
 
   public String getCity() {

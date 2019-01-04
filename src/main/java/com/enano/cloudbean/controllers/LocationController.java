@@ -58,6 +58,18 @@ public class LocationController extends BaseController {
     return response;
   }
   
+  @GetMapping(value = "/batches-list")
+  public ResponseEntity<?> getLocationsById() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(locationService.getListOfBatchesPerLocation());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+    }
+    return response;
+  }
+  
   @GetMapping(value = "/base-list")
   public ResponseEntity<?> getCompaniesDto() {
     ResponseEntity<?> response = null;

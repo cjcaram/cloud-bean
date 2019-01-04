@@ -1,10 +1,16 @@
 package com.enano.cloudbean.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -13,10 +19,6 @@ public class Location{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(name="origen")
-  private boolean isOrigin;
-  @Column(name="destino")
-  private boolean isDestiny;
   @Column(name="establecimiento")
   private String name;
   @Column(name="localidad")
@@ -31,16 +33,17 @@ public class Location{
   private String postalCode;
   @Column(name="observaciones")
   private String obs;
+  @OneToMany(mappedBy = "land", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  //@JsonBackReference
+  private List<LandBatch> batches = new ArrayList<>();
   
   public Location(){
   }
 
-  public Location(Long id, boolean isOrigin, boolean isDestiny, String name,
-      String city, String province, String address, String country, String postalCode,
-      String obs) {
+  public Location(Long id, String name, String city, String province, 
+      String address, String country, String postalCode, String obs,
+      List<LandBatch> batches) {
     this.id = id;
-    this.isOrigin = isOrigin;
-    this.isDestiny = isDestiny;
     this.name = name;
     this.city = city;
     this.province = province;
@@ -48,6 +51,7 @@ public class Location{
     this.country = country;
     this.postalCode = postalCode;
     this.obs = obs;
+    this.batches = batches;
   }
 
   public Long getId() {
@@ -56,22 +60,6 @@ public class Location{
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public boolean getIsOrigin() {
-    return isOrigin;
-  }
-
-  public void setIsOrigin(boolean isOrigin) {
-    this.isOrigin = isOrigin;
-  }
-
-  public boolean getIsDestiny() {
-    return isDestiny;
-  }
-
-  public void setIsDestiny(boolean isDestiny) {
-    this.isDestiny = isDestiny;
   }
 
   public String getName() {
@@ -128,6 +116,14 @@ public class Location{
 
   public void setObs(String obs) {
     this.obs = obs;
+  }
+
+  public List<LandBatch> getBatches() {
+    return batches;
+  }
+
+  public void setBatches(List<LandBatch> batches) {
+    this.batches = batches;
   }
   
 }
