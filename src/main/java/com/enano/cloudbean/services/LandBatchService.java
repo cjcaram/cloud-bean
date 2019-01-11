@@ -1,17 +1,14 @@
 package com.enano.cloudbean.services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.enano.cloudbean.dtos.CompanyDto;
 import com.enano.cloudbean.dtos.LandBatchDto;
-import com.enano.cloudbean.entities.AgrochemicalApplication;
-import com.enano.cloudbean.entities.ComercialEntity;
+import com.enano.cloudbean.entities.Application;
 import com.enano.cloudbean.entities.LandBatch;
+import com.enano.cloudbean.repositories.ApplicationRepository;
 import com.enano.cloudbean.repositories.LandBatchRepository;
 import com.enano.cloudbean.repositories.LocationRepository;
 
@@ -22,7 +19,10 @@ public class LandBatchService {
   private LandBatchRepository landBatchRepo;
   
   @Autowired
-  private LocationRepository LocationRepo;
+  private LocationRepository locationRepo;
+  
+  @Autowired
+  private ApplicationRepository agroAppRepo;
   
   public List<LandBatch> listAllLandBatch() {
     return landBatchRepo.findAll();
@@ -45,16 +45,16 @@ public class LandBatchService {
     landBatch.setName(item.getName());
     landBatch.setHaAmount(item.getHaAmount());
     landBatch.setNote(item.getNote());
-    landBatch.setLand(LocationRepo.getOne(item.getParentId()));
+    landBatch.setLand(locationRepo.getOne(item.getParentId()));
     return landBatch;
   }
   
-  public List<AgrochemicalApplication> getAgrochemicalApplicationAssociatedWithLandBatchId (Long id){
-    List<AgrochemicalApplication> agrochAppList = new ArrayList<>();// companyRepo.findByLocation(repo.getOne(id.longValue()));
+  public List<Application> getAgrochemicalApplicationAssociatedWithLandBatchId (Long id){
+    List<Application> agrochAppList = agroAppRepo.findByLandBatchId(id);
     return agrochAppList;
   }
 
   public void deleteOne(Long id) {
-    landBatchRepo.deleteById(id);;
+    landBatchRepo.deleteById(id);
   }
 }

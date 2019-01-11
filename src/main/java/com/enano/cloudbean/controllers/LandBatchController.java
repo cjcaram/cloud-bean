@@ -1,8 +1,11 @@
 package com.enano.cloudbean.controllers;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.enano.cloudbean.dtos.LandBatchDto;
+import com.enano.cloudbean.entities.Application;
 import com.enano.cloudbean.services.LandBatchService;
 
 @RestController
@@ -58,11 +62,25 @@ public class LandBatchController extends BaseController{
   public ResponseEntity<?> deleteLocation(@PathVariable Long id) {
     ResponseEntity<?> response = null;
     try {
-      // response = deleteIfNoDependeciesExist(id);
-      landBatchService.deleteOne(id);
-      response = ResponseEntity.ok(ZUtils.ENTITY_REMOVED_MSG); 
+      response = deleteIfNoDependeciesExist(id);
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
+    }
+    return response;
+  }
+  
+  private ResponseEntity<?> deleteIfNoDependeciesExist(Long id) {
+    ResponseEntity<?> response;
+    LOGGER.info(ZUtils.CHECKING_DEPENDENCIES_MSG);
+    List<Application> agroApplicationList = landBatchService.
+        getAgrochemicalApplicationAssociatedWithLandBatchId(id);
+    if (agroApplicationList.size() > 0) {
+      LOGGER.info(ZUtils.DEPENDENCIES_FOUNDS_MSG);
+      response = new ResponseEntity<>(agroApplicationList, HttpStatus.FAILED_DEPENDENCY);
+    } else {
+      LOGGER.info(ZUtils.REMOVING_ENTITY_MSG);
+      landBatchService.deleteOne(id);
+      response = ResponseEntity.ok(ZUtils.ENTITY_REMOVED_MSG);
     }
     return response;
   }
