@@ -6,11 +6,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.enano.cloudbean.dtos.ApplicationDto;
 import com.enano.cloudbean.dtos.WithdrawAgrochemicalDto;
 import com.enano.cloudbean.dtos.WithdrawItemDto;
 import com.enano.cloudbean.entities.Agrochemical;
+import com.enano.cloudbean.entities.Application;
 import com.enano.cloudbean.entities.RemoveAgrochemical;
+import com.enano.cloudbean.repositories.ApplicationRepository;
+import com.enano.cloudbean.repositories.AgrochemicalApplicationRepository;
 import com.enano.cloudbean.repositories.AgrochemicalRepository;
 import com.enano.cloudbean.repositories.RemoveAgrochemicalRepository;
 
@@ -22,6 +27,12 @@ public class AgrochemicalService {
   
   @Autowired
   private RemoveAgrochemicalRepository repoWithdraw;
+  
+  @Autowired
+  private ApplicationRepository repoApplication;
+  
+  @Autowired
+  private AgrochemicalApplicationRepository repoAgroApp;
   
   public List<Agrochemical> listAll() {
     return repo.findAll();
@@ -81,6 +92,10 @@ public class AgrochemicalService {
   public List<RemoveAgrochemical> listAllWithdrawedAgrochemicals() {
     return repoWithdraw.findAll(); 
   }
+  
+  public List<Application> listAllAgrochemicalsApplications() {
+    return repoApplication.findAll(); 
+  }
 
   private boolean checkIfStockExist(Agrochemical agrochemical, int withdrawAmt) {
     return agrochemical != null && agrochemical.getAmount() >= withdrawAmt;
@@ -90,5 +105,30 @@ public class AgrochemicalService {
     agrochemical.setModificationDate(new Date());
     agrochemical.setAmount(agrochemical.getAmount() - withdrawAmt);
     return agrochemical;
+  }
+
+  @Transactional
+  public Application saveAgrochemicalApplication(ApplicationDto agroApplication) {
+    Application application = new Application();
+    application.setApplicationDate(agroApplication.getApplicationDate());
+    application.setApplicationNumber(agroApplication.getApplicationNumber());
+    application.setApplicationType(agroApplication.getApplicationType());
+    application.setHaAmount(agroApplication.getHaAmount());
+    application.setLandBatch(agroApplication.getLandBatch());
+    if (agroApplication.getId() == null || agroApplication.getId() < 0) {
+      application.setId(null);
+      final Application applicationResult = repoApplication.saveAndFlush(application);
+      agroApplication.getItems().forEach(item -> item.setApplication(applicationResult));
+      repoAgroApp.saveAll(agroApplication.getItems());
+    } else {
+      application = repoApplication.saveAndFlush(application);
+    }
+    return application;
+  }
+
+  @Transactional
+  public void deleteApplication(Long id) {
+    repoAgroApp.deleteByApplicationId(id);
+    repoApplication.deleteById(id);
   }
 }

@@ -7,7 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name="AGROQUIMICO_APLICACION")
@@ -17,39 +19,32 @@ public class AgrochemicalApplication {
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   private Long id;
   
-  @Column(name="APLICACION_NRO")
-  private int applicationNumber;
-  
-  @ManyToOne
-  @JoinColumn(name="APPLICACION_TIPO")
-  private AgrochemicalAppType applicationType;
-  
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name="ARGROQUIMICO_ID")
   private Agrochemical agrochemical;
   
   @ManyToOne
-  @JoinColumn(name="LOTE_ID")
-  private LandBatch landBatch;
-  
-  @Column(name="CANT_HA")
-  private int haAmount;
+  @JoinColumn(name="APLICACION_ID")
+  private Application application;
   
   @Column(name="DOSIS")
   private Double dosage;
-
+  
   public AgrochemicalApplication() {
   }
-  
-  public AgrochemicalApplication(Long id, int applicationNumber,
-      AgrochemicalAppType applicationType, Agrochemical agrochemical, LandBatch landBatch,
-      int haAmount, Double dosage) {
+
+  public AgrochemicalApplication(Long id, Agrochemical agrochemical, Application application,
+      Double dosage) {
     this.id = id;
-    this.applicationNumber = applicationNumber;
-    this.applicationType = applicationType;
     this.agrochemical = agrochemical;
-    this.landBatch = landBatch;
-    this.haAmount = haAmount;
+    this.application = application;
+    this.dosage = dosage;
+  }
+  
+  public AgrochemicalApplication(Agrochemical agrochemical, Application application,
+      Double dosage) {
+    this.agrochemical = agrochemical;
+    this.application = application;
     this.dosage = dosage;
   }
 
@@ -61,22 +56,6 @@ public class AgrochemicalApplication {
     this.id = id;
   }
 
-  public int getApplicationNumber() {
-    return applicationNumber;
-  }
-
-  public void setApplicationNumber(int applicationNumber) {
-    this.applicationNumber = applicationNumber;
-  }
-
-  public AgrochemicalAppType getApplicationType() {
-    return applicationType;
-  }
-
-  public void setApplicationType(AgrochemicalAppType applicationType) {
-    this.applicationType = applicationType;
-  }
-
   public Agrochemical getAgrochemical() {
     return agrochemical;
   }
@@ -85,20 +64,12 @@ public class AgrochemicalApplication {
     this.agrochemical = agrochemical;
   }
 
-  public LandBatch getLandBatch() {
-    return landBatch;
+  public Application getApplication() {
+    return application;
   }
 
-  public void setLandBatch(LandBatch landBatch) {
-    this.landBatch = landBatch;
-  }
-
-  public int getHaAmount() {
-    return haAmount;
-  }
-
-  public void setHaAmount(int haAmount) {
-    this.haAmount = haAmount;
+  public void setApplication(Application application) {
+    this.application = application;
   }
 
   public Double getDosage() {
@@ -108,4 +79,5 @@ public class AgrochemicalApplication {
   public void setDosage(Double dosage) {
     this.dosage = dosage;
   }
+
 }
