@@ -74,7 +74,7 @@ public class AgrochemicalController extends BaseController {
   public ResponseEntity<?> saveAgrochemicalApplication(@RequestBody ApplicationDto agroApplication) {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
+      LOGGER.info((ZUtils.isEdition(agroApplication.getId())) ? ZUtils.EDITING_ENTITY_MSG : ZUtils.ADDING_ENTITY_MSG);
       response = ResponseEntity.ok(agroService.saveAgrochemicalApplication(agroApplication));
     } catch (Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
@@ -142,6 +142,18 @@ public class AgrochemicalController extends BaseController {
     return response;
   }
   
+  @GetMapping(value = "/application-detail/{id}")
+  public ResponseEntity<?> getApplicationDetailByApplicationId(@PathVariable Long id) {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(agroService.getApplicationDetailByApplicationId(id));
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+    }
+    return response;
+  }
+  
   @GetMapping(value = "/sum/{id}/{amount}")
   public ResponseEntity<?> getAgrochemicalById(@PathVariable Long id, @PathVariable Integer amount) {
     ResponseEntity<?> response = null;
@@ -150,6 +162,19 @@ public class AgrochemicalController extends BaseController {
       response = ResponseEntity.ok(agroService.addAmountToStock(id, amount));
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/report")
+  public ResponseEntity<?> getCostApplicationReport() {
+    ResponseEntity<?> response = null;
+    String methodInfo = "Creating Excel Report."; 
+    try {
+      LOGGER.info(methodInfo);
+      response = ResponseEntity.ok(agroService.getApplicationReport());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, "ERROR: " + methodInfo);
     }
     return response;
   }

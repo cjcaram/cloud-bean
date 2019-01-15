@@ -1,5 +1,6 @@
 package com.enano.cloudbean.services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,12 +13,14 @@ import com.enano.cloudbean.dtos.ApplicationDto;
 import com.enano.cloudbean.dtos.WithdrawAgrochemicalDto;
 import com.enano.cloudbean.dtos.WithdrawItemDto;
 import com.enano.cloudbean.entities.Agrochemical;
+import com.enano.cloudbean.entities.AgrochemicalApplication;
 import com.enano.cloudbean.entities.Application;
 import com.enano.cloudbean.entities.RemoveAgrochemical;
 import com.enano.cloudbean.repositories.ApplicationRepository;
 import com.enano.cloudbean.repositories.AgrochemicalApplicationRepository;
 import com.enano.cloudbean.repositories.AgrochemicalRepository;
 import com.enano.cloudbean.repositories.RemoveAgrochemicalRepository;
+import com.enano.report.BuildExcelFile;
 
 @Service
 public class AgrochemicalService {
@@ -121,6 +124,7 @@ public class AgrochemicalService {
       agroApplication.getItems().forEach(item -> item.setApplication(applicationResult));
       repoAgroApp.saveAll(agroApplication.getItems());
     } else {
+      application.setId(agroApplication.getId());
       application = repoApplication.saveAndFlush(application);
     }
     return application;
@@ -130,5 +134,15 @@ public class AgrochemicalService {
   public void deleteApplication(Long id) {
     repoAgroApp.deleteByApplicationId(id);
     repoApplication.deleteById(id);
+  }
+
+  public List<AgrochemicalApplication> getApplicationDetailByApplicationId(Long id) {
+    return repoAgroApp.findByApplicationId(id);
+  }
+
+  public byte[] getApplicationReport() throws IOException {
+    BuildExcelFile excelBuilder = new BuildExcelFile();
+    excelBuilder.buildExcel(repoApplication.findAll());
+    return excelBuilder.getReport();
   }
 }

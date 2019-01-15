@@ -1,6 +1,7 @@
 package com.enano.cloudbean.entities;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,7 +22,7 @@ public class Application {
   private Long id;
   
   @Column(name="APLICACION_NRO")
-  private int applicationNumber;
+  private Integer applicationNumber;
   
   @OneToOne
   @JoinColumn(name="APPLICACION_TIPO")
@@ -31,16 +33,19 @@ public class Application {
   private LandBatch landBatch;
   
   @Column(name="CANT_HA")
-  private int haAmount;
+  private Integer haAmount;
   
   @Column(name="FECHA_APLICACION")
   private Date applicationDate;
+  
+  @OneToMany(targetEntity = AgrochemicalApplication.class, mappedBy = "application" )
+  private Set<AgrochemicalApplication> items;
 
   public Application() {
   }
 
-  public Application(Long id, int applicationNumber, AgrochemicalAppType applicationType,
-      LandBatch landBatch, int haAmount, Date applicationDate) {
+  public Application(Long id, Integer applicationNumber, AgrochemicalAppType applicationType,
+      LandBatch landBatch, Integer haAmount, Date applicationDate) {
     this.id = id;
     this.applicationNumber = applicationNumber;
     this.applicationType = applicationType;
@@ -57,11 +62,11 @@ public class Application {
     this.id = id;
   }
 
-  public int getApplicationNumber() {
+  public Integer getApplicationNumber() {
     return applicationNumber;
   }
 
-  public void setApplicationNumber(int applicationNumber) {
+  public void setApplicationNumber(Integer applicationNumber) {
     this.applicationNumber = applicationNumber;
   }
 
@@ -81,11 +86,11 @@ public class Application {
     this.landBatch = landBatch;
   }
 
-  public int getHaAmount() {
+  public Integer getHaAmount() {
     return haAmount;
   }
 
-  public void setHaAmount(int haAmount) {
+  public void setHaAmount(Integer haAmount) {
     this.haAmount = haAmount;
   }
 
@@ -97,7 +102,12 @@ public class Application {
     this.applicationDate = applicationDate;
   }
 
-  
+  public Set<AgrochemicalApplication> getItems() {
+    return items;
+  }
 
+  public void setItems(Set<AgrochemicalApplication> items) {
+    this.items = items;
+  }
 }
 
