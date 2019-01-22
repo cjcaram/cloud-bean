@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.enano.cloudbean.dtos.AgrochemicalApplicationDto;
 import com.enano.cloudbean.dtos.ApplicationDto;
 import com.enano.cloudbean.dtos.WithdrawAgrochemicalDto;
 import com.enano.cloudbean.dtos.WithdrawItemDto;
@@ -20,7 +21,8 @@ import com.enano.cloudbean.repositories.ApplicationRepository;
 import com.enano.cloudbean.repositories.AgrochemicalApplicationRepository;
 import com.enano.cloudbean.repositories.AgrochemicalRepository;
 import com.enano.cloudbean.repositories.RemoveAgrochemicalRepository;
-import com.enano.report.BuildExcelFile;
+import com.enano.report.AgrochemicalApplicationCostReport;
+import com.enano.report.AgrochemicalStockReport;
 
 @Service
 public class AgrochemicalService {
@@ -140,9 +142,34 @@ public class AgrochemicalService {
     return repoAgroApp.findByApplicationId(id);
   }
 
+  public void deleteOneAgrochemicalApplication(Long id) {
+    repoAgroApp.deleteById(id);
+  }
+
+  public AgrochemicalApplication addAgrochemicalApplication(AgrochemicalApplicationDto appDetail) {
+    AgrochemicalApplication entity = new AgrochemicalApplication();
+    entity.setAgrochemical(appDetail.getAgrochemical());
+    entity.setApplication(appDetail.getApplication());
+    entity.setDosage(appDetail.getDosage());
+    return repoAgroApp.saveAndFlush(entity);
+  }
+  
   public byte[] getApplicationReport() throws IOException {
-    BuildExcelFile excelBuilder = new BuildExcelFile();
+    AgrochemicalApplicationCostReport excelBuilder = new AgrochemicalApplicationCostReport();
     excelBuilder.buildExcel(repoApplication.findAll());
+    return excelBuilder.getReport();
+  }
+
+  public byte[] getWithdrawReport() throws IOException {
+//    BuildExcelFile excelBuilder = new BuildExcelFile();
+//    excelBuilder.buildExcel(repoApplication.findAll());
+//    return excelBuilder.getReport();
+    return null;
+  }
+
+  public byte[] getStockReport() throws IOException{
+    AgrochemicalStockReport excelBuilder = new AgrochemicalStockReport();
+    excelBuilder.buildExcel(repo.findAll());
     return excelBuilder.getReport();
   }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enano.cloudbean.dtos.AgrochemicalApplicationDto;
 import com.enano.cloudbean.dtos.ApplicationDto;
 import com.enano.cloudbean.dtos.WithdrawAgrochemicalDto;
 import com.enano.cloudbean.entities.Agrochemical;
@@ -142,18 +143,6 @@ public class AgrochemicalController extends BaseController {
     return response;
   }
   
-  @GetMapping(value = "/application-detail/{id}")
-  public ResponseEntity<?> getApplicationDetailByApplicationId(@PathVariable Long id) {
-    ResponseEntity<?> response = null;
-    try {
-      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
-      response = ResponseEntity.ok(agroService.getApplicationDetailByApplicationId(id));
-    }catch(Exception e) {
-      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
-    }
-    return response;
-  }
-  
   @GetMapping(value = "/sum/{id}/{amount}")
   public ResponseEntity<?> getAgrochemicalById(@PathVariable Long id, @PathVariable Integer amount) {
     ResponseEntity<?> response = null;
@@ -166,19 +155,6 @@ public class AgrochemicalController extends BaseController {
     return response;
   }
   
-  @GetMapping(value = "/report")
-  public ResponseEntity<?> getCostApplicationReport() {
-    ResponseEntity<?> response = null;
-    String methodInfo = "Creating Excel Report."; 
-    try {
-      LOGGER.info(methodInfo);
-      response = ResponseEntity.ok(agroService.getApplicationReport());
-    }catch(Exception e) {
-      response = getErrorResponseAndLog(e, "ERROR: " + methodInfo);
-    }
-    return response;
-  }
-  
   @DeleteMapping(value = "/remove/{id}")
   public ResponseEntity<?> deleteAgrochemical(@PathVariable Long id) {
     ResponseEntity<?> response = null;
@@ -187,6 +163,78 @@ public class AgrochemicalController extends BaseController {
       response = ResponseEntity.ok(HttpStatus.ACCEPTED.getReasonPhrase());
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/application-detail/{id}")
+  public ResponseEntity<?> getApplicationDetailByApplicationId(@PathVariable Long id) {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(agroService.getApplicationDetailByApplicationId(id));
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+    }
+    return response;
+  }
+  
+  @DeleteMapping(value = "/application-detail/{id}")
+  public ResponseEntity<?> deleteAgrochemicalApplication(@PathVariable Long id) {
+    ResponseEntity<?> response = null;
+    try {
+      agroService.deleteOneAgrochemicalApplication(id);
+      response = ResponseEntity.ok(HttpStatus.ACCEPTED.getReasonPhrase());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
+    }
+    return response;
+  }
+  
+  @PostMapping(value = "/application-detail")
+  public ResponseEntity<?> addAgrochemicalApplication(@RequestBody AgrochemicalApplicationDto appDetail) {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
+      response = ResponseEntity.ok(agroService.addAgrochemicalApplication(appDetail));
+    } catch (Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/cost-report")
+  public ResponseEntity<?> getCostApplicationReport() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.CREATING_REPORT_MSG + " **Costos de aplicación**");
+      response = ResponseEntity.ok(agroService.getApplicationReport());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_CREATING_REPORT_MSG);
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/stock-report")
+  public ResponseEntity<?> getStockAgrochemicalReport() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.CREATING_REPORT_MSG + " **Stock de Agroquimicos**");
+      response = ResponseEntity.ok(agroService.getStockReport());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_CREATING_REPORT_MSG);
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/withdraw-report")
+  public ResponseEntity<?> getWithdrawAgrochemicalReport() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info(ZUtils.CREATING_REPORT_MSG + " **Retiro de Agroquimicos**");
+      response = ResponseEntity.ok(agroService.getWithdrawReport());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_CREATING_REPORT_MSG);
     }
     return response;
   }
