@@ -1,5 +1,7 @@
 package com.enano.report;
 
+import static com.enano.cloudbean.utils.GeneralConstants.MEASURMENT_UNITS;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -110,6 +112,10 @@ public class BuildExcelFile {
     wb.write(out);
     wb.close();
     return out.toByteArray();
+  }
+  
+  protected String getMeasurmentUnitName(int measurmentUnitId) {
+    return MEASURMENT_UNITS.get(measurmentUnitId).getName();
   }
   
   private static Map<String, CellStyle> createStyles(Workbook wb){

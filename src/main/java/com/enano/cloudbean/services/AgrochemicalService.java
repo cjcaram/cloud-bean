@@ -23,6 +23,7 @@ import com.enano.cloudbean.repositories.AgrochemicalRepository;
 import com.enano.cloudbean.repositories.RemoveAgrochemicalRepository;
 import com.enano.report.AgrochemicalApplicationCostReport;
 import com.enano.report.AgrochemicalStockReport;
+import com.enano.report.AgrochemicalWithdrawReport;
 
 @Service
 public class AgrochemicalService {
@@ -161,10 +162,9 @@ public class AgrochemicalService {
   }
 
   public byte[] getWithdrawReport() throws IOException {
-//    BuildExcelFile excelBuilder = new BuildExcelFile();
-//    excelBuilder.buildExcel(repoApplication.findAll());
-//    return excelBuilder.getReport();
-    return null;
+    AgrochemicalWithdrawReport excelBuilder = new AgrochemicalWithdrawReport();
+    excelBuilder.buildExcel(repoWithdraw.findAll());
+    return excelBuilder.getReport();
   }
 
   public byte[] getStockReport() throws IOException{

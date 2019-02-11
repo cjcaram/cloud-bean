@@ -2,8 +2,6 @@ package com.enano.report;
 
 import java.util.List;
 
-import static com.enano.cloudbean.utils.GeneralConstants.MEASURMENT_UNITS;
-
 import com.enano.cloudbean.entities.Agrochemical;
 
 public class AgrochemicalStockReport extends BuildExcelFile {
@@ -35,7 +33,7 @@ public class AgrochemicalStockReport extends BuildExcelFile {
       writeCell(col++, CELL_STYLE, item.getActivePrincipie());
       writeCell(col++, CELL_STYLE, item.getPrincipeActiveConcentration());
       writeCell(col++, TOTALS_STYLE, item.getAmount());
-      writeCell(col++, CELL_STYLE, MEASURMENT_UNITS.get(item.getMeasurementUnit()).getName());
+      writeCell(col++, CELL_STYLE, getMeasurmentUnitName(item.getMeasurementUnit()));
       writeCell(col++, TOTALS_STYLE, item.getPrice());
       writeCell(col++, CELL_STYLE, item.getPurchaseDate());
       writeCell(col++, CELL_STYLE, item.getExpirationDate());

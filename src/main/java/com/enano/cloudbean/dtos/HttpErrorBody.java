@@ -7,21 +7,21 @@ import org.springframework.http.HttpStatus;
 
 public class HttpErrorBody {
   private String exceptionErrorMsg;
-  private List<String> knownErros;
+  private List<String> knownErrors;
   private Exception exeption;
   private HttpStatus httpStatus;
   
   public HttpErrorBody(HttpStatus httpStatus, Exception exeption, List<String> knownErros) {
     this.exceptionErrorMsg = exeption.getMessage();
-    this.knownErros = knownErros;
+    this.knownErrors = knownErros;
     this.exeption = exeption;
     this.httpStatus = httpStatus;
   }
   
   public HttpErrorBody(HttpStatus httpStatus, Exception exeption, String knownError) {
     this.exceptionErrorMsg = exeption.getMessage();
-    this.knownErros = new ArrayList<>();
-    this.knownErros.add(knownError);
+    this.knownErrors = new ArrayList<>();
+    this.knownErrors.add(knownError);
     this.exeption = exeption;
     this.httpStatus = httpStatus;
   }
@@ -31,11 +31,11 @@ public class HttpErrorBody {
   }
 
   public List<String> getKnownErros() {
-    return knownErros;
+    return knownErrors;
   }
 
   public void setKnownErros(List<String> knownErros) {
-    this.knownErros = knownErros;
+    this.knownErrors = knownErros;
   }
 
   public Exception getExeption() {
@@ -58,7 +58,7 @@ public class HttpErrorBody {
   public String toString() {
     return "Http Status Code: " + httpStatus.value() + "\n" +
         "Http Status phrase:" + httpStatus.getReasonPhrase() + "\n" +
-        "Error List :" + String.join(", ", knownErros) + "\n" +
+        "Error List :" + String.join(", ", knownErrors) + "\n" +
         "Exception Message: " + exceptionErrorMsg;
   }
   
