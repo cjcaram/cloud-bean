@@ -12,5 +12,5 @@ CREATE TABLE `users` (
 
 
 INSERT INTO `USERS` (`USER_NAME`, `PSWD`, `ROLE_ID`) 
-  SELECT 'admin2', '$2a$10$zEm2wBNhLRgbd3clqJycCuAAAFG8l68ND509fvXmRegYFhzvxs4Pa', ID
+  SELECT 'admin', '$2a$10$zEm2wBNhLRgbd3clqJycCuAAAFG8l68ND509fvXmRegYFhzvxs4Pa', ID
   FROM ROLE WHERE ROLE = 'ADMIN';
