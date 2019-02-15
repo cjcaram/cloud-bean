@@ -28,11 +28,11 @@ public class User {
   @Column (name = "ACTIVE")
   private boolean active;
 
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @OneToOne
   @JoinColumn(name = "ROLE_ID")
   private Role role;
   
-  @ManyToOne(cascade=CascadeType.PERSIST)
+  @OneToOne
   @JoinColumn(name = "COMPANY_ID")
   private ComercialEntity company;
   

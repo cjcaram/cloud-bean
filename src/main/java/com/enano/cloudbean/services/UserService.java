@@ -50,8 +50,13 @@ public class UserService {
       userDto.setRole(tmpUsr.getRole());
       userDto.setUsername(tmpUsr.getUserName());
       CompanyDto companyDto = new CompanyDto();
-      companyDto.setId(tmpUsr.getCompany().getId());
-      companyDto.setName(tmpUsr.getCompany().getName());
+      if (tmpUsr.getCompany() != null) {
+        companyDto.setId(tmpUsr.getCompany().getId());
+        companyDto.setName(tmpUsr.getCompany().getName());
+      } else {
+        companyDto.setId(-1L);
+        companyDto.setName("Usuario sin compañia asignada");
+      }
       userDto.setCompany(companyDto);
       return userDto;
     }
@@ -94,7 +99,7 @@ public class UserService {
       newUser.setModificationDate(new Date());
       newUser.setRole(userDto.getRole());
       newUser.setUserName(userDto.getUsername());
-      newUser.setCompany(companyRepo.getOne(userDto.getCompany().getId().longValue()));
+      newUser.setCompany(companyRepo.findById((userDto.getCompany().getId().longValue())).get());
       return newUser;
     }
 
