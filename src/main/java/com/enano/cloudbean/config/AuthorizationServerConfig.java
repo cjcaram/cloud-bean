@@ -1,6 +1,7 @@
 package com.enano.cloudbean.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,7 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
+    @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -71,10 +73,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-//        security.tokenKeyAccess("permitAll()")
-//                .checkTokenAccess("isAuthenticated()")
+        security.tokenKeyAccess("permitAll()")
+                .checkTokenAccess("isAuthenticated()");
 //                .allowFormAuthenticationForClients();
-        security.checkTokenAccess("isAuthenticated()");
+//        security.checkTokenAccess("isAuthenticated()");
     }
 
 
