@@ -11,7 +11,7 @@ import com.enano.cloudbean.entities.Application;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long>{
   
-  @Query(value = "select * from APLICACION aa where aa.LOTE_ID = ?1", 
+  @Query(value = "select * from aplicacion aa where aa.LOTE_ID = ?1", 
       nativeQuery = true)
   List<Application> findByLandBatchId(Long landBatchId);
 

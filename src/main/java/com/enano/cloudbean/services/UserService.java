@@ -89,6 +89,7 @@ public class UserService {
     public User updateUser(UserDto userRegistration) {
       User userToUpdate = getUserFromUserRegistration(userRegistration);
       userToUpdate.setId(userRegistration.getId().longValue());
+      userToUpdate.setPassword(userRegistration.getPassword());
       return repo.saveAndFlush(userToUpdate);
       
     }
