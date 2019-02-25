@@ -1,2 +1,2 @@
-INSERT INTO `agroquimico_tipo` (`NOMBRE`) VALUES ('Molusquicida');
-INSERT INTO `agroquimico_tipo` (`NOMBRE`) VALUES ('Coadyuvante');
+INSERT INTO `AGROQUIMICO_TIPO` (`NOMBRE`) VALUES ('Molusquicida');
+INSERT INTO `AGROQUIMICO_TIPO` (`NOMBRE`) VALUES ('Coadyuvante');
