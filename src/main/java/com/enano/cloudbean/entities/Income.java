@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,24 +45,24 @@ public class Income {
   @ManyToOne
   @JoinColumn(name="titular_CP", nullable = true)
   private ComercialEntity waybillOwner;
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name="remitente_comercial", nullable = true)
   private ComercialEntity commercialSender;
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name="destinatario", nullable = true)
   private ComercialEntity receiver;
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name="transporte", nullable = true)
   private ComercialEntity transporter;
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name="procedencia", nullable = true)
   private Location origin;
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name = "grano_especie_id")
   private GrainType grainType;
   @Column(name="cantidad_bolsa")
   private int bagQuantity;
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name = "tipo_bolsa")
   private PackagingType packagingType;
   @Column(name="ubicacion")
