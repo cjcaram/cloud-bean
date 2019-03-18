@@ -1,0 +1,15 @@
+CREATE TABLE `mercaderia_stock` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `propietario` INT NULL,
+  `tipo_calidad_id` INT NULL,
+  `tipo_bolsa_id` INT NULL,
+  `cantidad_bulto` DECIMAL(4,2) NULL,
+  `cantidad_kg` INT NULL,
+  `ubicacion` VARCHAR(128) NULL,
+  `cosecha` VARCHAR(32) NULL,
+  `gramaje` INT NULL,
+  `obs` VARCHAR(256) NULL,
+  `proceso_id` INT NULL,
+  `entrada_id` INT NULL,
+  `salida_id` INT NULL,
+  PRIMARY KEY (`id`));
