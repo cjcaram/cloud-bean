@@ -1,6 +1,5 @@
 package com.enano.cloudbean.entities;
 
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table( name = "mercaderia_stock")
@@ -45,16 +43,13 @@ public class CommodityStock {
     private Long incomeId;
     @Column(name="salida_id")
     private Long outcomeId;
-    @JsonIgnore
-    @Column(name="fecha_modificacion")
-    private Date modificationDate;
-    
+
     public CommodityStock() {
     }
 
     public CommodityStock(Long id, Long owner, QualityType qualityType, PackagingType packagingType,
         Double bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-        String harvesting, Long processId, Long incomeId, Long outcomeId, Date modificationDate) {
+        String harvesting, Long processId, Long incomeId, Long outcomeId) {
       this.id = id;
       this.owner = owner;
       this.qualityType = qualityType;
@@ -68,7 +63,6 @@ public class CommodityStock {
       this.processId = processId;
       this.incomeId = incomeId;
       this.outcomeId = outcomeId;
-      this.modificationDate = modificationDate;
     }
 
     public Long getId() {
@@ -174,13 +168,4 @@ public class CommodityStock {
     public void setOutcomeId(Long outcomeId) {
       this.outcomeId = outcomeId;
     }
-
-    public Date getModificationDate() {
-      return modificationDate;
-    }
-
-    public void setModificationDate(Date modificationDate) {
-      this.modificationDate = modificationDate;
-    }
-  
 }

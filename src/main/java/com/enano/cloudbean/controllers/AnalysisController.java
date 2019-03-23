@@ -28,21 +28,19 @@ public class AnalysisController extends BaseController {
   private static final Logger LOGGER = LogManager.getLogger(AnalysisController.class);
   
   @PostMapping(value = "/save/{incomeId}")
-  public ResponseEntity<?> AddOrModifyAnalysis(@RequestBody Analysis analysis, @PathVariable Integer incomeId) {
+  public ResponseEntity<?> ModifyAnalysis(@RequestBody Analysis analysis, @PathVariable Long incomeId) {
     ResponseEntity<?> response = null;
     Analysis result = new Analysis();
     try {
       if (ZUtils.isEdition(analysis.getId())) {
         LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
         result = analysisService.edit(analysis);
-      } else {
+      } else { 
         LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
-        result = analysisService.save(analysis);
-        if (incomeId != null && incomeId > 0) {
-          LOGGER.info("Updating AnalysisId in parent Income.");
-          incomeService.updateAnalysis(incomeId, result.getId().intValue());
-        }
+        result = analysisService.save(analysis);  
       }
+      LOGGER.info("Updating AnalysisId in parent Income.");
+      incomeService.updateAnalysis(incomeId, result);
       response = ResponseEntity.ok(result);
     } catch (Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);

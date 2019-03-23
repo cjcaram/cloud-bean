@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,8 +22,9 @@ public class Income {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(name="analisis_id")
-  private int analysisId;
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name="analisis_id", nullable = true)
+  private Analysis analysis;
   @Column(name="numero_ingreso")
   private int incomeNo;
   @Column(name="carta_de_porte")
@@ -74,18 +77,20 @@ public class Income {
   private String obs;
   @Column(name="img_dir")
   private String imgDir;
+  @Column(name="cosecha")
+  private String harvesting;
   
   public Income() {
   }
   
-  public Income(Long id, int analysisId, int incomeNo, String waybill, String depositCertificate,
+  public Income(Long id, Analysis analysis, int incomeNo, String waybill, String depositCertificate,
       String ctg, int grossWeight, int truckWeight, String driverName, String truckPatent,
       String trailerPatent, ComercialEntity waybillOwner, ComercialEntity commercialSender, ComercialEntity receiver,
       ComercialEntity transporter, Location origin, GrainType grainType, int bagQuantity,
       PackagingType packagingType, String locationInPlant, Date downloadDate, Date modificationDate,
-      String obs, String imgDir) {
+      String obs, String imgDir, String harvesting) {
     this.id = id;
-    this.analysisId = analysisId;
+    this.analysis = analysis;
     this.incomeNo = incomeNo;
     this.waybill = waybill;
     this.depositCertificate = depositCertificate;
@@ -108,6 +113,7 @@ public class Income {
     this.modificationDate = modificationDate;
     this.obs = obs;
     this.imgDir = imgDir;
+    this.harvesting = harvesting;
   }
 
   public Long getId() {
@@ -118,12 +124,12 @@ public class Income {
     this.id = id;
   }
 
-  public int getAnalysisId() {
-    return analysisId;
+  public Analysis getAnalysis() {
+    return analysis;
   }
 
-  public void setAnalysisId(int analysisId) {
-    this.analysisId = analysisId;
+  public void setAnalysis(Analysis analysis) {
+    this.analysis = analysis;
   }
 
   public int getIncomeNo() {
@@ -300,6 +306,18 @@ public class Income {
 
   public void setImgDir(String imgDir) {
     this.imgDir = imgDir;
+  }
+
+  public String getHarvesting() {
+    return harvesting;
+  }
+
+  public void setHarvesting(String harvesting) {
+    this.harvesting = harvesting;
+  }
+
+  public void setOrigin(Location origin) {
+    this.origin = origin;
   }
 
 }

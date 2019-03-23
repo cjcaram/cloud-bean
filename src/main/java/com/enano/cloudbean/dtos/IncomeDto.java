@@ -2,12 +2,13 @@ package com.enano.cloudbean.dtos;
 
 import java.util.Date;
 
+import com.enano.cloudbean.entities.Analysis;
 import com.enano.cloudbean.entities.GrainType;
 import com.enano.cloudbean.entities.PackagingType;
 
 public class IncomeDto {
   private Integer id;
-  private Integer analysisId;
+  private Analysis analysis;
   private Integer incomeNo;
   private String waybill;
   private String depositCertificate;
@@ -30,29 +31,27 @@ public class IncomeDto {
   private Date modificationDate;
   private String obs;
   private String imgDir;
+  private String harvesting;
   
   public IncomeDto() {
   }
   
-  public IncomeDto(Integer id,
-      Integer analysisId,
-      Integer incomeNo,
-      String waybill) {
+  public IncomeDto(Integer id, Analysis analysis, Integer incomeNo, String waybill) {
     this.id = id;
-    this.analysisId = analysisId;
+    this.analysis = analysis;
     this.incomeNo = incomeNo;
     this.waybill = waybill;
   }
   
-  public IncomeDto(Integer id, Integer analysisId, Integer incomeNo, String waybill,
+  public IncomeDto(Integer id, Analysis analysis, Integer incomeNo, String waybill,
       String depositCertificate, String ctg, Integer grossWeight, Integer truckWeight,
       String driverName, String truckPatent, String trailerPatent, BaseCompanyDto waybillOwner, 
       BaseCompanyDto commercialSender, BaseCompanyDto receiver, BaseCompanyDto transporter, 
       BaseLocationDto origin, GrainType grainType, String grainTypeVariety, 
       Integer bagQuantity, PackagingType packagingType, String locationInPlant, 
-      Date downloadDate, Date modificationDate, String obs, String imgDir) {
+      Date downloadDate, Date modificationDate, String obs, String imgDir, String harvesting) {
     this.id = id;
-    this.analysisId = analysisId;
+    this.analysis = analysis;
     this.incomeNo = incomeNo;
     this.waybill = waybill;
     this.depositCertificate = depositCertificate;
@@ -75,6 +74,7 @@ public class IncomeDto {
     this.modificationDate = modificationDate;
     this.obs = obs;
     this.imgDir = imgDir;
+    this.harvesting = harvesting;
   }
 
   public Integer getId() {
@@ -85,12 +85,12 @@ public class IncomeDto {
     this.id = id;
   }
 
-  public Integer getAnalysisId() {
-    return analysisId;
+  public Analysis getAnalysis() {
+    return analysis;
   }
 
-  public void setAnalysisId(Integer analysisId) {
-    this.analysisId = analysisId;
+  public void setAnalysisId(Analysis analysis) {
+    this.analysis = analysis;
   }
 
   public Integer getIncomeNo() {
@@ -267,5 +267,17 @@ public class IncomeDto {
 
   public void setImgDir(String imgDir) {
     this.imgDir = imgDir;
+  }
+
+  public String getHarvesting() {
+    return harvesting;
+  }
+
+  public void setHarvesting(String harvesting) {
+    this.harvesting = harvesting;
+  }
+
+  public void setAnalysis(Analysis analysis) {
+    this.analysis = analysis;
   }
 }
