@@ -1,7 +1,5 @@
 package com.enano.cloudbean.services;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +18,23 @@ public class CommodityService {
   private QualityTypeService qualityTypeSrv;
   
   public Commodity addNewIncome(Income income) {
-    Commodity commodity = new Commodity();
-    commodity.setAmount(income.getGrossWeight() - income.getTruckWeight());
-    commodity.setBagQuantity(Double.valueOf(income.getBagQuantity()));
-    commodity.setLocationInPlant(income.getLocationInPlant());
-    commodity.setModificationDate(new Date());
-    commodity.setObs(income.getObs());
-    commodity.setOwner(income.getWaybillOwner().getId());
-    commodity.setPackagingType(income.getPackagingType());
+    Commodity commodity = setBasicInfo(income);
     commodity.setQualityType(qualityTypeSrv.
         getQualityTypeByName(CommodityQuality.NATURAL.getType()));
     return commodityRepo.saveAndFlush(commodity);
+  }
+  
+  public static Commodity setBasicInfo(Income income) {
+    Commodity commodity = new Commodity();
+    
+    commodity.setAmount(income.getGrossWeight() - income.getTruckWeight());
+    commodity.setBagQuantity(Double.valueOf(income.getBagQuantity()));
+    commodity.setLocationInPlant(income.getLocationInPlant());
+    commodity.setObs(income.getObs());
+    commodity.setOwner(income.getWaybillOwner().getId());
+    commodity.setPackagingType(income.getPackagingType());
+    commodity.setGrainType(income.getGrainType());
+    
+    return commodity;
   }
 }

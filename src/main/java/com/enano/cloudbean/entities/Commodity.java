@@ -1,7 +1,5 @@
 package com.enano.cloudbean.entities;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table( name = "mercaderia")
@@ -39,16 +36,16 @@ public class Commodity {
   private String obs;
   @Column(name="proceso_id")
   private Long processId;
-  @JsonIgnore
-  @Column(name="fecha_modificacion")
-  private Date modificationDate;
+  @OneToOne
+  @JoinColumn(name = "grano_especie_id")
+  private GrainType grainType;
   
   public Commodity() {
   }
   
   public Commodity(Long id, Long owner, QualityType qualityType, PackagingType packagingType,
       Double bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-      Long processId, Date modificationDate) {
+      Long processId, GrainType grainType) {
     this.id = id;
     this.owner = owner;
     this.qualityType = qualityType;
@@ -59,7 +56,7 @@ public class Commodity {
     this.gramaje = gramaje;
     this.obs = obs;
     this.processId = processId;
-    this.modificationDate = modificationDate;
+    this.grainType = grainType;
   }
 
   public Long getId() {
@@ -142,12 +139,11 @@ public class Commodity {
     this.processId = processId;
   }
 
-  public Date getModificationDate() {
-    return modificationDate;
+  public GrainType getGrainType() {
+    return grainType;
   }
 
-  public void setModificationDate(Date modificationDate) {
-    this.modificationDate = modificationDate;
+  public void setGrainType(GrainType grainType) {
+    this.grainType = grainType;
   }
-
 }

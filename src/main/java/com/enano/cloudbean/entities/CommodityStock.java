@@ -1,6 +1,5 @@
 package com.enano.cloudbean.entities;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,10 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
 @Entity
 @Table( name = "mercaderia_stock")
-public class CommodityStock {
+public class CommodityStock{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,21 +33,24 @@ public class CommodityStock {
     private Integer gramaje;
     @Column(name="obs")
     private String obs;
-    @Column(name="cosecha")
-    private String harvesting;
     @Column(name="proceso_id")
     private Long processId;
+    @OneToOne
+    @JoinColumn(name = "grano_especie_id")
+    private GrainType grainType;
+    @Column(name="cosecha")
+    private String harvesting;
     @Column(name="entrada_id")
     private Long incomeId;
     @Column(name="salida_id")
     private Long outcomeId;
-
+    
     public CommodityStock() {
     }
-
+    
     public CommodityStock(Long id, Long owner, QualityType qualityType, PackagingType packagingType,
         Double bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-        String harvesting, Long processId, Long incomeId, Long outcomeId) {
+        Long processId, GrainType grainType, String harvesting, Long incomeId, Long outcomeId) {
       this.id = id;
       this.owner = owner;
       this.qualityType = qualityType;
@@ -59,8 +60,9 @@ public class CommodityStock {
       this.locationInPlant = locationInPlant;
       this.gramaje = gramaje;
       this.obs = obs;
-      this.harvesting = harvesting;
       this.processId = processId;
+      this.grainType = grainType;
+      this.harvesting = harvesting;
       this.incomeId = incomeId;
       this.outcomeId = outcomeId;
     }
@@ -137,20 +139,28 @@ public class CommodityStock {
       this.obs = obs;
     }
 
-    public String getHarvesting() {
-      return harvesting;
-    }
-
-    public void setHarvesting(String harvesting) {
-      this.harvesting = harvesting;
-    }
-
     public Long getProcessId() {
       return processId;
     }
 
     public void setProcessId(Long processId) {
       this.processId = processId;
+    }
+
+    public GrainType getGrainType() {
+      return grainType;
+    }
+
+    public void setGrainType(GrainType grainType) {
+      this.grainType = grainType;
+    }
+
+    public String getHarvesting() {
+      return harvesting;
+    }
+
+    public void setHarvesting(String harvesting) {
+      this.harvesting = harvesting;
     }
 
     public Long getIncomeId() {
@@ -168,4 +178,5 @@ public class CommodityStock {
     public void setOutcomeId(Long outcomeId) {
       this.outcomeId = outcomeId;
     }
+
 }

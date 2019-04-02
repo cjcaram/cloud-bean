@@ -3,6 +3,6 @@ CREATE TABLE `proceso` (
   `proceso_numero` INT NULL,
   `nombre_referencia` VARCHAR(45) NULL,
   `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `grano_especie_id` INT NULL,
+  `fecha_modificacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `obs` VARCHAR(256) NULL,
   PRIMARY KEY (`id`));

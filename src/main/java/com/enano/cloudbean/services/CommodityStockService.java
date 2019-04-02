@@ -1,5 +1,7 @@
 package com.enano.cloudbean.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class CommodityStockService {
     stock.setObs(income.getObs());
     stock.setOwner(income.getWaybillOwner().getId());
     stock.setPackagingType(income.getPackagingType());
+    stock.setGrainType(income.getGrainType());
     stock.setQualityType(qualityTypeSrv.
         getQualityTypeByName(CommodityQuality.NATURAL.getType()));
     stock.setIncomeId(income.getId());
@@ -40,6 +43,10 @@ public class CommodityStockService {
     CommodityStock stock = commodityStockRepo.findByIncomeId(income.getId());
     stock.setGramaje(Math.round(income.getAnalysis().getGramaje()));
     commodityStockRepo.save(stock);
+  }
+
+  public List<CommodityStock> listAll() {
+    return commodityStockRepo.findAll();
   }
 
 }

@@ -8,6 +8,7 @@ CREATE TABLE `mercaderia_stock` (
   `ubicacion` VARCHAR(128) NULL,
   `cosecha` VARCHAR(32) NULL,
   `gramaje` INT NULL,
+  `grano_especie_id` INT(4) NULL,
   `obs` VARCHAR(256) NULL,
   `proceso_id` INT NULL,
   `entrada_id` INT NULL,
