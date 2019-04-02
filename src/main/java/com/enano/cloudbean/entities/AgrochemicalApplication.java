@@ -31,13 +31,13 @@ public class AgrochemicalApplication {
   private Application application;
   
   @Column(name="DOSIS")
-  private Double dosage;
+  private Float dosage;
   
   public AgrochemicalApplication() {
   }
 
   public AgrochemicalApplication(Long id, Agrochemical agrochemical, Application application,
-      Double dosage) {
+      Float dosage) {
     this.id = id;
     this.agrochemical = agrochemical;
     this.application = application;
@@ -45,7 +45,7 @@ public class AgrochemicalApplication {
   }
   
   public AgrochemicalApplication(Agrochemical agrochemical, Application application,
-      Double dosage) {
+      Float dosage) {
     this.agrochemical = agrochemical;
     this.application = application;
     this.dosage = dosage;
@@ -75,11 +75,11 @@ public class AgrochemicalApplication {
     this.application = application;
   }
 
-  public Double getDosage() {
+  public Float getDosage() {
     return dosage;
   }
 
-  public void setDosage(Double dosage) {
+  public void setDosage(Float dosage) {
     this.dosage = dosage;
   }
 

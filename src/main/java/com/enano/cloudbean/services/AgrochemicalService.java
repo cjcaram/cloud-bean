@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.enano.cloudbean.dtos.AgrochemicalApplicationDto;
 import com.enano.cloudbean.dtos.ApplicationDto;
+import com.enano.cloudbean.dtos.ItemAmountDto;
 import com.enano.cloudbean.dtos.WithdrawAgrochemicalDto;
 import com.enano.cloudbean.dtos.WithdrawItemDto;
 import com.enano.cloudbean.entities.Agrochemical;
@@ -66,10 +67,11 @@ public class AgrochemicalService {
     return repo.listAllDistincAgrochemicalNames();
   }
   
-  public Agrochemical addAmountToStock(Long id, Integer amount) {
+  public Agrochemical addAmountToStock(ItemAmountDto item) {
     Agrochemical agrochemical = null;
+    Float amount = item.getAmount();
     if (amount != null && amount > 0) {
-      agrochemical = repo.getOne(id);
+      agrochemical = repo.getOne(item.getId());
       agrochemical.setModificationDate(new Date());
       agrochemical.setAmount(agrochemical.getAmount() + amount);
       agrochemical = repo.saveAndFlush(agrochemical);
@@ -81,7 +83,7 @@ public class AgrochemicalService {
     List<RemoveAgrochemical> removeAgrochemicalList = new ArrayList<>();
     Agrochemical agrochemical;
     String workOrder = withdrawOrder.getWorkOrder();
-    int withdrawAmt = 0;
+    float withdrawAmt = 0;
     for (WithdrawItemDto item : withdrawOrder.getItems()) {
       withdrawAmt = item.getWithdrawAmt();
       agrochemical = repo.findById(item.getId()).get();
@@ -103,11 +105,11 @@ public class AgrochemicalService {
     return repoApplication.findAll(); 
   }
 
-  private boolean checkIfStockExist(Agrochemical agrochemical, int withdrawAmt) {
+  private boolean checkIfStockExist(Agrochemical agrochemical, float withdrawAmt) {
     return agrochemical != null && agrochemical.getAmount() >= withdrawAmt;
   }
   
-  private Agrochemical getWithdrawedAgrochemical (Agrochemical agrochemical, int withdrawAmt) {
+  private Agrochemical getWithdrawedAgrochemical (Agrochemical agrochemical, float withdrawAmt) {
     agrochemical.setModificationDate(new Date());
     agrochemical.setAmount(agrochemical.getAmount() - withdrawAmt);
     return agrochemical;

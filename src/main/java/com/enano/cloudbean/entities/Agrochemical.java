@@ -25,7 +25,7 @@ public class Agrochemical {
   private String nota;
   
   @Column (name = "CANTIDAD")
-  private Integer amount;
+  private Float amount;
  
   @Column (name = "UNIDAD_MEDIDA")
   private int measurementUnit;
@@ -46,7 +46,7 @@ public class Agrochemical {
   private float principeActiveConcentration;
   
   @Column (name = "PRECIO")
-  private Double price;
+  private Float price;
   
   @Column (name = "LABORATORIO")
   private String laboratory;
@@ -63,9 +63,9 @@ public class Agrochemical {
   
   public Agrochemical() { }
 
-  public Agrochemical(Long id, String name, String nota, Integer amount, int measurementUnit,
+  public Agrochemical(Long id, String name, String nota, Float amount, int measurementUnit,
       Date modificationDate, Date expirationDate, Date purchaseDate,
-      String activePrincipie, float principeActiveConcentration, Double price, String laboratory,
+      String activePrincipie, float principeActiveConcentration, Float price, String laboratory,
       String bill, String batchCode, AgrochemicalType agrochemicalType) {
     this.id = id;
     this.name = name;
@@ -108,11 +108,11 @@ public class Agrochemical {
     this.nota = nota;
   }
 
-  public Integer getAmount() {
+  public Float getAmount() {
     return amount;
   }
 
-  public void setAmount(Integer amount) {
+  public void setAmount(Float amount) {
     this.amount = amount;
   }
 
@@ -164,11 +164,11 @@ public class Agrochemical {
     this.principeActiveConcentration = principeActiveConcentration;
   }
 
-  public Double getPrice() {
+  public Float getPrice() {
     return price;
   }
 
-  public void setPrice(Double price) {
+  public void setPrice(Float price) {
     this.price = price;
   }
 

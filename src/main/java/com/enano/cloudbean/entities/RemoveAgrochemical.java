@@ -21,7 +21,7 @@ public class RemoveAgrochemical {
   @Column(name="ORDEN_TRABAJO")
   private String workOrderId;
   @Column(name="CANTIDAD")
-  private int amount;
+  private Float amount;
   @Column(name="FECHA")
   private Date date;
   @OneToOne
@@ -31,7 +31,7 @@ public class RemoveAgrochemical {
   public RemoveAgrochemical() {
   }
   
-  public RemoveAgrochemical(Long id, String workOrderId, int amount, Date date, Agrochemical agrochemical) {
+  public RemoveAgrochemical(Long id, String workOrderId, Float amount, Date date, Agrochemical agrochemical) {
     this.id = id;
     this.workOrderId = workOrderId;
     this.amount = amount;
@@ -39,7 +39,7 @@ public class RemoveAgrochemical {
     this.agrochemical = agrochemical;
   }
   
-  public RemoveAgrochemical(String workOrderId, Agrochemical agrochemical, int amount) {
+  public RemoveAgrochemical(String workOrderId, Agrochemical agrochemical, Float amount) {
     this.date = new Date();
     this.workOrderId = workOrderId;
     this.amount = amount;
@@ -62,11 +62,11 @@ public class RemoveAgrochemical {
     this.workOrderId = workOrderId;
   }
 
-  public int getAmount() {
+  public Float getAmount() {
     return amount;
   }
 
-  public void setAmount(int amount) {
+  public void setAmount(Float amount) {
     this.amount = amount;
   }
 

@@ -8,13 +8,13 @@ public class AgrochemicalApplicationDto {
   private Long id;
   private Agrochemical agrochemical;
   private Application application;
-  private Double dosage;
+  private Float dosage;
   
   public AgrochemicalApplicationDto () {
   }
   
   public AgrochemicalApplicationDto(Long id, Agrochemical agrochemical, Application application,
-      Double dosage) {
+      Float dosage) {
     this.id = id;
     this.agrochemical = agrochemical;
     this.application = application;
@@ -45,11 +45,11 @@ public class AgrochemicalApplicationDto {
     this.application = application;
   }
 
-  public Double getDosage() {
+  public Float getDosage() {
     return dosage;
   }
 
-  public void setDosage(Double dosage) {
+  public void setDosage(Float dosage) {
     this.dosage = dosage;
   }
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.enano.cloudbean.dtos.AgrochemicalApplicationDto;
 import com.enano.cloudbean.dtos.ApplicationDto;
+import com.enano.cloudbean.dtos.ItemAmountDto;
 import com.enano.cloudbean.dtos.WithdrawAgrochemicalDto;
 import com.enano.cloudbean.entities.Agrochemical;
 import com.enano.cloudbean.services.AgrochemicalService;
@@ -143,12 +144,12 @@ public class AgrochemicalController extends BaseController {
     return response;
   }
   
-  @GetMapping(value = "/sum/{id}/{amount}")
-  public ResponseEntity<?> getAgrochemicalById(@PathVariable Long id, @PathVariable Integer amount) {
+  @PostMapping(value = "/sum")
+  public ResponseEntity<?> sumAgrochemicalAmount(@RequestBody ItemAmountDto item) {
     ResponseEntity<?> response = null;
     try {
       LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
-      response = ResponseEntity.ok(agroService.addAmountToStock(id, amount));
+      response = ResponseEntity.ok(agroService.addAmountToStock(item));
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
     }
