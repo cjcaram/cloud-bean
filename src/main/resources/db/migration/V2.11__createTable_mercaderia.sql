@@ -9,5 +9,5 @@ CREATE TABLE `mercaderia` (
   `gramaje` INT NULL,
   `obs` VARCHAR(256) NULL,
   `proceso_id` INT NOT NULL,
-  `fecha_modificacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `grano_especie_id` INT(4) NULL,
   PRIMARY KEY (`id`));

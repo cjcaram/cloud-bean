@@ -2,12 +2,12 @@ package com.enano.cloudbean.dtos;
 
 public class WithdrawItemDto {
   private Long id;
-  private int withdrawAmt;
+  private Float withdrawAmt;
   
   public WithdrawItemDto() {
   }
 
-  public WithdrawItemDto(Long id, int withdrawAmt) {
+  public WithdrawItemDto(Long id, Float withdrawAmt) {
     this.id = id;
     this.withdrawAmt = withdrawAmt;
   }
@@ -18,10 +18,10 @@ public class WithdrawItemDto {
   public void setId(Long id) {
     this.id = id;
   }
-  public int getWithdrawAmt() {
+  public Float getWithdrawAmt() {
     return withdrawAmt;
   }
-  public void setWithdrawAmt(int withdrawAmt) {
+  public void setWithdrawAmt(Float withdrawAmt) {
     this.withdrawAmt = withdrawAmt;
   }
 
