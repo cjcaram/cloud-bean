@@ -2,6 +2,7 @@ package com.enano.cloudbean.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,8 +25,8 @@ public class RemoveAgrochemical {
   private Float amount;
   @Column(name="FECHA")
   private Date date;
-  @OneToOne
-  @JoinColumn(name="AGROQUIMICO_ID")
+  @OneToOne(cascade = CascadeType.PERSIST, optional = true)
+  @JoinColumn(name="AGROQUIMICO_ID", nullable = true)
   private Agrochemical agrochemical;
   
   public RemoveAgrochemical() {

@@ -174,4 +174,9 @@ public class AgrochemicalService {
     excelBuilder.buildExcel(repo.findAll());
     return excelBuilder.getReport();
   }
+
+  public List<String> getAssociatedWithdraws(Long id) {
+    List<String> withdrawList = repoWithdraw.getWorkOrderByAgrochemicalId(id.intValue());
+    return withdrawList;
+  }
 }

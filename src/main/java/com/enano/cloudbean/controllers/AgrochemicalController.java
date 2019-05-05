@@ -1,5 +1,7 @@
 package com.enano.cloudbean.controllers;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,18 +158,6 @@ public class AgrochemicalController extends BaseController {
     return response;
   }
   
-  @DeleteMapping(value = "/remove/{id}")
-  public ResponseEntity<?> deleteAgrochemical(@PathVariable Long id) {
-    ResponseEntity<?> response = null;
-    try {
-      agroService.deleteOne(id);
-      response = ResponseEntity.ok(HttpStatus.ACCEPTED.getReasonPhrase());
-    }catch(Exception e) {
-      response = getErrorResponseAndLog(e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
-    }
-    return response;
-  }
-  
   @GetMapping(value = "/application-detail/{id}")
   public ResponseEntity<?> getApplicationDetailByApplicationId(@PathVariable Long id) {
     ResponseEntity<?> response = null;
@@ -236,6 +226,32 @@ public class AgrochemicalController extends BaseController {
       response = ResponseEntity.ok(agroService.getWithdrawReport());
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_CREATING_REPORT_MSG);
+    }
+    return response;
+  }
+  
+  @DeleteMapping(value = "/remove/{id}")
+  public ResponseEntity<?> deleteAgrochemical(@PathVariable Long id) {
+    ResponseEntity<?> response = null;
+    try {
+      response = deleteIfNoDependeciesExist(id);
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_REMOVING_ENTITY_MSG);
+    }
+    return response;
+  }
+  
+  private ResponseEntity<?> deleteIfNoDependeciesExist(Long id) {
+    ResponseEntity<?> response;
+    LOGGER.info(ZUtils.CHECKING_DEPENDENCIES_MSG);
+    List<String> withdrawList = agroService.getAssociatedWithdraws(id);
+    if (withdrawList.size() > 0) {
+      LOGGER.info(ZUtils.DEPENDENCIES_FOUNDS_MSG);
+      response = new ResponseEntity<>(withdrawList, HttpStatus.FAILED_DEPENDENCY);
+    } else {
+      LOGGER.info(ZUtils.REMOVING_ENTITY_MSG);
+      agroService.deleteOne(id);
+      response = ResponseEntity.ok(ZUtils.ENTITY_REMOVED_MSG);
     }
     return response;
   }
