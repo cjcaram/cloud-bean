@@ -23,12 +23,8 @@ public class Outcome {
   @JoinColumn(name="analisis_id", nullable = true)
   private Analysis analysisId;
   @OneToOne
-  @JoinColumn(name="entrada_id", nullable = true)
-  private Income incomeId;
-  @Column(name="mercaderia_id")
-  private Long commodityId;
-  @Column(name="parte_proceso_id")
-  private Long processId;
+  @JoinColumn(name="mercaderia_id")
+  private CommodityStock commodityStock;
   @Column(name="img_dir")
   private String imgPath;
   @Column(name="cp_numero")
@@ -48,16 +44,11 @@ public class Outcome {
   @OneToOne
   @JoinColumn(name="destinatario_id", nullable = true)
   private ComercialEntity receiver;
-  @OneToOne
-  @JoinColumn(name = "grano_especie", nullable = true)
-  private GrainType grainType;
   @Column(name="cantidad_bolsa")
   private int bagQuantity;
   @OneToOne
   @JoinColumn(name = "tipo_bolsa")
   private PackagingType packagingType;
-  @Column(name="calidad")
-  private String quality;
   @Column(name="peso_bruto")
   private int grossWeight;
   @Column(name="peso_tara")
@@ -82,19 +73,16 @@ public class Outcome {
   public Outcome() {
   }
   
-  public Outcome(Long id, int outcomeNumber, Analysis analysisId, Income incomeId, Long commodityId,
-      Long processId, String imgPath, String waybill, String ctg, Date loadingDate,
-      ComercialEntity waybillOwner, ComercialEntity commercialSender, String deliveryRepresentative,
-      ComercialEntity receiver, GrainType grainType, int bagQuantity, PackagingType packagingType,
-      String quality, int grossWeight, int truckWeight, String obs, Location destiny,
-      ComercialEntity carrier, String driverName, String truckPatent, String trailerPatent,
-      Integer distanceToTravel) {
+  public Outcome(Long id, int outcomeNumber, Analysis analysisId, CommodityStock commodityStock,
+      String imgPath, String waybill, String ctg, Date loadingDate, ComercialEntity waybillOwner,
+      ComercialEntity commercialSender, String deliveryRepresentative, ComercialEntity receiver,
+      int bagQuantity, PackagingType packagingType, int grossWeight, int truckWeight, String obs,
+      Location destiny, ComercialEntity carrier, String driverName, String truckPatent,
+      String trailerPatent, Integer distanceToTravel) {
     this.id = id;
     this.outcomeNumber = outcomeNumber;
     this.analysisId = analysisId;
-    this.incomeId = incomeId;
-    this.commodityId = commodityId;
-    this.processId = processId;
+    this.commodityStock = commodityStock;
     this.imgPath = imgPath;
     this.waybill = waybill;
     this.ctg = ctg;
@@ -103,21 +91,19 @@ public class Outcome {
     this.commercialSender = commercialSender;
     this.deliveryRepresentative = deliveryRepresentative;
     this.receiver = receiver;
-    this.grainType = grainType;
     this.bagQuantity = bagQuantity;
     this.packagingType = packagingType;
-    this.quality = quality;
     this.grossWeight = grossWeight;
     this.truckWeight = truckWeight;
     this.obs = obs;
     this.destiny = destiny;
     this.carrier = carrier;
-    this.driverName = driverName;
+    this.driverName = driverName.toUpperCase();
     this.truckPatent = truckPatent;
     this.trailerPatent = trailerPatent;
     this.distanceToTravel = distanceToTravel;
   }
- 
+  
   public Long getId() {
     return id;
   }
@@ -134,28 +120,13 @@ public class Outcome {
     this.analysisId = analysisId;
   }
 
-  public Income getIncomeId() {
-    return incomeId;
+
+  public CommodityStock getCommodityStock() {
+    return commodityStock;
   }
 
-  public void setIncomeId(Income incomeId) {
-    this.incomeId = incomeId;
-  }
-
-  public Long getCommodityId() {
-    return commodityId;
-  }
-
-  public void setCommodityId(Long commodityId) {
-    this.commodityId = commodityId;
-  }
-
-  public Long getProcessId() {
-    return processId;
-  }
-
-  public void setProcessId(Long processId) {
-    this.processId = processId;
+  public void setCommodityStock(CommodityStock commodityId) {
+    this.commodityStock = commodityId;
   }
 
   public String getImgPath() {
@@ -220,22 +191,6 @@ public class Outcome {
 
   public void setReceiver(ComercialEntity receiver) {
     this.receiver = receiver;
-  }
-
-  public GrainType getGrainType() {
-    return grainType;
-  }
-
-  public void setGrainType(GrainType grainType) {
-    this.grainType = grainType;
-  }
-
-  public String getQuality() {
-    return quality;
-  }
-
-  public void setQuality(String quality) {
-    this.quality = quality;
   }
 
   public int getGrossWeight() {
@@ -315,7 +270,7 @@ public class Outcome {
   }
 
   public void setDriverName(String driverName) {
-    this.driverName = driverName;
+    this.driverName = driverName.toUpperCase();
   }
 
   public int getBagQuantity() {

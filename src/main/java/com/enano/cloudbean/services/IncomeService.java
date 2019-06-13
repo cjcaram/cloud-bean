@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.enano.cloudbean.dtos.IncomeDto;
 import com.enano.cloudbean.dtos.IncomeFiltersDto;
@@ -31,9 +32,17 @@ public class IncomeService {
 
   public Income edit(Income income) {
     income.setModificationDate(new Date());
-    return repo.saveAndFlush(income); 
+    if (AnalysisValidation.isValidAnalysis(income.getAnalysis())) {
+      income.setAnalysis(analisysSrv.save(income.getAnalysis()));
+    } else {
+      income.setAnalysis(null);
+    }
+    Income editedIncome = repo.save(income); 
+    stockSrv.editCommodityAccordingNewAnalysis(editedIncome);
+    return editedIncome; 
   }
 
+  @Transactional
   public Income save(Income incomeToAdd) {
     incomeToAdd.setId(null);
     if (AnalysisValidation.isValidAnalysis(incomeToAdd.getAnalysis())) {

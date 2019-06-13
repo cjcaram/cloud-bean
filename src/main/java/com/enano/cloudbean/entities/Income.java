@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -43,7 +42,7 @@ public class Income {
   private String truckPatent;
   @Column(name="patente_acoplado")
   private String trailerPatent;
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name="titular_CP", nullable = true)
   private ComercialEntity waybillOwner;
   @OneToOne
@@ -97,7 +96,7 @@ public class Income {
     this.ctg = ctg;
     this.grossWeight = grossWeight;
     this.truckWeight = truckWeight;
-    this.driverName = driverName;
+    this.driverName = driverName.toUpperCase();
     this.truckPatent = truckPatent;
     this.trailerPatent = trailerPatent;
     this.waybillOwner = waybillOwner;
@@ -185,7 +184,7 @@ public class Income {
   }
 
   public void setDriverName(String driverName) {
-    this.driverName = driverName;
+    this.driverName = driverName.toUpperCase();
   }
 
   public String getTruckPatent() {

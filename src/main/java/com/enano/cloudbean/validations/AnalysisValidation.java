@@ -7,7 +7,7 @@ public class AnalysisValidation {
   public static boolean isValidAnalysis(Analysis analysis) {
     boolean result = true;
     try {
-     if  (analysis.getId() <= 0 || analysis.getGramaje() < 0) {
+     if (analysis.getGramaje() < 0) {
        result = false;
      }
     }catch (NullPointerException npe) {

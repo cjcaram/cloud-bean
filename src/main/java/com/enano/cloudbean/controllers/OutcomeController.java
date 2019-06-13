@@ -25,14 +25,16 @@ public class OutcomeController extends BaseController{
   @PostMapping(value = "/save")
   public ResponseEntity<?> AddOrModifyOutcome(@RequestBody Outcome outcome) {
     ResponseEntity<?> response = null;
+    Outcome outcomeResult = null;
     try {
       if (ZUtils.isEdition(outcome.getId())) {
         LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
-        response = ResponseEntity.ok(outcomeService.edit(outcome));
+        outcomeResult = outcomeService.edit(outcome);
       } else {
         LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
-        response = ResponseEntity.ok(outcomeService.save(outcome));
+        outcomeResult = outcomeService.save(outcome);
       }
+      response = ResponseEntity.ok(outcomeResult);
     } catch (Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
     }
