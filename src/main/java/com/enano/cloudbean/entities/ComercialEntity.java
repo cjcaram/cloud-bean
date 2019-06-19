@@ -116,5 +116,12 @@ public class ComercialEntity {
   public void setResponsibleType(ResponsibleType responsibleType) {
     this.responsibleType = responsibleType;
   }
+
+  @Override
+  public String toString() {
+    return "ComercialEntity [id=" + id + ", name=" + name + ", cuit=" + cuit + ", location="
+        + location + ", phone=" + phone + ", mail=" + mail + ", obs=" + obs + ", responsibleType="
+        + responsibleType + "]";
+  }
   
 }

@@ -319,4 +319,18 @@ public class Income {
     this.origin = origin;
   }
 
+  @Override
+  public String toString() {
+    return "Income [id=" + id + ", analysis=" + analysis + ", incomeNo=" + incomeNo + ", waybill="
+        + waybill + ", depositCertificate=" + depositCertificate + ", ctg=" + ctg + ", grossWeight="
+        + grossWeight + ", truckWeight=" + truckWeight + ", driverName=" + driverName
+        + ", truckPatent=" + truckPatent + ", trailerPatent=" + trailerPatent + ", waybillOwner="
+        + waybillOwner + ", commercialSender=" + commercialSender + ", receiver=" + receiver
+        + ", transporter=" + transporter + ", origin=" + origin + ", grainType=" + grainType
+        + ", bagQuantity=" + bagQuantity + ", packagingType=" + packagingType + ", locationInPlant="
+        + locationInPlant + ", downloadDate=" + downloadDate + ", modificationDate="
+        + modificationDate + ", obs=" + obs + ", imgDir=" + imgDir + ", harvesting=" + harvesting
+        + "]";
+  }
+
 }

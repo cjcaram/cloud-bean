@@ -64,4 +64,10 @@ public class GrainType {
     this.description = description;
   }
 
+  @Override
+  public String toString() {
+    return "GrainType [id=" + id + ", name=" + name + ", variety=" + variety + ", description="
+        + description + "]";
+  }
+
 }

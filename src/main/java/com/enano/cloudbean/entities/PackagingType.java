@@ -43,4 +43,9 @@ public class PackagingType {
   public void setPackagingType(String packagingType) {
     this.packagingType = packagingType;
   }
+
+  @Override
+  public String toString() {
+    return "PackagingType [id=" + id + ", packagingType=" + packagingType + "]";
+  }
 }

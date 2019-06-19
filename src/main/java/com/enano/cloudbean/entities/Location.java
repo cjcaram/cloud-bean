@@ -125,5 +125,12 @@ public class Location{
   public void setBatches(List<LandBatch> batches) {
     this.batches = batches;
   }
+
+  @Override
+  public String toString() {
+    return "Location [id=" + id + ", name=" + name + ", city=" + city + ", province=" + province
+        + ", address=" + address + ", country=" + country + ", postalCode=" + postalCode + ", obs="
+        + obs + ", batches=" + batches + "]";
+  }
   
 }

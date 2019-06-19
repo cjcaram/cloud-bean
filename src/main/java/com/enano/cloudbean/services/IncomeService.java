@@ -50,7 +50,7 @@ public class IncomeService {
     } else {
       incomeToAdd.setAnalysis(null);
     }
-    Income addedIncome = repo.saveAndFlush(incomeToAdd);
+    Income addedIncome = repo.save(incomeToAdd);
     stockSrv.addNewIncome(addedIncome);
     return addedIncome; 
   }
