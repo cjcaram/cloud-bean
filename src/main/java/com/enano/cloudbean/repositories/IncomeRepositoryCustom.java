@@ -8,5 +8,7 @@ import com.enano.cloudbean.entities.Income;
 public interface IncomeRepositoryCustom {
   
   List<Income> findIncomesUsingFilters(IncomeFiltersDto filters);
+  
+  List<Income> listNotProcessedIncomes();
 
 }

@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
+import com.enano.cloudbean.dtos.BasicIncomeInfoDto;
 import com.enano.cloudbean.dtos.IncomeFiltersDto;
 import com.enano.cloudbean.entities.Income;
 
@@ -21,6 +22,22 @@ public class IncomeRepositoryImpl implements IncomeRepositoryCustom {
   
   @PersistenceContext
   EntityManager entityManager;
+  
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Income> listNotProcessedIncomes() {
+    String qlString = "SELECT "
+        + "e.* "
+        + "FROM entrada e "
+        + "JOIN grano_especie grano ON grano.id = e.grano_especie_id "
+        + "JOIN analisis ON analisis.id = e.analisis_id "
+        + "JOIN entidad_comercial ec ON e.destinatario = ec.id "
+        + "JOIN origen_destino od ON e.procedencia = od.id "
+        + "WHERE e.id NOT IN (SELECT entrada_id FROM entrada_proceso) "; 
+    
+    Query query = entityManager.createNativeQuery(qlString, Income.class);
+    return query.getResultList();
+  }
   
   @SuppressWarnings("unchecked")
   @Override

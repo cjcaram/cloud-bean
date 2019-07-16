@@ -2,12 +2,16 @@ package com.enano.cloudbean.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -16,8 +20,6 @@ public class Commodity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(name="propietario")
-  private Long owner;
   @OneToOne
   @JoinColumn(name="tipo_calidad_id", nullable = true)
   private QualityType qualityType;
@@ -34,20 +36,18 @@ public class Commodity {
   private Integer gramaje;
   @Column(name="obs")
   private String obs;
-  @Column(name="proceso_id")
-  private Long processId;
-  @OneToOne
-  @JoinColumn(name = "grano_especie_id")
-  private GrainType grainType;
-  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name="proceso_id")
+  @JsonIgnore
+  private Process process;
+
   public Commodity() {
   }
   
-  public Commodity(Long id, Long owner, QualityType qualityType, PackagingType packagingType,
+  public Commodity(Long id, QualityType qualityType, PackagingType packagingType,
       Double bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-      Long processId, GrainType grainType) {
+      Process process) {
     this.id = id;
-    this.owner = owner;
     this.qualityType = qualityType;
     this.packagingType = packagingType;
     this.bagQuantity = bagQuantity;
@@ -55,8 +55,7 @@ public class Commodity {
     this.locationInPlant = locationInPlant;
     this.gramaje = gramaje;
     this.obs = obs;
-    this.processId = processId;
-    this.grainType = grainType;
+    this.process = process;
   }
 
   public Long getId() {
@@ -65,14 +64,6 @@ public class Commodity {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public Long getOwner() {
-    return owner;
-  }
-
-  public void setOwner(Long owner) {
-    this.owner = owner;
   }
 
   public QualityType getQualityType() {
@@ -131,19 +122,18 @@ public class Commodity {
     this.obs = obs;
   }
 
-  public Long getProcessId() {
-    return processId;
+  public Process getProcess() {
+    return process;
   }
 
-  public void setProcessId(Long processId) {
-    this.processId = processId;
+  public void setProcess(Process process) {
+    this.process = process;
   }
 
-  public GrainType getGrainType() {
-    return grainType;
-  }
-
-  public void setGrainType(GrainType grainType) {
-    this.grainType = grainType;
+  @Override
+  public String toString() {
+    return "Commodity [id=" + id + ", qualityType=" + qualityType + ", packagingType=" + 
+        packagingType + ", bagQuantity=" + bagQuantity + ", amount=" + amount
+        + ", locationInPlant=" + locationInPlant + ", gramaje=" + gramaje + ", obs=" + obs + "]";
   }
 }

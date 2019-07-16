@@ -26,16 +26,17 @@ public class IncomeController extends BaseController {
   @PostMapping(value = "/save")
   public ResponseEntity<?> AddOrModifyIncome(@RequestBody Income income) {
     ResponseEntity<?> response = null;
+    String methodName = "[Method]: AddOrModifyIncome - ";
     try {
       if (ZUtils.isEdition(income.getId())) {
-        LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
+        LOGGER.info(methodName + ZUtils.EDITING_ENTITY_MSG);
         response = ResponseEntity.ok(incomeService.edit(income));
       } else {
-        LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
+        LOGGER.info(methodName + ZUtils.ADDING_ENTITY_MSG);
         response = ResponseEntity.ok(incomeService.save(income));
       }
     } catch (Exception e) {
-      response = getErrorResponseAndLog(e, ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
+      response = getErrorResponseAndLog(e, methodName + ZUtils.ERROR_ADD_EDIT_ENTITY_MSG);
     }
     return response;
   }
@@ -44,7 +45,7 @@ public class IncomeController extends BaseController {
   public ResponseEntity<?> getIncomes() {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
+      LOGGER.info("[Method]: getIncomes - " + ZUtils.FETCHING_ENTITIES_MSG);
       response = ResponseEntity.ok(incomeService.listAllIncomeDto());
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
@@ -53,11 +54,23 @@ public class IncomeController extends BaseController {
   }
   
   @PostMapping(value = "/filter")
-  public ResponseEntity<?> getIncomes(@RequestBody IncomeFiltersDto filters) {
+  public ResponseEntity<?> getFilteredIncomes(@RequestBody IncomeFiltersDto filters) {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
+      LOGGER.info("[Method]: getFilteredIncomes - " + ZUtils.FETCHING_ENTITIES_MSG);
       response = ResponseEntity.ok(incomeService.listIncomesByFilter(filters));
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+    }
+    return response;
+  }
+  
+  @GetMapping(value = "/not-processed-list")
+  public ResponseEntity<?> getNotProcessedIncomes() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info("[Method]: getNotProcessedIncomes - " + ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(incomeService.listNotProcessedIncomes());
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
     }

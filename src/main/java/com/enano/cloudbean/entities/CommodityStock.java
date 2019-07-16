@@ -2,12 +2,16 @@ package com.enano.cloudbean.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table( name = "mercaderia_stock")
@@ -33,8 +37,10 @@ public class CommodityStock{
     private Integer gramaje;
     @Column(name="obs")
     private String obs;
-    @Column(name="proceso_id")
-    private Long processId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="proceso_id")
+    @JsonIgnore
+    private Process process;
     @OneToOne
     @JoinColumn(name = "grano_especie_id")
     private GrainType grainType;
@@ -50,7 +56,7 @@ public class CommodityStock{
     
     public CommodityStock(Long id, Long owner, QualityType qualityType, PackagingType packagingType,
         Double bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-        Long processId, GrainType grainType, String harvesting, Long incomeId, Long outcomeId) {
+        Process process, GrainType grainType, String harvesting, Long incomeId, Long outcomeId) {
       this.id = id;
       this.owner = owner;
       this.qualityType = qualityType;
@@ -60,7 +66,7 @@ public class CommodityStock{
       this.locationInPlant = locationInPlant;
       this.gramaje = gramaje;
       this.obs = obs;
-      this.processId = processId;
+      this.process = process;
       this.grainType = grainType;
       this.harvesting = harvesting;
       this.incomeId = incomeId;
@@ -139,12 +145,12 @@ public class CommodityStock{
       this.obs = obs;
     }
 
-    public Long getProcessId() {
-      return processId;
+    public Process getProcess() {
+      return process;
     }
 
-    public void setProcessId(Long processId) {
-      this.processId = processId;
+    public void setProcessId(Process process) {
+      this.process = process;
     }
 
     public GrainType getGrainType() {
@@ -177,6 +183,15 @@ public class CommodityStock{
 
     public void setOutcomeId(Long outcomeId) {
       this.outcomeId = outcomeId;
+    }
+
+    @Override
+    public String toString() {
+      return "CommodityStock [id=" + id + ", owner=" + owner + ", qualityType=" + qualityType
+          + ", packagingType=" + packagingType + ", bagQuantity=" + bagQuantity + ", amount="
+          + amount + ", locationInPlant=" + locationInPlant + ", gramaje=" + gramaje + ", obs="
+          + obs + ", grainType=" + grainType + ", harvesting="
+          + harvesting + ", incomeId=" + incomeId + ", outcomeId=" + outcomeId + "]";
     }
 
 }

@@ -4,11 +4,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.enano.cloudbean.dtos.BasicIncomeInfoDto;
 import com.enano.cloudbean.dtos.IncomeDto;
 import com.enano.cloudbean.dtos.IncomeFiltersDto;
 import com.enano.cloudbean.entities.Analysis;
@@ -18,6 +21,8 @@ import com.enano.cloudbean.validations.AnalysisValidation;
 
 @Service
 public class IncomeService {
+  
+  private static final Logger LOGGER = LogManager.getLogger(IncomeService.class);
   
   @Autowired
   private IncomeRepository repo;
@@ -70,6 +75,21 @@ public class IncomeService {
     List<Income> incomeList = repo.findAll();
     return incomeListToIncomeDtoList(incomeList);
   }
+  
+  public List<BasicIncomeInfoDto> listNotProcessedIncomes() {
+    List<BasicIncomeInfoDto> incomeDtoList = null;
+    List<Income> incomeList = null;
+    try {
+      incomeList = repo.listNotProcessedIncomes();
+      incomeDtoList = incomeList.stream()
+          .map(item -> getNoProcessedIncomeDtoFromIncomeEntity(item))
+          .collect(Collectors.toList());
+    } catch (Exception error) {
+      LOGGER.error("[Method: listNotProcessedIncomes] - "+ error);
+      throw error;
+    }
+    return incomeDtoList;
+  }
 
   public List<IncomeDto> listIncomesByFilter( IncomeFiltersDto filters) {
     List<Income> incomeList = repo.findIncomesUsingFilters(filters);
@@ -81,6 +101,23 @@ public class IncomeService {
         .map(item -> getIncomeDtoFromIncomeEntity(item))
         .collect(Collectors.toList());
     return incomeDtoList;
+  }
+  
+  private BasicIncomeInfoDto getNoProcessedIncomeDtoFromIncomeEntity (Income item) {
+    BasicIncomeInfoDto noProcessedIncomeDto = new BasicIncomeInfoDto();
+    noProcessedIncomeDto.setId(item.getId());
+    noProcessedIncomeDto.setDestinatario(item.getCommercialSender().getName());
+    if (AnalysisValidation.isValidAnalysis(item.getAnalysis())) {
+      noProcessedIncomeDto.setGramaje(item.getAnalysis().getGramaje().toString());
+    } else {
+      noProcessedIncomeDto.setGramaje("Analisis Pendiente");
+    }
+    noProcessedIncomeDto.setFecha(item.getDownloadDate());
+    noProcessedIncomeDto.setIngresoNro(item.getIncomeNo());
+    noProcessedIncomeDto.setProcedencia(item.getOrigin().getName());
+    noProcessedIncomeDto.setKilogramos(item.getGrossWeight() - item.getTruckWeight());
+    noProcessedIncomeDto.setGrano(item.getGrainType().getName());
+    return noProcessedIncomeDto;
   }
   
   private IncomeDto getIncomeDtoFromIncomeEntity(Income item) {

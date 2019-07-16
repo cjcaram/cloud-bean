@@ -31,9 +31,7 @@ public class CommodityService {
     commodity.setBagQuantity(Double.valueOf(income.getBagQuantity()));
     commodity.setLocationInPlant(income.getLocationInPlant());
     commodity.setObs(income.getObs());
-    commodity.setOwner(income.getWaybillOwner().getId());
     commodity.setPackagingType(income.getPackagingType());
-    commodity.setGrainType(income.getGrainType());
     
     return commodity;
   }

@@ -272,7 +272,7 @@ public class Income {
   }
 
   public void setLocationInPlant(String locationInPlant) {
-    this.locationInPlant = locationInPlant;
+    this.locationInPlant = locationInPlant.toUpperCase();
   }
 
   public Date getDownloadDate() {
