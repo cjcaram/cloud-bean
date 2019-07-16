@@ -1,5 +1,7 @@
 package com.enano.cloudbean.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +16,9 @@ public class QualityTypeService {
   
   public QualityType getQualityTypeByName(String name) {
     return qualityTypeRepo.findByQualityType(name);
+  }
+  
+  public List<QualityType> listAll(){
+    return qualityTypeRepo.findAll();
   }
 }
