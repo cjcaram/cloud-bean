@@ -24,8 +24,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
       http.cors().configurationSource(corsConfigurationSource()).and()
         .authorizeRequests()
         .antMatchers(HttpMethod.OPTIONS, "/oauth/token").permitAll()
+        .antMatchers("/oauth/authorize").permitAll()
         .antMatchers("/","/home","/login").permitAll()
-        .antMatchers("/post/postComment").authenticated()
         .antMatchers("/user/**").authenticated()
         .antMatchers("/agrochemical/**").authenticated()
         .antMatchers("/agrochemical-type/**").authenticated()
@@ -37,6 +37,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         .antMatchers("/location/**").authenticated()
         .antMatchers("/outcome/**").authenticated()
         .antMatchers("/role/**").authenticated()
+        .antMatchers("/quality-type/**").authenticated()
+        .antMatchers("/process/**").authenticated()
         .antMatchers(HttpMethod.GET , "/post/**").permitAll()
         .antMatchers(HttpMethod.DELETE , "/post/**").hasAuthority("ROLE_ADMIN")
         .and().csrf().disable();
