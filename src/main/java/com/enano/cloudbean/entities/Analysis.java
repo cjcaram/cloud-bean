@@ -14,88 +14,87 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name= "analisis")
+@Table(name = "analisis")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Analysis {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(name="zaranda")
+  @Column(name = "zaranda")
   private Float zaranda;
-  @Column(name="caida_zaranda")
+  @Column(name = "caida_zaranda")
   private Float caidaZaranda;
-  @Column(name="incomestible")
+  @Column(name = "incomestible")
   private Float incomestible;
-  @Column(name="terron")
+  @Column(name = "terron")
   private Float terron;
-  @Column(name="manchado")
+  @Column(name = "manchado")
   private Float manchado;
-  @Column(name="partido")
+  @Column(name = "partido")
   private Float partido;
-  @Column(name="helado")
+  @Column(name = "helado")
   private Float helado;
-  @Column(name="chuzo")
+  @Column(name = "chuzo")
   private Float chuzo;
-  @Column(name="tiempo_de_coccion")
+  @Column(name = "tiempo_de_coccion")
   private Float tiempoCoccion;
-  @Column(name="roido")
+  @Column(name = "roido")
   private Float roido;
-  @Column(name="picado_de_campo")
+  @Column(name = "picado_de_campo")
   private Float picadoCampo;
-  @Column(name="contrastante")
+  @Column(name = "contrastante")
   private Float contrastante;
-  @Column(name="leve_A")
+  @Column(name = "leve_A")
   private Float leveA;
-  @Column(name="leve_B")
+  @Column(name = "leve_B")
   private Float leveB;
-  @Column(name="descorticado")
+  @Column(name = "descorticado")
   private Float descorticado;
-  @Column(name="cascado")
+  @Column(name = "cascado")
   private Float cascado;
-  @Column(name="arrugado")
+  @Column(name = "arrugado")
   private Float arrugado;
-  @Column(name="revolcado")
+  @Column(name = "revolcado")
   private Float revolcado;
-  @Column(name="manchado_maquina")
+  @Column(name = "manchado_maquina")
   private Float manchadoMaquina;
-  @Column(name="punta_chaucha")
+  @Column(name = "punta_chaucha")
   private Float puntaChaucha;
-  @Column(name="pinto")
+  @Column(name = "pinto")
   private Float pinto;
-  @Column(name="bolita")
+  @Column(name = "bolita")
   private Float bolita;
-  @Column(name="oxidado")
+  @Column(name = "oxidado")
   private Float oxidado;
-  @Column(name="quebrado")
+  @Column(name = "quebrado")
   private Float quebrado;
-  @Column(name="brotado")
+  @Column(name = "brotado")
   private Float brotado;
-  @Column(name="venoso")
+  @Column(name = "venoso")
   private Float venoso;
-  @Column(name="decolorido")
+  @Column(name = "decolorido")
   private Float decolorido;
-  @Column(name="humedad")
+  @Column(name = "humedad")
   private Float humedad;
-  @Column(name="gramaje")
+  @Column(name = "gramaje")
   private Float gramaje;
-  @Column(name="hidratacion")
+  @Column(name = "hidratacion")
   private Float hidratacion;
-  @Column(name="fecha_realizacion")
+  @Column(name = "fecha_realizacion")
   private Date analysisDate;
   @JsonIgnore
-  @Column(name="fecha_modificacion")
+  @Column(name = "fecha_modificacion")
   private Date modificationDate;
-  
-  public Analysis () {
-  }
+
+  public Analysis() {}
 
   public Analysis(Long id, Float zaranda, Float caidaZaranda, Float incomestible, Float terron,
       Float manchado, Float partido, Float helado, Float chuzo, Float tiempoCoccion, Float roido,
-      Float picadoCampo, Float contrastante, Float leveA, Float leveB, Float descorticado, Float cascado,
-      Float arrugado, Float revolcado, Float manchadoMaquina, Float puntaChaucha, Float pinto,
-      Float bolita, Float oxidado, Float quebrado, Float brotado, Float venoso, Float decolorido,
-      Float humedad, Float gramaje, Float hidratacion, Date analysisDate,
+      Float picadoCampo, Float contrastante, Float leveA, Float leveB, Float descorticado,
+      Float cascado, Float arrugado, Float revolcado, Float manchadoMaquina, Float puntaChaucha,
+      Float pinto, Float bolita, Float oxidado, Float quebrado, Float brotado, Float venoso,
+      Float decolorido, Float humedad, Float gramaje, Float hidratacion, Date analysisDate,
       Date modificationDate) {
     this.id = id;
     this.zaranda = zaranda;
@@ -133,7 +132,7 @@ public class Analysis {
   }
 
   public Long getId() {
-    return id;
+    return (id != null && id > 0) ? id : null;
   }
 
   public void setId(Long id) {
@@ -141,7 +140,7 @@ public class Analysis {
   }
 
   public Float getZaranda() {
-    return zaranda;
+    return (zaranda != null) ? zaranda : 0F;
   }
 
   public void setZaranda(Float zaranda) {
@@ -149,7 +148,7 @@ public class Analysis {
   }
 
   public Float getCaidaZaranda() {
-    return caidaZaranda;
+    return (caidaZaranda != null) ? caidaZaranda : 0F;
   }
 
   public void setCaidaZaranda(Float caidaZaranda) {
@@ -157,7 +156,7 @@ public class Analysis {
   }
 
   public Float getIncomestible() {
-    return incomestible;
+    return (incomestible != null) ? incomestible : 0F;
   }
 
   public void setIncomestible(Float incomestible) {
@@ -165,7 +164,7 @@ public class Analysis {
   }
 
   public Float getTerron() {
-    return terron;
+    return (terron != null) ? terron : 0F;
   }
 
   public void setTerron(Float terron) {
@@ -173,7 +172,7 @@ public class Analysis {
   }
 
   public Float getManchado() {
-    return manchado;
+    return (manchado != null) ? manchado : 0F;
   }
 
   public void setManchado(Float manchado) {
@@ -181,7 +180,7 @@ public class Analysis {
   }
 
   public Float getPartido() {
-    return partido;
+    return (partido != null) ? partido : 0F;
   }
 
   public void setPartido(Float partido) {
@@ -189,7 +188,7 @@ public class Analysis {
   }
 
   public Float getHelado() {
-    return helado;
+    return (helado != null) ? helado : 0F;
   }
 
   public void setHelado(Float helado) {
@@ -197,7 +196,7 @@ public class Analysis {
   }
 
   public Float getChuzo() {
-    return chuzo;
+    return (chuzo != null) ? chuzo : 0F;
   }
 
   public void setChuzo(Float chuzo) {
@@ -205,7 +204,7 @@ public class Analysis {
   }
 
   public Float getTiempoCoccion() {
-    return tiempoCoccion;
+    return (tiempoCoccion != null) ? tiempoCoccion : 0F;
   }
 
   public void setTiempoCoccion(Float tiempoCoccion) {
@@ -213,7 +212,7 @@ public class Analysis {
   }
 
   public Float getRoido() {
-    return roido;
+    return (roido != null) ? roido : 0F;
   }
 
   public void setRoido(Float roido) {
@@ -221,7 +220,7 @@ public class Analysis {
   }
 
   public Float getPicadoCampo() {
-    return picadoCampo;
+    return (picadoCampo != null) ? picadoCampo : 0F;
   }
 
   public void setPicadoCampo(Float picadoCampo) {
@@ -229,7 +228,7 @@ public class Analysis {
   }
 
   public Float getContrastante() {
-    return contrastante;
+    return (contrastante != null) ? contrastante : 0F;
   }
 
   public void setContrastante(Float contrastante) {
@@ -237,7 +236,7 @@ public class Analysis {
   }
 
   public Float getLeveA() {
-    return leveA;
+    return (leveA != null) ? leveA : 0F;
   }
 
   public void setLeveA(Float leveA) {
@@ -245,7 +244,7 @@ public class Analysis {
   }
 
   public Float getLeveB() {
-    return leveB;
+    return (leveB != null) ? leveB : 0F;
   }
 
   public void setLeveB(Float leveB) {
@@ -253,7 +252,7 @@ public class Analysis {
   }
 
   public Float getDescorticado() {
-    return descorticado;
+    return (descorticado != null) ? descorticado : 0F;
   }
 
   public void setDescorticado(Float descorticado) {
@@ -261,7 +260,7 @@ public class Analysis {
   }
 
   public Float getCascado() {
-    return cascado;
+    return (cascado != null) ? cascado : 0F;
   }
 
   public void setCascado(Float cascado) {
@@ -269,7 +268,7 @@ public class Analysis {
   }
 
   public Float getArrugado() {
-    return arrugado;
+    return (arrugado != null) ? arrugado : 0F;
   }
 
   public void setArrugado(Float arrugado) {
@@ -277,7 +276,7 @@ public class Analysis {
   }
 
   public Float getRevolcado() {
-    return revolcado;
+    return (revolcado != null) ? revolcado : 0F;
   }
 
   public void setRevolcado(Float revolcado) {
@@ -285,7 +284,7 @@ public class Analysis {
   }
 
   public Float getManchadoMaquina() {
-    return manchadoMaquina;
+    return (manchadoMaquina != null) ? manchadoMaquina : 0F;
   }
 
   public void setManchadoMaquina(Float manchadoMaquina) {
@@ -293,7 +292,7 @@ public class Analysis {
   }
 
   public Float getPuntaChaucha() {
-    return puntaChaucha;
+    return (puntaChaucha != null) ? puntaChaucha : 0F;
   }
 
   public void setPuntaChaucha(Float puntaChaucha) {
@@ -301,7 +300,7 @@ public class Analysis {
   }
 
   public Float getPinto() {
-    return pinto;
+    return (pinto != null) ? pinto : 0F;
   }
 
   public void setPinto(Float pinto) {
@@ -309,7 +308,7 @@ public class Analysis {
   }
 
   public Float getBolita() {
-    return bolita;
+    return (bolita != null) ? bolita : 0F;
   }
 
   public void setBolita(Float bolita) {
@@ -317,7 +316,7 @@ public class Analysis {
   }
 
   public Float getOxidado() {
-    return oxidado;
+    return (oxidado != null) ? oxidado : 0F;
   }
 
   public void setOxidado(Float oxidado) {
@@ -325,7 +324,7 @@ public class Analysis {
   }
 
   public Float getQuebrado() {
-    return quebrado;
+    return (quebrado != null) ? quebrado : 0F;
   }
 
   public void setQuebrado(Float quebrado) {
@@ -333,7 +332,7 @@ public class Analysis {
   }
 
   public Float getBrotado() {
-    return brotado;
+    return (brotado != null) ? brotado : 0F;
   }
 
   public void setBrotado(Float brotado) {
@@ -341,7 +340,7 @@ public class Analysis {
   }
 
   public Float getVenoso() {
-    return venoso;
+    return (venoso != null) ? venoso : 0F;
   }
 
   public void setVenoso(Float venoso) {
@@ -349,7 +348,7 @@ public class Analysis {
   }
 
   public Float getDecolorido() {
-    return decolorido;
+    return (decolorido != null) ? decolorido : 0F;
   }
 
   public void setDecolorido(Float decolorido) {
@@ -357,7 +356,7 @@ public class Analysis {
   }
 
   public Float getHumedad() {
-    return humedad;
+    return (humedad != null) ? humedad : 0F;
   }
 
   public void setHumedad(Float humedad) {
@@ -365,7 +364,7 @@ public class Analysis {
   }
 
   public Float getGramaje() {
-    return gramaje;
+    return (gramaje != null) ? gramaje : 0F;
   }
 
   public void setGramaje(Float gramaje) {
@@ -373,7 +372,7 @@ public class Analysis {
   }
 
   public Float getHidratacion() {
-    return hidratacion;
+    return (hidratacion != null) ? hidratacion : 0F;
   }
 
   public void setHidratacion(Float hidratacion) {
@@ -394,5 +393,11 @@ public class Analysis {
 
   public void setModificationDate(Date modificationDate) {
     this.modificationDate = modificationDate;
+  }
+
+  public Float getCaida() {
+    return (getIncomestible() + getTerron() + getCaidaZaranda() + getManchado() + getPartido()
+        + getHelado() + getChuzo() + getRoido() + getPicadoCampo() + getContrastante()
+        + getDescorticado() + getQuebrado() + getBrotado() + getRevolcado() + getLeveA());
   }
 }

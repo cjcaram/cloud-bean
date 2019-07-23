@@ -54,7 +54,7 @@ public class ComercialEntity {
   }
 
   public Long getId() {
-    return id;
+    return (id != null && id > 0) ? id : null;
   }
 
   public void setId(Long id) {

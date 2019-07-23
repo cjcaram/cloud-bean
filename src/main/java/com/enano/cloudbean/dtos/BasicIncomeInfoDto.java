@@ -6,30 +6,34 @@ public class BasicIncomeInfoDto {
   
   private Long id;
   private String gramaje;
+  private Float caida;
   private String grano;
   private int ingresoNro;
   private int kilogramos;
   private String procedencia;
   private String destinatario;
+  private String cp;
   private Date fecha;
   
   public BasicIncomeInfoDto () {
   }
   
-  public BasicIncomeInfoDto(Long id, String gramaje, String grano, int ingresoNro, int kilogramos,
-      String procedencia, String destinatario, Date fecha) {
+  public BasicIncomeInfoDto(Long id, String gramaje, Float caida, String grano, int ingresoNro, 
+      int kilogramos, String procedencia, String destinatario, String cp, Date fecha) {
     this.id = id;
     this.gramaje = gramaje;
+    this.caida = caida;
     this.grano = grano;
     this.ingresoNro = ingresoNro;
     this.kilogramos = kilogramos;
     this.procedencia = procedencia;
     this.destinatario = destinatario;
+    this.cp = cp;
     this.fecha = fecha;
   }
 
   public Long getId() {
-    return id;
+    return (id != null && id > 0) ? id : null;
   }
 
   public void setId(Long id) {
@@ -92,12 +96,19 @@ public class BasicIncomeInfoDto {
     this.fecha = fecha;
   }
 
-  @Override
-  public String toString() {
-    return "BasicIncomeInfoDto [id=" + id + ", gramaje=" + gramaje + ", grano=" + grano
-        + ", ingresoNro=" + ingresoNro + ", kilogramos=" + kilogramos + ", procedencia="
-        + procedencia + ", destinatario=" + destinatario + ", fecha=" + fecha + "]";
+  public Float getCaida() {
+    return caida;
+  }
+
+  public void setCaida(Float caida) {
+    this.caida = caida;
   }
   
-  
+  public String getCp() {
+    return cp;
+  }
+
+  public void setCp(String cp) {
+    this.cp = cp;
+  }
 }

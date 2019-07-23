@@ -2,17 +2,12 @@ package com.enano.cloudbean.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 @Entity
 @Table( name = "mercaderia")
@@ -36,17 +31,15 @@ public class Commodity {
   private Integer gramaje;
   @Column(name="obs")
   private String obs;
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name="proceso_id")
-  @JsonIgnore
-  private Process process;
+  @Column(name="proceso_id")
+  private Long processId;
 
   public Commodity() {
   }
   
   public Commodity(Long id, QualityType qualityType, PackagingType packagingType,
       Double bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-      Process process) {
+      Long processId) {
     this.id = id;
     this.qualityType = qualityType;
     this.packagingType = packagingType;
@@ -55,11 +48,11 @@ public class Commodity {
     this.locationInPlant = locationInPlant;
     this.gramaje = gramaje;
     this.obs = obs;
-    this.process = process;
+    this.processId = processId;
   }
 
   public Long getId() {
-    return id;
+    return (id != null && id > 0) ? id : null;
   }
 
   public void setId(Long id) {
@@ -122,12 +115,12 @@ public class Commodity {
     this.obs = obs;
   }
 
-  public Process getProcess() {
-    return process;
+  public Long getProcessId() {
+    return processId;
   }
 
-  public void setProcess(Process process) {
-    this.process = process;
+  public void setProcessId(Long processId) {
+    this.processId = processId;
   }
 
   @Override

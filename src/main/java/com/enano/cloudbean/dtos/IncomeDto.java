@@ -78,7 +78,7 @@ public class IncomeDto {
   }
 
   public Integer getId() {
-    return id;
+    return (id != null && id > 0) ? id : null;
   }
 
   public void setId(Integer id) {
