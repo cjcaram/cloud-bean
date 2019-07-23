@@ -90,6 +90,21 @@ public class IncomeService {
     }
     return incomeDtoList;
   }
+  
+  public List<BasicIncomeInfoDto> getIncomesByProcessId(Long processId) {
+    List<BasicIncomeInfoDto> incomeDtoList = null;
+    List<Income> incomeList = null;
+    try {
+      incomeList = repo.getIncomesByProcessId(processId);
+      incomeDtoList = incomeList.stream()
+          .map(item -> getNoProcessedIncomeDtoFromIncomeEntity(item))
+          .collect(Collectors.toList());
+    } catch (Exception error) {
+      LOGGER.error("[Method: getIncomesByProcessId] - "+ error);
+      throw error;
+    }
+    return incomeDtoList;
+  }
 
   public List<IncomeDto> listIncomesByFilter( IncomeFiltersDto filters) {
     List<Income> incomeList = repo.findIncomesUsingFilters(filters);
@@ -107,10 +122,13 @@ public class IncomeService {
     BasicIncomeInfoDto noProcessedIncomeDto = new BasicIncomeInfoDto();
     noProcessedIncomeDto.setId(item.getId());
     noProcessedIncomeDto.setDestinatario(item.getCommercialSender().getName());
+    noProcessedIncomeDto.setCp(item.getWaybill());
     if (AnalysisValidation.isValidAnalysis(item.getAnalysis())) {
       noProcessedIncomeDto.setGramaje(item.getAnalysis().getGramaje().toString());
+      noProcessedIncomeDto.setCaida(item.getAnalysis().getCaida());
     } else {
       noProcessedIncomeDto.setGramaje("Analisis Pendiente");
+      noProcessedIncomeDto.setCaida(null);
     }
     noProcessedIncomeDto.setFecha(item.getDownloadDate());
     noProcessedIncomeDto.setIngresoNro(item.getIncomeNo());
