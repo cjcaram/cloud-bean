@@ -2,12 +2,10 @@ package com.enano.cloudbean.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -28,7 +26,7 @@ public class CommodityStock{
     @JoinColumn(name="tipo_bolsa_id", nullable = true)
     private PackagingType packagingType;
     @Column(name="cantidad_bulto")
-    private Double bagQuantity;
+    private Integer bagQuantity;
     @Column(name="cantidad_kg")
     private Integer amount;
     @Column(name="ubicacion")
@@ -37,10 +35,9 @@ public class CommodityStock{
     private Integer gramaje;
     @Column(name="obs")
     private String obs;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="proceso_id")
     @JsonIgnore
-    private Process process;
+    @Column(name="proceso_id")
+    private Long processId;
     @OneToOne
     @JoinColumn(name = "grano_especie_id")
     private GrainType grainType;
@@ -55,8 +52,8 @@ public class CommodityStock{
     }
     
     public CommodityStock(Long id, Long owner, QualityType qualityType, PackagingType packagingType,
-        Double bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-        Process process, GrainType grainType, String harvesting, Long incomeId, Long outcomeId) {
+        Integer bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
+        Long processId, GrainType grainType, String harvesting, Long incomeId, Long outcomeId) {
       this.id = id;
       this.owner = owner;
       this.qualityType = qualityType;
@@ -66,7 +63,7 @@ public class CommodityStock{
       this.locationInPlant = locationInPlant;
       this.gramaje = gramaje;
       this.obs = obs;
-      this.process = process;
+      this.processId = processId;
       this.grainType = grainType;
       this.harvesting = harvesting;
       this.incomeId = incomeId;
@@ -105,11 +102,11 @@ public class CommodityStock{
       this.packagingType = packagingType;
     }
 
-    public Double getBagQuantity() {
+    public Integer getBagQuantity() {
       return bagQuantity;
     }
 
-    public void setBagQuantity(Double bagQuantity) {
+    public void setBagQuantity(Integer bagQuantity) {
       this.bagQuantity = bagQuantity;
     }
 
@@ -145,12 +142,12 @@ public class CommodityStock{
       this.obs = obs;
     }
 
-    public Process getProcess() {
-      return process;
+    public Long getProcessId() {
+      return processId;
     }
 
-    public void setProcessId(Process process) {
-      this.process = process;
+    public void setProcessId(Long processId) {
+      this.processId = processId;
     }
 
     public GrainType getGrainType() {

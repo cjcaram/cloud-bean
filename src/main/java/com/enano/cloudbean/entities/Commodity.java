@@ -22,7 +22,7 @@ public class Commodity {
   @JoinColumn(name="tipo_bolsa_id", nullable = true)
   private PackagingType packagingType;
   @Column(name="cantidad_bulto")
-  private Double bagQuantity;
+  private Integer bagQuantity;
   @Column(name="cantidad_kg")
   private Integer amount;
   @Column(name="ubicacion")
@@ -38,7 +38,7 @@ public class Commodity {
   }
   
   public Commodity(Long id, QualityType qualityType, PackagingType packagingType,
-      Double bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
+      Integer bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
       Long processId) {
     this.id = id;
     this.qualityType = qualityType;
@@ -75,11 +75,11 @@ public class Commodity {
     this.packagingType = packagingType;
   }
 
-  public Double getBagQuantity() {
+  public Integer getBagQuantity() {
     return bagQuantity;
   }
 
-  public void setBagQuantity(Double bagQuantity) {
+  public void setBagQuantity(Integer bagQuantity) {
     this.bagQuantity = bagQuantity;
   }
 

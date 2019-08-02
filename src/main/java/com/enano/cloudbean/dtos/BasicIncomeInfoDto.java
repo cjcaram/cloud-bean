@@ -13,13 +13,13 @@ public class BasicIncomeInfoDto {
   private String procedencia;
   private String destinatario;
   private String cp;
-  private Date fecha;
+  private Date downloadDate;
   
   public BasicIncomeInfoDto () {
   }
   
   public BasicIncomeInfoDto(Long id, String gramaje, Float caida, String grano, int ingresoNro, 
-      int kilogramos, String procedencia, String destinatario, String cp, Date fecha) {
+      int kilogramos, String procedencia, String destinatario, String cp, Date downloadDate) {
     this.id = id;
     this.gramaje = gramaje;
     this.caida = caida;
@@ -29,7 +29,7 @@ public class BasicIncomeInfoDto {
     this.procedencia = procedencia;
     this.destinatario = destinatario;
     this.cp = cp;
-    this.fecha = fecha;
+    this.setDownloadDate(downloadDate);
   }
 
   public Long getId() {
@@ -88,14 +88,6 @@ public class BasicIncomeInfoDto {
     this.destinatario = destinatario;
   }
 
-  public Date getFecha() {
-    return fecha;
-  }
-
-  public void setFecha(Date fecha) {
-    this.fecha = fecha;
-  }
-
   public Float getCaida() {
     return caida;
   }
@@ -110,5 +102,13 @@ public class BasicIncomeInfoDto {
 
   public void setCp(String cp) {
     this.cp = cp;
+  }
+
+  public Date getDownloadDate() {
+    return downloadDate;
+  }
+
+  public void setDownloadDate(Date downloadDate) {
+    this.downloadDate = downloadDate;
   }
 }

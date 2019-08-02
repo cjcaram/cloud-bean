@@ -1,0 +1,20 @@
+CREATE TABLE `mercaderia_stock_audit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mercaderia_stock_id` int(11) NOT NULL,
+  `accion` int(2) NOT NULL,
+  `fecha_modificacion` TIMESTAMP NOT NULL,
+  `propietario` int(11) DEFAULT NULL,
+  `tipo_calidad_id` int(11) DEFAULT NULL,
+  `tipo_bolsa_id` int(11) DEFAULT NULL,
+  `cantidad_bulto` decimal(4,2) DEFAULT NULL,
+  `cantidad_kg` int(11) DEFAULT NULL,
+  `ubicacion` varchar(128) DEFAULT NULL,
+  `cosecha` varchar(32) DEFAULT NULL,
+  `gramaje` int(11) DEFAULT NULL,
+  `grano_especie_id` int(4) DEFAULT NULL,
+  `obs` varchar(256) DEFAULT NULL,
+  `proceso_id` int(11) DEFAULT NULL,
+  `entrada_id` int(11) DEFAULT NULL,
+  `salida_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;

@@ -83,4 +83,10 @@ public class ProcessDto {
   public void setNaturalCommodities(List<BasicIncomeInfoDto> naturalCommodities) {
     this.naturalCommodities = naturalCommodities;
   }
+
+  @Override
+  public String toString() {
+    return "ProcessDto [id=" + id + ", processNumber=" + processNumber + ", referenceName="
+        + referenceName + ", date=" + date + ", obs=" + obs + "]";
+  }
 }

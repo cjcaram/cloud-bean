@@ -35,6 +35,11 @@ public class IncomeService {
   
   private ModelMapper modelMapper = new ModelMapper();
 
+  /** Edit Income 
+   * 
+   * @param income
+   * @return edited income
+   */
   public Income edit(Income income) {
     income.setModificationDate(new Date());
     if (AnalysisValidation.isValidAnalysis(income.getAnalysis())) {
@@ -47,6 +52,11 @@ public class IncomeService {
     return editedIncome; 
   }
 
+  /** Save new Income
+   * 
+   * @param incomeToAdd
+   * @return Income saved
+   */
   @Transactional
   public Income save(Income incomeToAdd) {
     incomeToAdd.setId(null);
@@ -60,10 +70,19 @@ public class IncomeService {
     return addedIncome; 
   }
 
+  /** List all incomes without filters
+   * 
+   * @return list of incomes
+   */
   public List<Income> listAll() {
     return repo.findAll();
   }
   
+  /** Update analysis associated to income
+   * 
+   * @param id
+   * @param analysis
+   */
   public void updateAnalysis(Long id, Analysis analysis) {
     Income income = repo.getOne(id);
     income.setAnalysis(analysis);
@@ -71,11 +90,19 @@ public class IncomeService {
     repo.saveAndFlush(income);
   }
 
+  /** List of incomesDto
+   * 
+   * @return List of incomesDto
+   */
   public List<IncomeDto> listAllIncomeDto() {
     List<Income> incomeList = repo.findAll();
     return incomeListToIncomeDtoList(incomeList);
   }
   
+  /** List of incomes without process associated
+   * 
+   * @return List of incomes
+   */
   public List<BasicIncomeInfoDto> listNotProcessedIncomes() {
     List<BasicIncomeInfoDto> incomeDtoList = null;
     List<Income> incomeList = null;
@@ -91,6 +118,11 @@ public class IncomeService {
     return incomeDtoList;
   }
   
+  /** List of incomes associated to specific process
+   * 
+   * @param processId
+   * @return List of incomes
+   */
   public List<BasicIncomeInfoDto> getIncomesByProcessId(Long processId) {
     List<BasicIncomeInfoDto> incomeDtoList = null;
     List<Income> incomeList = null;
@@ -106,9 +138,23 @@ public class IncomeService {
     return incomeDtoList;
   }
 
+  /** List Incomes using filters
+   * 
+   * @param filters
+   * @return Filtered incomes
+   */
   public List<IncomeDto> listIncomesByFilter( IncomeFiltersDto filters) {
     List<Income> incomeList = repo.findIncomesUsingFilters(filters);
     return incomeListToIncomeDtoList(incomeList);
+  }
+  
+  /** Get income by id
+   * 
+   * @param id
+   * @return income
+   */
+  public Income getIncomeById (Long id) {
+    return repo.getOne(id);
   }
 
   private List<IncomeDto> incomeListToIncomeDtoList(List<Income> incomeList) {
@@ -130,7 +176,7 @@ public class IncomeService {
       noProcessedIncomeDto.setGramaje("Analisis Pendiente");
       noProcessedIncomeDto.setCaida(null);
     }
-    noProcessedIncomeDto.setFecha(item.getDownloadDate());
+    noProcessedIncomeDto.setDownloadDate(item.getDownloadDate());
     noProcessedIncomeDto.setIngresoNro(item.getIncomeNo());
     noProcessedIncomeDto.setProcedencia(item.getOrigin().getName());
     noProcessedIncomeDto.setKilogramos(item.getGrossWeight() - item.getTruckWeight());
