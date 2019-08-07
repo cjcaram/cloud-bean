@@ -1,6 +1,7 @@
 package com.enano.cloudbean.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,6 +94,14 @@ public class UserController extends BaseController {
   @GetMapping(value = "/getUserProfile")
   public UserProfile getUserProfile() {
     return userService.getUserProfileByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+  }
+  
+  @GetMapping(value = "/validate")
+  public ResponseEntity<?> validateToken() {
+    Map<String, Boolean> validToken = new HashMap<>();
+    validToken.put("valid", true);
+    ResponseEntity<?> response = ResponseEntity.ok(validToken);
+    return response;
   }
   
   @DeleteMapping(value = "/disableUser")

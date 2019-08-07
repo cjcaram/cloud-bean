@@ -24,7 +24,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
       http.cors().configurationSource(corsConfigurationSource()).and()
         .authorizeRequests()
         .antMatchers(HttpMethod.OPTIONS, "/oauth/token").permitAll()
-        .antMatchers("/oauth/authorize").permitAll()
         .antMatchers("/","/home","/login").permitAll()
         .antMatchers("/user/**").authenticated()
         .antMatchers("/agrochemical/**").authenticated()
