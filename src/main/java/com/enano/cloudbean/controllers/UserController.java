@@ -2,6 +2,7 @@ package com.enano.cloudbean.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -106,8 +107,8 @@ public class UserController extends BaseController {
     return response;
   }
   
-  @PostMapping(value = "/logoutCurrentUser")
-  public void logout(@RequestBody String accessToken){
-    tokenStore.removeAccessToken(tokenStore.readAccessToken(accessToken.substring(0, accessToken.length()-1)));
+  @PostMapping(value = "/logout")
+  public void logout(@RequestBody Map<String, String> accessToken){
+    tokenStore.removeAccessToken(tokenStore.readAccessToken(accessToken.get("accessToken")));
   }
 }
