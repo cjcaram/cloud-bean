@@ -124,9 +124,83 @@ public class Commodity {
   }
 
   @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+    result = prime * result + ((bagQuantity == null) ? 0 : bagQuantity.hashCode());
+    result = prime * result + ((gramaje == null) ? 0 : gramaje.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((locationInPlant == null) ? 0 : locationInPlant.hashCode());
+    result = prime * result + ((obs == null) ? 0 : obs.hashCode());
+    result = prime * result + ((packagingType == null) ? 0 : packagingType.hashCode());
+    result = prime * result + ((processId == null) ? 0 : processId.hashCode());
+    result = prime * result + ((qualityType == null) ? 0 : qualityType.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Commodity other = (Commodity) obj;
+    if (amount == null) {
+      if (other.amount != null)
+        return false;
+    } else if (!amount.equals(other.amount))
+      return false;
+    if (bagQuantity == null) {
+      if (other.bagQuantity != null)
+        return false;
+    } else if (!bagQuantity.equals(other.bagQuantity))
+      return false;
+    if (gramaje == null) {
+      if (other.gramaje != null)
+        return false;
+    } else if (!gramaje.equals(other.gramaje))
+      return false;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (locationInPlant == null) {
+      if (other.locationInPlant != null)
+        return false;
+    } else if (!locationInPlant.equals(other.locationInPlant))
+      return false;
+    if (obs == null) {
+      if (other.obs != null)
+        return false;
+    } else if (!obs.equals(other.obs))
+      return false;
+    if (packagingType == null) {
+      if (other.packagingType != null)
+        return false;
+    } else if (!packagingType.equals(other.packagingType))
+      return false;
+    if (processId == null) {
+      if (other.processId != null)
+        return false;
+    } else if (!processId.equals(other.processId))
+      return false;
+    if (qualityType == null) {
+      if (other.qualityType != null)
+        return false;
+    } else if (!qualityType.equals(other.qualityType))
+      return false;
+    return true;
+  }
+
+  @Override
   public String toString() {
-    return "Commodity [id=" + id + ", qualityType=" + qualityType + ", packagingType=" + 
-        packagingType + ", bagQuantity=" + bagQuantity + ", amount=" + amount
-        + ", locationInPlant=" + locationInPlant + ", gramaje=" + gramaje + ", obs=" + obs + "]";
+    return "Commodity [id=" + id + ", qualityType=" + qualityType + ", packagingType="
+        + packagingType + ", bagQuantity=" + bagQuantity + ", amount=" + amount
+        + ", locationInPlant=" + locationInPlant + ", gramaje=" + gramaje + ", obs=" + obs
+        + ", processId=" + processId + "]";
   }
 }
