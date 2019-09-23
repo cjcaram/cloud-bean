@@ -47,13 +47,16 @@ public class CommodityStock{
     private Long incomeId;
     @Column(name="salida_id")
     private Long outcomeId;
+    @Column(name="mercaderia_id")
+    private Long commodityId;
     
     public CommodityStock() {
     }
     
     public CommodityStock(Long id, Long owner, QualityType qualityType, PackagingType packagingType,
         Integer bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-        Long processId, GrainType grainType, String harvesting, Long incomeId, Long outcomeId) {
+        Long processId, GrainType grainType, String harvesting, Long incomeId, Long outcomeId,
+        Long commodityId) {
       this.id = id;
       this.owner = owner;
       this.qualityType = qualityType;
@@ -68,6 +71,7 @@ public class CommodityStock{
       this.harvesting = harvesting;
       this.incomeId = incomeId;
       this.outcomeId = outcomeId;
+      this.commodityId = commodityId;
     }
 
     public Long getId() {
@@ -182,13 +186,21 @@ public class CommodityStock{
       this.outcomeId = outcomeId;
     }
 
+    public Long getCommodityId() {
+      return commodityId;
+    }
+
+    public void setCommodityId(Long commodityId) {
+      this.commodityId = commodityId;
+    }
+
     @Override
     public String toString() {
       return "CommodityStock [id=" + id + ", owner=" + owner + ", qualityType=" + qualityType
           + ", packagingType=" + packagingType + ", bagQuantity=" + bagQuantity + ", amount="
           + amount + ", locationInPlant=" + locationInPlant + ", gramaje=" + gramaje + ", obs="
-          + obs + ", grainType=" + grainType + ", harvesting="
-          + harvesting + ", incomeId=" + incomeId + ", outcomeId=" + outcomeId + "]";
+          + obs + ", processId=" + processId + ", grainType=" + grainType + ", harvesting="
+          + harvesting + ", incomeId=" + incomeId + ", outcomeId=" + outcomeId + ", commodityId="
+          + commodityId + "]";
     }
-
 }

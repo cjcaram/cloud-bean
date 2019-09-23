@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.enano.cloudbean.dtos.CommodityDto;
 import com.enano.cloudbean.dtos.ProcessDto;
 import com.enano.cloudbean.repositories.IncomeProcessRepository;
 import com.enano.cloudbean.repositories.ProcessRepository;
@@ -62,16 +63,18 @@ public class ProcessService {
    */
   @Transactional
   public Process addProcess(ProcessDto processDto) {
+    LOGGER.info("[Method: addProcess]");
     Process process = new Process();
     processDto.setId(null);
     try {
       process = getProcessEntityFromDto(processDto);
       process = processRepo.save(process);
-      List<Commodity> commodityList = getCommoditiesFromDto(process.getId(), processDto);
-
-      commodityService.addNewCommodities(commodityList);
-      incomeProcessRepo.saveAll(getIncomesProcess(process.getId(), processDto));
-      commodityStockService.addNewProcess(process.getId(), processDto);
+      processDto.setId(process.getId());
+      List<Commodity> commodityList = getCommoditiesFromDto(processDto);
+      commodityList = commodityService.saveAllCommodities(commodityList);
+      processDto.setProcessedCommodities(getCommodityListDto(commodityList));
+      incomeProcessRepo.saveAll(getIncomesToProcess(processDto));
+      commodityStockService.addNewProcess(processDto);
 
     } catch (Exception e) {
       LOGGER.error("Error Trying to save process: " + processDto.toString());
@@ -80,22 +83,33 @@ public class ProcessService {
     return process;
   }
 
-  private List<Commodity> getCommoditiesFromDto(Long id, ProcessDto processDto) {
+  private List<Commodity> getCommoditiesFromDto(ProcessDto processDto) {
     List<Commodity> commoditiesList = new ArrayList<>();
     processDto.getProcessedCommodities().forEach(dto -> {
       Commodity entity = new Commodity();
       entity = modelMapper.map(dto, Commodity.class);
-      entity.setProcessId(id);
+      entity.setProcessId(processDto.getId());
       entity.setId(dto.getId());
       commoditiesList.add(entity);
     });
     return commoditiesList;
   }
 
-  private List<IncomeProcess> getIncomesProcess(Long id, ProcessDto processDto) {
+  private List<IncomeProcess> getIncomesToProcess(ProcessDto processDto) {
+    Long processId = processDto.getId();
     List<IncomeProcess> incomeProcessList = new ArrayList<>();
+    List<IncomeProcess> prevIncomeProcessList = incomeProcessRepo.findByProcessId(processId);
     processDto.getNaturalCommodities().forEach(dto -> {
-      IncomeProcess entity = new IncomeProcess(null, dto.getId(), id);
+      IncomeProcess entity = null;
+      for (IncomeProcess prevIncToProcess : prevIncomeProcessList) {
+        if (prevIncToProcess.getIncomeId() == dto.getId() && prevIncToProcess.getProcessId() == processId) {
+          entity = new IncomeProcess(prevIncToProcess.getId(), dto.getId(), processId);
+          break;
+        }
+      }
+      if (entity == null) {
+        entity = new IncomeProcess(null, dto.getId(), processId);
+      }
       incomeProcessList.add(entity);
     });
     return incomeProcessList;
@@ -106,9 +120,52 @@ public class ProcessService {
         new Date(), dto.getObs());
   }
 
-  public Object editProcess(ProcessDto processDto) {
-    // TODO Auto-generated method stub
-    return null;
+  @Transactional
+  public Process editProcess(ProcessDto processDto) {
+    LOGGER.info("[Method: editProcess]");
+    Process process = new Process();
+    try {
+      process = getProcessEntityFromDto(processDto);
+      process = processRepo.save(process);
+      List<Commodity> commodityList = getCommoditiesFromDto(processDto);
+      commodityList = commodityService.saveAllCommodities(commodityList);
+      processDto.setProcessedCommodities(getCommodityListDto(commodityList));
+      List<Commodity> removedCommodities = commodityService.removeCommoditiesIfNoLongerExist(commodityList, process.getId());
+      List<IncomeProcess> incomeToProcessList = getIncomesToProcess(processDto);
+      incomeProcessRepo.saveAll(incomeToProcessList);
+      List<IncomeProcess> removedIncomeProcess = removeIncomeToProcessIfNoLongerExist(process.getId(), incomeToProcessList);
+      commodityStockService.editProcess(processDto, removedIncomeProcess, removedCommodities);
+
+    } catch (Exception e) {
+      LOGGER.error("Error Trying to save process: " + processDto.toString());
+      throw e;
+    }
+    return process;
+  }
+
+  private List<CommodityDto> getCommodityListDto(List<Commodity> commodityList) {
+    List <CommodityDto> commoditiesDto = new ArrayList<>(); 
+    for (Commodity item : commodityList) {
+      CommodityDto itemDto = modelMapper.map(item, CommodityDto.class);
+      commoditiesDto.add(itemDto);
+    }
+    return commoditiesDto;
+  }
+  
+  private List<IncomeProcess> removeIncomeToProcessIfNoLongerExist (Long processId, List<IncomeProcess> incomeToProcessList) {
+    List<IncomeProcess> deletedIncomesSelected = new ArrayList<>();
+    try {
+      if (incomeToProcessList != null && !incomeToProcessList.isEmpty()) {
+        deletedIncomesSelected = incomeProcessRepo.findByProcessId(processId);
+        deletedIncomesSelected.removeIf(item -> (incomeToProcessList.contains(item)));
+        incomeProcessRepo.deleteAll(deletedIncomesSelected);
+      }
+    } catch (Exception e) {
+      LOGGER.error("[removeIncomeToProcessIfNoLongerExist] - Error removing incomes to process during edition of Process with id: " + processId);
+      throw e;
+    }
+    
+    return deletedIncomesSelected;
   }
 
   public List<Process> getBasicProcessList() {

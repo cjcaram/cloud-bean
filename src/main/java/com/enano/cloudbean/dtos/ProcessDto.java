@@ -3,8 +3,6 @@ package com.enano.cloudbean.dtos;
 import java.util.Date;
 import java.util.List;
 
-import com.enano.cloudbean.entities.Commodity;
-
 public class ProcessDto {
   
   private Long id;
@@ -12,13 +10,13 @@ public class ProcessDto {
   private String referenceName;
   private Date date;
   private String obs;
-  private List<Commodity> processedCommodities;
+  private List<CommodityDto> processedCommodities;
   private List<BasicIncomeInfoDto> naturalCommodities;
 
   public ProcessDto () {}
 
   public ProcessDto(Long id, int processNumber, String referenceName, Date date, String obs,
-      List<Commodity> processedCommodities, List<BasicIncomeInfoDto> naturalCommodities) {
+      List<CommodityDto> processedCommodities, List<BasicIncomeInfoDto> naturalCommodities) {
     this.id = id;
     this.processNumber = processNumber;
     this.referenceName = referenceName;
@@ -68,11 +66,11 @@ public class ProcessDto {
     this.obs = obs;
   }
 
-  public List<Commodity> getProcessedCommodities() {
+  public List<CommodityDto> getProcessedCommodities() {
     return processedCommodities;
   }
 
-  public void setProcessedCommodities(List<Commodity> processedCommodities) {
+  public void setProcessedCommodities(List<CommodityDto> processedCommodities) {
     this.processedCommodities = processedCommodities;
   }
 

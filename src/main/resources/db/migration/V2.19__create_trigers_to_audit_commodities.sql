@@ -40,7 +40,7 @@ INSERT INTO mercaderia_stock_audit (
         NEW.salida_id,
         NEW.mercaderia_id);
 END$$
-DELIMITER ;
+DELIMITER;
 
 
 DELIMITER $$

@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.enano.cloudbean.dtos.BasicIncomeInfoDto;
+import com.enano.cloudbean.dtos.CommodityDto;
 import com.enano.cloudbean.dtos.ProcessDto;
 import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.entities.GrainType;
 import com.enano.cloudbean.entities.Income;
+import com.enano.cloudbean.entities.IncomeProcess;
 import com.enano.cloudbean.entities.Outcome;
 import com.enano.cloudbean.repositories.CommodityStockRepository;
 import com.enano.cloudbean.utils.CommodityQuality;
@@ -75,16 +77,16 @@ public class CommodityStockService {
    * @param processId
    * @param processDto
    */
-  public void addNewProcess(Long processId, ProcessDto processDto) {
+  public void addNewProcess(ProcessDto processDto) {
     try {
-      removingNaturalStocks(processId, processDto);
-      addingNewStocks(processId, processDto);
+      removingNaturalStocks(processDto);
+      addingNewStocks(processDto);
     } catch (Exception e) {
       LOGGER.error("[addNewProcess] - Error updating stock.");
     }
   }
   
-  /** removing stock when an outcome is produced  
+  /** Removing stock when an outcome is produced  
    * 
    * @param outcome
    * @return the commodityStock modified
@@ -115,6 +117,36 @@ public class CommodityStockService {
     commodityStockRepo.saveAll(entities);
   }
 
+  /** Change stock according process edition
+   * 
+   * @param processDto
+   * @param removedIncomeProcess
+   */
+  public void editProcess(ProcessDto processDto, List<IncomeProcess> removedIncomeProcess, List<Commodity> removedCommodities) {
+    removingNaturalStocks(processDto);
+    if (removedIncomeProcess != null && !removedIncomeProcess.isEmpty()) {
+      removedIncomeProcess.forEach(item -> {
+        Income income = incomeService.getIncomeById(item.getIncomeId());
+        addNewIncome(income);
+      });
+    }
+    removeStocksByCommodities(removedCommodities);
+    addingNewStocks(processDto);
+  }
+  
+  private void removeStocksByCommodities(List<Commodity> removedCommodities) {
+    if (removedCommodities != null && !removedCommodities.isEmpty()) {
+      List<CommodityStock> commodityStockToRemove = new ArrayList<>();
+      for (int i = 0; i < removedCommodities.size(); i++) {
+        CommodityStock stockItem = commodityStockRepo.findByCommodityId(removedCommodities.get(i).getId());
+        commodityStockToRemove.add(stockItem);
+      }
+      if (!commodityStockToRemove.isEmpty()) {
+        commodityStockRepo.deleteAll(commodityStockToRemove);
+      }
+    }
+  }
+
   private Long getOwnerId(Income income) {
     Long ownerId = null;
     if (income.getCommercialSender() != null) {
@@ -125,7 +157,7 @@ public class CommodityStockService {
     return ownerId;
   }
   
-  private void addingNewStocks(Long processId, ProcessDto processDto) {
+  private void addingNewStocks(ProcessDto processDto) {
     Long ownerId = null;
     String harvesting = null;
     GrainType grainType = null;
@@ -144,19 +176,20 @@ public class CommodityStockService {
 
     List<CommodityStock> commodityStockList = new ArrayList<>();
     for (int i = 0; i < processDto.getProcessedCommodities().size(); i++) {
-      Commodity item = processDto.getProcessedCommodities().get(i);
+      CommodityDto item = processDto.getProcessedCommodities().get(i);
       CommodityStock stockItem = new CommodityStock();
       stockItem = modelMapper.map(item, CommodityStock.class);
       stockItem.setOwner(ownerId);
       stockItem.setGrainType(grainType);
       stockItem.setHarvesting(harvesting);
-      stockItem.setProcessId(processId);
+      stockItem.setProcessId(processDto.getId());
+      stockItem.setCommodityId(item.getId());
       commodityStockList.add(stockItem);
     }
     commodityStockRepo.saveAll(commodityStockList);
   }
   
-  private void removingNaturalStocks(Long processId, ProcessDto processDto) {
+  private void removingNaturalStocks(ProcessDto processDto) {
     for (int i = 0; i < processDto.getNaturalCommodities().size(); i++) {
       BasicIncomeInfoDto income = processDto.getNaturalCommodities().get(i);
       CommodityStock currentStock = commodityStockRepo.findByIncomeId(income.getId());
@@ -165,5 +198,5 @@ public class CommodityStockService {
       }
     }
   }
-
+  
 }
