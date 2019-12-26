@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enano.cloudbean.dtos.OutcomeRequestDto;
 import com.enano.cloudbean.entities.Outcome;
 import com.enano.cloudbean.services.OutcomeService;
 
@@ -23,16 +24,16 @@ public class OutcomeController extends BaseController{
   private static final Logger LOGGER = LogManager.getLogger(OutcomeController.class);
   
   @PostMapping(value = "/save")
-  public ResponseEntity<?> AddOrModifyOutcome(@RequestBody Outcome outcome) {
+  public ResponseEntity<?> AddOrModifyOutcome(@RequestBody OutcomeRequestDto outcomeDto) {
     ResponseEntity<?> response = null;
     Outcome outcomeResult = null;
     try {
-      if (ZUtils.isEdition(outcome.getId())) {
+      if (ZUtils.isEdition(outcomeDto.getId())) {
         LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
-        outcomeResult = outcomeService.edit(outcome);
+        outcomeResult = outcomeService.edit(outcomeDto);
       } else {
         LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
-        outcomeResult = outcomeService.save(outcome);
+        outcomeResult = outcomeService.save(outcomeDto);
       }
       response = ResponseEntity.ok(outcomeResult);
     } catch (Exception e) {

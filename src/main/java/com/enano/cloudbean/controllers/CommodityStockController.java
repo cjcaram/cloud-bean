@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,13 +19,13 @@ public class CommodityStockController extends BaseController {
   
   private static final Logger LOGGER = LogManager.getLogger(CommodityStockController.class);
   
-  @GetMapping(value = "/list")
-  public ResponseEntity<?> getAllCommodities() {
+  @GetMapping(value = "/list/{page}/{processId}")
+  public ResponseEntity<?> getTenCommoditiesPerPage(@PathVariable Integer page, @PathVariable Integer processId) {
     ResponseEntity<?> response = null;
     try {
       LOGGER.info(ZUtils.FETCHING_ENTITIES_MSG);
-      response = ResponseEntity.ok(stockService.listAll());
-    }catch(Exception e) {
+      response = ResponseEntity.ok(stockService.listAll(page, processId));
+    } catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
     }
     return response;

@@ -7,6 +7,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.enano.cloudbean.dtos.BasicIncomeInfoDto;
@@ -105,8 +108,20 @@ public class CommodityStockService {
     return commodityStockRepo.save(actualCommodityStock);
   }
 
-  public List<CommodityStock> listAll() {
-    return commodityStockRepo.findAll();
+  public Page<CommodityStock> listAll(Integer pageNumber, Integer processId) {
+    Pageable page = null;
+    Page<CommodityStock> result;
+    if (pageNumber == null) {
+      page = PageRequest.of(0, 10);
+    }
+    page = PageRequest.of(pageNumber, 10);
+
+    if (processId == null || processId < 0) {
+      result = commodityStockRepo.findAll(page);
+    } else {
+      result = commodityStockRepo.findByProcessId(page, processId.longValue());
+    }
+    return result;
   }
 
   public CommodityStock getOne(Long id) {

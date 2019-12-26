@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.enano.cloudbean.dtos.OutcomeRequestDto;
 import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.entities.Outcome;
 import com.enano.cloudbean.repositories.OutcomeRepository;
@@ -24,12 +25,12 @@ public class OutcomeService {
     return outcomeRepo.findAll();
   }
   
-  public Outcome edit(Outcome outcome) {
+  public Outcome edit(OutcomeRequestDto outcome) {
     return outcomeRepo.saveAndFlush(outcome);
   }
   
   @Transactional
-  public Outcome save(Outcome outcome) throws Exception {
+  public Outcome save(OutcomeRequestDto outcome) throws Exception {
     outcome.setId(null);
     Outcome savedOutcome = null;
     if (isValidWithdrawCommodityStock(outcome)) {
@@ -41,7 +42,7 @@ public class OutcomeService {
     return savedOutcome;
   }
   
-  private boolean isValidWithdrawCommodityStock(Outcome outcome) {
+  private boolean isValidWithdrawCommodityStock(OutcomeRequestDto outcome) {
     boolean result = false;
     int withdrawAmt = outcome.getGrossWeight() - outcome.getTruckWeight();
     CommodityStock actualCommodityStock = null; 
