@@ -1,13 +1,18 @@
 package com.enano.cloudbean.entities;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,9 +27,6 @@ public class Outcome {
   @OneToOne
   @JoinColumn(name="analisis_id", nullable = true)
   private Analysis analysisId;
-  @OneToOne
-  @JoinColumn(name="mercaderia_id")
-  private CommodityStock commodityStock;
   @Column(name="img_dir")
   private String imgPath;
   @Column(name="cp_numero")
@@ -69,20 +71,27 @@ public class Outcome {
   private String trailerPatent;
   @Column(name="KM_a_recorrer")
   private Integer distanceToTravel;
+  
+  @ManyToMany(cascade = { CascadeType.ALL })
+  @JoinTable(
+      name = "mercaderia_stock_salida", 
+      joinColumns = { @JoinColumn(name = "salida_id") }, 
+      inverseJoinColumns = { @JoinColumn(name = "mercaderia_stock_id") }
+  )
+  Set<CommodityStock> commodityStocks = new HashSet<>();
  
   public Outcome() {
   }
   
-  public Outcome(Long id, int outcomeNumber, Analysis analysisId, CommodityStock commodityStock,
+  public Outcome(Long id, int outcomeNumber, Analysis analysisId, 
       String imgPath, String waybill, String ctg, Date loadingDate, ComercialEntity waybillOwner,
       ComercialEntity commercialSender, String deliveryRepresentative, ComercialEntity receiver,
       int bagQuantity, PackagingType packagingType, int grossWeight, int truckWeight, String obs,
       Location destiny, ComercialEntity carrier, String driverName, String truckPatent,
-      String trailerPatent, Integer distanceToTravel) {
+      String trailerPatent, Integer distanceToTravel, HashSet<CommodityStock> commodityStocks) {
     this.id = id;
     this.outcomeNumber = outcomeNumber;
     this.analysisId = analysisId;
-    this.commodityStock = commodityStock;
     this.imgPath = imgPath;
     this.waybill = waybill;
     this.ctg = ctg;
@@ -102,6 +111,7 @@ public class Outcome {
     this.truckPatent = truckPatent;
     this.trailerPatent = trailerPatent;
     this.distanceToTravel = distanceToTravel;
+    this.commodityStocks = commodityStocks;
   }
   
   public Long getId() {
@@ -118,15 +128,6 @@ public class Outcome {
 
   public void setAnalysisId(Analysis analysisId) {
     this.analysisId = analysisId;
-  }
-
-
-  public CommodityStock getCommodityStock() {
-    return commodityStock;
-  }
-
-  public void setCommodityStock(CommodityStock commodityId) {
-    this.commodityStock = commodityId;
   }
 
   public String getImgPath() {
@@ -287,5 +288,13 @@ public class Outcome {
 
   public void setPackagingType(PackagingType packagingType) {
     this.packagingType = packagingType;
+  }
+
+  public Set<CommodityStock> getCommodityStocks() {
+    return commodityStocks;
+  }
+
+  public void setCommodityStocks(Set<CommodityStock> commodityStocks) {
+    this.commodityStocks = commodityStocks;
   }
 }

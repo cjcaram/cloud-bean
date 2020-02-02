@@ -30,10 +30,10 @@ public class OutcomeController extends BaseController{
     try {
       if (ZUtils.isEdition(outcomeDto.getId())) {
         LOGGER.info(ZUtils.EDITING_ENTITY_MSG);
-        outcomeResult = outcomeService.edit(outcomeDto);
+        outcomeResult = outcomeService.edit(OutcomeRequestDto.From(outcomeDto));
       } else {
         LOGGER.info(ZUtils.ADDING_ENTITY_MSG);
-        outcomeResult = outcomeService.save(outcomeDto);
+        outcomeResult = outcomeService.save(OutcomeRequestDto.From(outcomeDto));
       }
       response = ResponseEntity.ok(outcomeResult);
     } catch (Exception e) {

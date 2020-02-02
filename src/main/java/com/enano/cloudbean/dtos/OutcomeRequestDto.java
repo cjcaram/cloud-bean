@@ -5,15 +5,15 @@ import java.util.List;
 
 import com.enano.cloudbean.entities.Analysis;
 import com.enano.cloudbean.entities.ComercialEntity;
-import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.entities.Location;
+import com.enano.cloudbean.entities.Outcome;
 import com.enano.cloudbean.entities.PackagingType;
 
 public class OutcomeRequestDto {
   private Long id;
   private int outcomeNumber;
   private Analysis analysisId;
-  private List<CommodityStock> commodityStock;
+  private List<Long> commodityStockIds;
   private String imgPath;
   private String waybill;
   private String ctg;
@@ -33,11 +33,40 @@ public class OutcomeRequestDto {
   private String truckPatent;
   private String trailerPatent;
   private Integer distanceToTravel;
+  
+  public static Outcome From(OutcomeRequestDto requestDto) {
+    Outcome outcome = new Outcome();
+    
+    outcome.setId(requestDto.getId());
+    outcome.setAnalysisId(requestDto.getAnalysisId());
+    outcome.setBagQuantity(requestDto.getBagQuantity());
+    outcome.setCarrier(requestDto.getCarrier());
+    outcome.setCommercialSender(requestDto.getCommercialSender());
+    outcome.setCtg(requestDto.getCtg());
+    outcome.setDeliveryRepresentative(requestDto.getDeliveryRepresentative());
+    outcome.setDestiny(requestDto.getDestiny());
+    outcome.setDistanceToTravel(requestDto.getDistanceToTravel());
+    outcome.setDriverName(requestDto.getDriverName());
+    outcome.setGrossWeight(requestDto.getGrossWeight());
+    outcome.setImgPath(requestDto.getImgPath());
+    outcome.setLoadingDate(requestDto.getLoadingDate());
+    outcome.setObs(requestDto.getObs());
+    outcome.setOutcomeNumber(requestDto.getOutcomeNumber());
+    outcome.setPackagingType(requestDto.getPackagingType());
+    outcome.setReceiver(requestDto.getReceiver());
+    outcome.setTrailerPatent(requestDto.getTrailerPatent());
+    outcome.setTruckPatent(requestDto.getTrailerPatent());
+    outcome.setTruckWeight(requestDto.getTruckWeight());
+    outcome.setWaybill(requestDto.getWaybill());
+    outcome.setWaybillOwner(requestDto.getWaybillOwner());
+    
+    return outcome; 
+  }
  
   public OutcomeRequestDto() { }
   
   public OutcomeRequestDto(Long id, int outcomeNumber, Analysis analysisId,
-      List<CommodityStock> commodityStock, String imgPath, String waybill, String ctg, Date loadingDate,
+      List<Long> commodityStockIds, String imgPath, String waybill, String ctg, Date loadingDate,
       ComercialEntity waybillOwner, ComercialEntity commercialSender, String deliveryRepresentative,
       ComercialEntity receiver, int bagQuantity, PackagingType packagingType, int grossWeight,
       int truckWeight, String obs, Location destiny, ComercialEntity carrier, String driverName,
@@ -45,7 +74,7 @@ public class OutcomeRequestDto {
     this.id = id;
     this.outcomeNumber = outcomeNumber;
     this.analysisId = analysisId;
-    this.commodityStock = commodityStock;
+    this.commodityStockIds = commodityStockIds;
     this.imgPath = imgPath;
     this.waybill = waybill;
     this.ctg = ctg;
@@ -91,12 +120,12 @@ public class OutcomeRequestDto {
     this.analysisId = analysisId;
   }
 
-  public List<CommodityStock> getCommodityStock() {
-    return commodityStock;
+  public List<Long> getCommodityStockIds() {
+    return commodityStockIds;
   }
 
-  public void setCommodityStock(List<CommodityStock> commodityStock) {
-    this.commodityStock = commodityStock;
+  public void setCommodityStockIds(List<Long> commodityStockIds) {
+    this.commodityStockIds = commodityStockIds;
   }
 
   public String getImgPath() {

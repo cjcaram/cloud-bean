@@ -94,13 +94,13 @@ public class CommodityStockService {
    * @param outcome
    * @return the commodityStock modified
    */
-  public CommodityStock withdrawCommodityStock(Outcome outcome) {
-    CommodityStock actualCommodityStock =
-        commodityStockRepo.getOne(outcome.getCommodityStock().getId());
-    actualCommodityStock.setOutcomeId(outcome.getId());
-    return withdrawCommodityStock(actualCommodityStock,
-        outcome.getGrossWeight() - outcome.getTruckWeight());
-  }
+//  public CommodityStock withdrawCommodityStock(Outcome outcome) {
+//    CommodityStock actualCommodityStock =
+//        commodityStockRepo.getOne(outcome.getCommodityStock().getId());
+//    actualCommodityStock.setOutcomeId(outcome.getId());
+//    return withdrawCommodityStock(actualCommodityStock,
+//        outcome.getGrossWeight() - outcome.getTruckWeight());
+//  }
 
   private CommodityStock withdrawCommodityStock(CommodityStock actualCommodityStock,
       int withdrawAmt) {

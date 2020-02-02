@@ -1,6 +1,7 @@
 package com.enano.cloudbean.services;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -22,36 +23,37 @@ public class OutcomeService {
   private CommodityStockService commodityStockService;
   
   public List<Outcome> listAll() {
-    return outcomeRepo.findAll();
+    List<Outcome> outcomes = outcomeRepo.findAll();
+    return outcomes;
   }
   
-  public Outcome edit(OutcomeRequestDto outcome) {
+  public Outcome edit(Outcome outcome) {
     return outcomeRepo.saveAndFlush(outcome);
   }
   
   @Transactional
-  public Outcome save(OutcomeRequestDto outcome) throws Exception {
+  public Outcome save(Outcome outcome) throws Exception {
     outcome.setId(null);
     Outcome savedOutcome = null;
-    if (isValidWithdrawCommodityStock(outcome)) {
+    if (true) {// (isValidWithdrawCommodityStock(outcome)) {
       savedOutcome = outcomeRepo.save(outcome);
-      commodityStockService.withdrawCommodityStock(savedOutcome);
+      //commodityStockService.withdrawCommodityStock(savedOutcome);
     } else {
       throw new Exception("Error al intentar utilizar la mercadería existente.");
     }
     return savedOutcome;
   }
   
-  private boolean isValidWithdrawCommodityStock(OutcomeRequestDto outcome) {
+  private boolean isValidWithdrawCommodityStock(Outcome outcome) {
     boolean result = false;
     int withdrawAmt = outcome.getGrossWeight() - outcome.getTruckWeight();
     CommodityStock actualCommodityStock = null; 
-    if (outcome.getCommodityStock() != null) {
-      actualCommodityStock = commodityStockService.getOne(outcome.getCommodityStock().getId());
-      if ((actualCommodityStock != null) && (withdrawAmt <= actualCommodityStock.getAmount())) {
-        result = true;
-      }
-    }
+//    if (outcome.getCommodityStock() != null) {
+//      actualCommodityStock = commodityStockService.getOne(outcome.getCommodityStock().getId());
+//      if ((actualCommodityStock != null) && (withdrawAmt <= actualCommodityStock.getAmount())) {
+//        result = true;
+//      }
+//    }
     return result;
   }
 
