@@ -1,7 +1,9 @@
 package com.enano.cloudbean.services;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +17,7 @@ import com.enano.cloudbean.dtos.BasicIncomeInfoDto;
 import com.enano.cloudbean.dtos.IncomeDto;
 import com.enano.cloudbean.dtos.IncomeFiltersDto;
 import com.enano.cloudbean.entities.Analysis;
+import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.Income;
 import com.enano.cloudbean.repositories.IncomeRepository;
 import com.enano.cloudbean.validations.AnalysisValidation;
@@ -40,36 +43,38 @@ public class IncomeService {
    * @param income
    * @return edited income
    */
-  public Income edit(Income income) {
-    income.setModificationDate(new Date());
-    if (AnalysisValidation.isValidAnalysis(income.getAnalysis())) {
-      income.setAnalysis(analisysSrv.save(income.getAnalysis()));
-    } else {
-      income.setAnalysis(null);
+  @Transactional
+  public Income edit(Income incomeToEdit) throws Exception {
+    try {
+      incomeToEdit.setModificationDate(new Date());
+      Income editedIncome = repo.save(incomeToEdit);
+      stockSrv.editCommodityAccordingNewAnalysis(editedIncome);
+      return editedIncome;
+    } catch (Exception ex) {
+      LOGGER.error("Errror Saving Income: ", ex);
+      throw ex;
     }
-    Income editedIncome = repo.save(income); 
-    stockSrv.editCommodityAccordingNewAnalysis(editedIncome);
-    return editedIncome; 
   }
 
   /** Save new Income
    * 
    * @param incomeToAdd
    * @return Income saved
+   * @throws Exception 
    */
   @Transactional
-  public Income save(Income incomeToAdd) {
-    incomeToAdd.setId(null);
-    if (AnalysisValidation.isValidAnalysis(incomeToAdd.getAnalysis())) {
-      incomeToAdd.setAnalysis(analisysSrv.save(incomeToAdd.getAnalysis()));
-    } else {
-      incomeToAdd.setAnalysis(null);
+  public Income save(Income incomeToAdd) throws Exception {
+    try {
+      incomeToAdd.setId(null);
+      Income addedIncome = repo.save(incomeToAdd);
+      stockSrv.addNewIncome(addedIncome);
+      return addedIncome; 
+    } catch (Exception ex) {
+      LOGGER.error("Errror Saving Income: ", ex);
+      throw ex;
     }
-    Income addedIncome = repo.save(incomeToAdd);
-    stockSrv.addNewIncome(addedIncome);
-    return addedIncome; 
   }
-
+  
   /** List all incomes without filters
    * 
    * @return list of incomes
@@ -83,11 +88,20 @@ public class IncomeService {
    * @param id
    * @param analysis
    */
-  public void updateAnalysis(Long id, Analysis analysis) {
-    Income income = repo.getOne(id);
-    income.setAnalysis(analysis);
-    stockSrv.editCommodityAccordingNewAnalysis(income);
-    repo.saveAndFlush(income);
+  public void updateAnalysis(Long incomeId, Analysis analysis) throws Exception {
+    try {
+      Income income = repo.getOne(incomeId);
+      Commodity commodity = income.getCommodities().iterator().next();
+      commodity.setGramaje(analysis.getGramaje());
+      Set<Commodity> newCommodity = new HashSet<Commodity>();
+      newCommodity.add(commodity);
+      income.setCommodities(newCommodity);
+      income.setAnalysis(analysis);
+      edit(income);
+    } catch (Exception ex) {
+      LOGGER.error("Errror Updating Analysis: ", ex);
+      throw ex;
+    }
   }
 
   /** List of incomesDto
@@ -103,6 +117,7 @@ public class IncomeService {
    * 
    * @return List of incomes
    */
+  /*
   public List<BasicIncomeInfoDto> listNotProcessedIncomes() {
     List<BasicIncomeInfoDto> incomeDtoList = null;
     List<Income> incomeList = null;
@@ -116,13 +131,14 @@ public class IncomeService {
       throw error;
     }
     return incomeDtoList;
-  }
+  }*/
   
   /** List of incomes associated to specific process
    * 
    * @param processId
    * @return List of incomes
    */
+  /*
   public List<BasicIncomeInfoDto> getIncomesByProcessId(Long processId) {
     List<BasicIncomeInfoDto> incomeDtoList = null;
     List<Income> incomeList = null;
@@ -136,7 +152,7 @@ public class IncomeService {
       throw error;
     }
     return incomeDtoList;
-  }
+  }*/
 
   /** List Incomes using filters
    * 
@@ -180,17 +196,17 @@ public class IncomeService {
     noProcessedIncomeDto.setIngresoNro(item.getIncomeNo());
     noProcessedIncomeDto.setProcedencia(item.getOrigin().getName());
     noProcessedIncomeDto.setKilogramos(item.getGrossWeight() - item.getTruckWeight());
-    noProcessedIncomeDto.setGrano(item.getGrainType().getName());
     return noProcessedIncomeDto;
   }
   
   private IncomeDto getIncomeDtoFromIncomeEntity(Income item) {
    IncomeDto incomeDto = modelMapper.map(item, IncomeDto.class);
    if (AnalysisValidation.isValidAnalysis(item.getAnalysis())) {
-     incomeDto.setAnalysisId(modelMapper.map(item.getAnalysis(), Analysis.class));
+     incomeDto.setAnalysis(modelMapper.map(item.getAnalysis(), Analysis.class));
    } else {
-     incomeDto.setAnalysisId(new Analysis());
+     incomeDto.setAnalysis(new Analysis());
    }
+   incomeDto.setCommodity(modelMapper.map(item.getCommodities().iterator().next(), Commodity.class));
    return incomeDto;
   }
 

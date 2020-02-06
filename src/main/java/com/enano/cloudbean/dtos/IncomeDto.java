@@ -3,6 +3,7 @@ package com.enano.cloudbean.dtos;
 import java.util.Date;
 
 import com.enano.cloudbean.entities.Analysis;
+import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.GrainType;
 import com.enano.cloudbean.entities.PackagingType;
 
@@ -23,15 +24,11 @@ public class IncomeDto {
   private BaseCompanyDto receiver;
   private BaseCompanyDto transporter;
   private BaseLocationDto origin;
-  private GrainType grainType;
-  private Integer bagQuantity;
-  private PackagingType packagingType;
-  private String locationInPlant;
   private Date downloadDate;
   private Date modificationDate;
   private String obs;
   private String imgDir;
-  private String harvesting;
+  private Commodity commodity;
   
   public IncomeDto() {
   }
@@ -45,11 +42,10 @@ public class IncomeDto {
   
   public IncomeDto(Integer id, Analysis analysis, Integer incomeNo, String waybill,
       String depositCertificate, String ctg, Integer grossWeight, Integer truckWeight,
-      String driverName, String truckPatent, String trailerPatent, BaseCompanyDto waybillOwner, 
-      BaseCompanyDto commercialSender, BaseCompanyDto receiver, BaseCompanyDto transporter, 
-      BaseLocationDto origin, GrainType grainType, String grainTypeVariety, 
-      Integer bagQuantity, PackagingType packagingType, String locationInPlant, 
-      Date downloadDate, Date modificationDate, String obs, String imgDir, String harvesting) {
+      String driverName, String truckPatent, String trailerPatent, BaseCompanyDto waybillOwner,
+      BaseCompanyDto commercialSender, BaseCompanyDto receiver, BaseCompanyDto transporter,
+      BaseLocationDto origin, Date downloadDate, Date modificationDate, String obs, String imgDir,
+      Commodity commodity) {
     this.id = id;
     this.analysis = analysis;
     this.incomeNo = incomeNo;
@@ -66,15 +62,11 @@ public class IncomeDto {
     this.receiver = receiver;
     this.transporter = transporter;
     this.origin = origin;
-    this.grainType = grainType;
-    this.bagQuantity = bagQuantity;
-    this.packagingType = packagingType;
-    this.locationInPlant = locationInPlant;
     this.downloadDate = downloadDate;
     this.modificationDate = modificationDate;
     this.obs = obs;
     this.imgDir = imgDir;
-    this.harvesting = harvesting;
+    this.commodity = commodity;
   }
 
   public Integer getId() {
@@ -87,10 +79,6 @@ public class IncomeDto {
 
   public Analysis getAnalysis() {
     return analysis;
-  }
-
-  public void setAnalysisId(Analysis analysis) {
-    this.analysis = analysis;
   }
 
   public Integer getIncomeNo() {
@@ -205,38 +193,6 @@ public class IncomeDto {
     this.origin = origin;
   }
 
-  public GrainType getGrainType() {
-    return grainType;
-  }
-
-  public void setGrainType(GrainType grainType) {
-    this.grainType = grainType;
-  }
-
-  public Integer getBagQuantity() {
-    return bagQuantity;
-  }
-
-  public void setBagQuantity(Integer bagQuantity) {
-    this.bagQuantity = bagQuantity;
-  }
-
-  public PackagingType getPackagingType() {
-    return packagingType;
-  }
-
-  public void setPackagingType(PackagingType packagingType) {
-    this.packagingType = packagingType;
-  }
-
-  public String getLocationInPlant() {
-    return locationInPlant;
-  }
-
-  public void setLocationInPlant(String locationInPlant) {
-    this.locationInPlant = locationInPlant;
-  }
-
   public Date getDownloadDate() {
     return downloadDate;
   }
@@ -269,15 +225,15 @@ public class IncomeDto {
     this.imgDir = imgDir;
   }
 
-  public String getHarvesting() {
-    return harvesting;
-  }
-
-  public void setHarvesting(String harvesting) {
-    this.harvesting = harvesting;
-  }
-
   public void setAnalysis(Analysis analysis) {
     this.analysis = analysis;
+  }
+
+  public Commodity getCommodity() {
+    return commodity;
+  }
+
+  public void setCommodity(Commodity commodity) {
+    this.commodity = commodity;
   }
 }

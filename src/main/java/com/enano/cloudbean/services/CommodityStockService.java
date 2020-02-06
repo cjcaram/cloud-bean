@@ -19,7 +19,6 @@ import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.entities.GrainType;
 import com.enano.cloudbean.entities.Income;
-import com.enano.cloudbean.entities.IncomeProcess;
 import com.enano.cloudbean.entities.Outcome;
 import com.enano.cloudbean.repositories.CommodityStockRepository;
 import com.enano.cloudbean.utils.CommodityQuality;
@@ -38,41 +37,40 @@ public class CommodityStockService {
   @Autowired
   private IncomeService incomeService;
 
-  @Autowired
-  private QualityTypeService qualityTypeSrv;
-
   /** Adding stock when new incomes are saved
    * 
    * @param income
    */
-  public void addNewIncome(Income income) {
-    CommodityStock stock = new CommodityStock();
-    stock.setAmount(income.getGrossWeight() - income.getTruckWeight());
-    stock.setBagQuantity(Integer.valueOf(income.getBagQuantity()));
-    stock.setLocationInPlant(income.getLocationInPlant());
-    stock.setObs(income.getObs());
-    stock.setOwner(income.getWaybillOwner().getId());
-    stock.setPackagingType(income.getPackagingType());
-    stock.setGrainType(income.getGrainType());
-    stock.setQualityType(qualityTypeSrv.getQualityTypeByName(CommodityQuality.NATURAL.getType()));
-    stock.setIncomeId(income.getId());
-    stock.setHarvesting(income.getHarvesting());
-    if (AnalysisValidation.isValidAnalysis(income.getAnalysis())) {
-      stock.setGramaje(Math.round(income.getAnalysis().getGramaje()));
+  public void addNewIncome(Income income) throws Exception {
+    try {
+      CommodityStock stock = CommodityDto.From(income.getCommodities().iterator().next());
+      stock.setId(null);
+      stock.setIncomeId(income.getId());
+      commodityStockRepo.save(stock);
+    } catch (Exception ex) {
+      LOGGER.error("Error adding stock from new income.", ex);
+      throw ex;
     }
-    commodityStockRepo.save(stock);
   }
 
-  /** Edit gramaje in stock when user load analysis later
+  /** Edit Stock when income is modified
    * 
    * @param income
    */
-  public void editCommodityAccordingNewAnalysis(Income income) {
-    CommodityStock stock = commodityStockRepo.findByIncomeId(income.getId());
-    if (income.getAnalysis() != null) {
-      stock.setGramaje(Math.round(income.getAnalysis().getGramaje()));
+  public void editCommodityAccordingNewAnalysis(Income income) throws Exception {
+    try {
+      CommodityStock oldStock = commodityStockRepo.findByIncomeId(income.getId());
+      CommodityStock newStock = CommodityDto.From(income.getCommodities().iterator().next());
+      newStock.setId(oldStock.getId());
+      newStock.setIncomeId(oldStock.getIncomeId());
+      if (income.getAnalysis() != null) {
+        newStock.setGramaje(income.getAnalysis().getGramaje());
+      }
+      commodityStockRepo.save(newStock);
+    } catch (Exception ex) {
+      LOGGER.error("Error editing Stock when income is modified.", ex);
+      throw ex;
     }
-    commodityStockRepo.save(stock);
   }
 
   /** Calculate and save Stock when new Process is added to db
@@ -137,14 +135,14 @@ public class CommodityStockService {
    * @param processDto
    * @param removedIncomeProcess
    */
-  public void editProcess(ProcessDto processDto, List<IncomeProcess> removedIncomeProcess, List<Commodity> removedCommodities) {
+  public void editProcess(ProcessDto processDto, List<Commodity> removedCommodities) {
     removingNaturalStocks(processDto);
-    if (removedIncomeProcess != null && !removedIncomeProcess.isEmpty()) {
+    /*if (removedIncomeProcess != null && !removedIncomeProcess.isEmpty()) {
       removedIncomeProcess.forEach(item -> {
         Income income = incomeService.getIncomeById(item.getIncomeId());
         addNewIncome(income);
       });
-    }
+    }*/
     removeStocksByCommodities(removedCommodities);
     addingNewStocks(processDto);
   }
@@ -181,8 +179,6 @@ public class CommodityStockService {
           incomeService.getIncomeById(processDto.getNaturalCommodities().get(i).getId());
       if (income != null) {
         ownerId = (ownerId == null) ? getOwnerId(income) : ownerId;
-        harvesting = (harvesting == null) ? income.getHarvesting() : harvesting;
-        grainType = (grainType == null) ? income.getGrainType() : grainType;
       }
       if (ownerId != null && grainType != null) {
         break;

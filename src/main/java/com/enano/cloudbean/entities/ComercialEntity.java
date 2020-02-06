@@ -123,5 +123,72 @@ public class ComercialEntity {
         + location + ", phone=" + phone + ", mail=" + mail + ", obs=" + obs + ", responsibleType="
         + responsibleType + "]";
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((cuit == null) ? 0 : cuit.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((location == null) ? 0 : location.hashCode());
+    result = prime * result + ((mail == null) ? 0 : mail.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((obs == null) ? 0 : obs.hashCode());
+    result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+    result = prime * result + ((responsibleType == null) ? 0 : responsibleType.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ComercialEntity other = (ComercialEntity) obj;
+    if (cuit == null) {
+      if (other.cuit != null)
+        return false;
+    } else if (!cuit.equals(other.cuit))
+      return false;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (location == null) {
+      if (other.location != null)
+        return false;
+    } else if (!location.equals(other.location))
+      return false;
+    if (mail == null) {
+      if (other.mail != null)
+        return false;
+    } else if (!mail.equals(other.mail))
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
+    if (obs == null) {
+      if (other.obs != null)
+        return false;
+    } else if (!obs.equals(other.obs))
+      return false;
+    if (phone == null) {
+      if (other.phone != null)
+        return false;
+    } else if (!phone.equals(other.phone))
+      return false;
+    if (responsibleType == null) {
+      if (other.responsibleType != null)
+        return false;
+    } else if (!responsibleType.equals(other.responsibleType))
+      return false;
+    return true;
+  }
   
 }

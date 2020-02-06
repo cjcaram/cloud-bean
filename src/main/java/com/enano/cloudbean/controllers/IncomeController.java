@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.enano.cloudbean.dtos.IncomeDto;
 import com.enano.cloudbean.dtos.IncomeFiltersDto;
 import com.enano.cloudbean.entities.Income;
 import com.enano.cloudbean.services.IncomeService;
+import com.enano.cloudbean.validations.IncomeValidation;
 
 @RestController
 @RequestMapping("/income")
@@ -28,6 +30,7 @@ public class IncomeController extends BaseController {
     ResponseEntity<?> response = null;
     String methodName = "[Method]: AddOrModifyIncome - ";
     try {
+      checkIncome(income);
       if (ZUtils.isEdition(income.getId())) {
         LOGGER.info(methodName + ZUtils.EDITING_ENTITY_MSG);
         response = ResponseEntity.ok(incomeService.edit(income));
@@ -70,11 +73,19 @@ public class IncomeController extends BaseController {
     ResponseEntity<?> response = null;
     try {
       LOGGER.info("[Method]: getNotProcessedIncomes - " + ZUtils.FETCHING_ENTITIES_MSG);
-      response = ResponseEntity.ok(incomeService.listNotProcessedIncomes());
+      response = ResponseEntity.ok("working on it");
+      // response = ResponseEntity.ok(incomeService.listNotProcessedIncomes());
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
     }
     return response;
+  }
+  
+  private void checkIncome(Income income) throws Exception {
+    if (!IncomeValidation.isValidIncome(income)) {
+      LOGGER.debug(IncomeValidation.NO_MIN_REQUIRED_FIELD);
+      throw new Exception(IncomeValidation.NO_MIN_REQUIRED_FIELD);
+    }
   }
 
 }

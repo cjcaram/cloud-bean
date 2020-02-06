@@ -1,7 +1,10 @@
 package com.enano.cloudbean.entities;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,7 +26,7 @@ public class Income {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @OneToOne(fetch = FetchType.EAGER)
+  @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
   @JoinColumn(name="analisis_id", nullable = true)
   private Analysis analysis;
   @Column(name="numero_ingreso")
@@ -57,16 +62,6 @@ public class Income {
   @OneToOne
   @JoinColumn(name="procedencia", nullable = true)
   private Location origin;
-  @OneToOne
-  @JoinColumn(name = "grano_especie_id")
-  private GrainType grainType;
-  @Column(name="cantidad_bolsa")
-  private int bagQuantity;
-  @OneToOne
-  @JoinColumn(name = "tipo_bolsa")
-  private PackagingType packagingType;
-  @Column(name="ubicacion")
-  private String locationInPlant;
   @Column(name="fecha_descarga")
   private Date downloadDate;
   @JsonIgnore
@@ -76,18 +71,23 @@ public class Income {
   private String obs;
   @Column(name="img_dir")
   private String imgDir;
-  @Column(name="cosecha")
-  private String harvesting;
+  
+  @ManyToMany(cascade = { CascadeType.ALL })
+  @JoinTable(
+      name = "mercaderia_entrada", 
+      joinColumns = { @JoinColumn(name = "entrada_id") }, 
+      inverseJoinColumns = { @JoinColumn(name = "mercaderia_id") }
+  )
+  Set<Commodity> commodities = new HashSet<>();
   
   public Income() {
   }
   
   public Income(Long id, Analysis analysis, int incomeNo, String waybill, String depositCertificate,
       String ctg, int grossWeight, int truckWeight, String driverName, String truckPatent,
-      String trailerPatent, ComercialEntity waybillOwner, ComercialEntity commercialSender, ComercialEntity receiver,
-      ComercialEntity transporter, Location origin, GrainType grainType, int bagQuantity,
-      PackagingType packagingType, String locationInPlant, Date downloadDate, Date modificationDate,
-      String obs, String imgDir, String harvesting) {
+      String trailerPatent, ComercialEntity waybillOwner, ComercialEntity commercialSender,
+      ComercialEntity receiver, ComercialEntity transporter, Location origin, Date downloadDate,
+      Date modificationDate, String obs, String imgDir, Set<Commodity> commodities) {
     this.id = id;
     this.analysis = analysis;
     this.incomeNo = incomeNo;
@@ -96,7 +96,7 @@ public class Income {
     this.ctg = ctg;
     this.grossWeight = grossWeight;
     this.truckWeight = truckWeight;
-    this.driverName = driverName.toUpperCase();
+    this.driverName = driverName;
     this.truckPatent = truckPatent;
     this.trailerPatent = trailerPatent;
     this.waybillOwner = waybillOwner;
@@ -104,17 +104,13 @@ public class Income {
     this.receiver = receiver;
     this.transporter = transporter;
     this.origin = origin;
-    this.grainType = grainType;
-    this.bagQuantity = bagQuantity;
-    this.packagingType = packagingType;
-    this.locationInPlant = locationInPlant;
     this.downloadDate = downloadDate;
     this.modificationDate = modificationDate;
     this.obs = obs;
     this.imgDir = imgDir;
-    this.harvesting = harvesting;
+    this.commodities = commodities;
   }
-
+  
   public Long getId() {
     return (id != null && id > 0) ? id : null;
   }
@@ -184,7 +180,7 @@ public class Income {
   }
 
   public void setDriverName(String driverName) {
-    this.driverName = driverName.toUpperCase();
+    this.driverName = driverName;
   }
 
   public String getTruckPatent() {
@@ -239,40 +235,8 @@ public class Income {
     return origin;
   }
 
-  public void setOriginId(Location origin) {
+  public void setOrigin(Location origin) {
     this.origin = origin;
-  }
-
-  public GrainType getGrainType() {
-    return grainType;
-  }
-
-  public void setGrainType(GrainType grainType) {
-    this.grainType = grainType;
-  }
-
-  public int getBagQuantity() {
-    return bagQuantity;
-  }
-
-  public void setBagQuantity(int bagQuantity) {
-    this.bagQuantity = bagQuantity;
-  }
-
-  public PackagingType getPackagingType() {
-    return packagingType;
-  }
-
-  public void setPackagingType(PackagingType packagingType) {
-    this.packagingType = packagingType;
-  }
-
-  public String getLocationInPlant() {
-    return locationInPlant;
-  }
-
-  public void setLocationInPlant(String locationInPlant) {
-    this.locationInPlant = locationInPlant.toUpperCase();
   }
 
   public Date getDownloadDate() {
@@ -307,16 +271,12 @@ public class Income {
     this.imgDir = imgDir;
   }
 
-  public String getHarvesting() {
-    return harvesting;
+  public Set<Commodity> getCommodities() {
+    return commodities;
   }
 
-  public void setHarvesting(String harvesting) {
-    this.harvesting = harvesting;
-  }
-
-  public void setOrigin(Location origin) {
-    this.origin = origin;
+  public void setCommodities(Set<Commodity> commodities) {
+    this.commodities = commodities;
   }
 
   @Override
@@ -326,11 +286,138 @@ public class Income {
         + grossWeight + ", truckWeight=" + truckWeight + ", driverName=" + driverName
         + ", truckPatent=" + truckPatent + ", trailerPatent=" + trailerPatent + ", waybillOwner="
         + waybillOwner + ", commercialSender=" + commercialSender + ", receiver=" + receiver
-        + ", transporter=" + transporter + ", origin=" + origin + ", grainType=" + grainType
-        + ", bagQuantity=" + bagQuantity + ", packagingType=" + packagingType + ", locationInPlant="
-        + locationInPlant + ", downloadDate=" + downloadDate + ", modificationDate="
-        + modificationDate + ", obs=" + obs + ", imgDir=" + imgDir + ", harvesting=" + harvesting
-        + "]";
+        + ", transporter=" + transporter + ", origin=" + origin + ", downloadDate=" + downloadDate
+        + ", modificationDate=" + modificationDate + ", obs=" + obs + ", imgDir=" + imgDir + "]";
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((analysis == null) ? 0 : analysis.hashCode());
+    result = prime * result + ((commercialSender == null) ? 0 : commercialSender.hashCode());
+    result = prime * result + ((ctg == null) ? 0 : ctg.hashCode());
+    result = prime * result + ((depositCertificate == null) ? 0 : depositCertificate.hashCode());
+    result = prime * result + ((downloadDate == null) ? 0 : downloadDate.hashCode());
+    result = prime * result + ((driverName == null) ? 0 : driverName.hashCode());
+    result = prime * result + grossWeight;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((imgDir == null) ? 0 : imgDir.hashCode());
+    result = prime * result + incomeNo;
+    result = prime * result + ((modificationDate == null) ? 0 : modificationDate.hashCode());
+    result = prime * result + ((obs == null) ? 0 : obs.hashCode());
+    result = prime * result + ((origin == null) ? 0 : origin.hashCode());
+    result = prime * result + ((receiver == null) ? 0 : receiver.hashCode());
+    result = prime * result + ((trailerPatent == null) ? 0 : trailerPatent.hashCode());
+    result = prime * result + ((transporter == null) ? 0 : transporter.hashCode());
+    result = prime * result + ((truckPatent == null) ? 0 : truckPatent.hashCode());
+    result = prime * result + truckWeight;
+    result = prime * result + ((waybill == null) ? 0 : waybill.hashCode());
+    result = prime * result + ((waybillOwner == null) ? 0 : waybillOwner.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Income other = (Income) obj;
+    if (analysis == null) {
+      if (other.analysis != null)
+        return false;
+    } else if (!analysis.equals(other.analysis))
+      return false;
+    if (commercialSender == null) {
+      if (other.commercialSender != null)
+        return false;
+    } else if (!commercialSender.equals(other.commercialSender))
+      return false;
+    if (ctg == null) {
+      if (other.ctg != null)
+        return false;
+    } else if (!ctg.equals(other.ctg))
+      return false;
+    if (depositCertificate == null) {
+      if (other.depositCertificate != null)
+        return false;
+    } else if (!depositCertificate.equals(other.depositCertificate))
+      return false;
+    if (downloadDate == null) {
+      if (other.downloadDate != null)
+        return false;
+    } else if (!downloadDate.equals(other.downloadDate))
+      return false;
+    if (driverName == null) {
+      if (other.driverName != null)
+        return false;
+    } else if (!driverName.equals(other.driverName))
+      return false;
+    if (grossWeight != other.grossWeight)
+      return false;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (imgDir == null) {
+      if (other.imgDir != null)
+        return false;
+    } else if (!imgDir.equals(other.imgDir))
+      return false;
+    if (incomeNo != other.incomeNo)
+      return false;
+    if (modificationDate == null) {
+      if (other.modificationDate != null)
+        return false;
+    } else if (!modificationDate.equals(other.modificationDate))
+      return false;
+    if (obs == null) {
+      if (other.obs != null)
+        return false;
+    } else if (!obs.equals(other.obs))
+      return false;
+    if (origin == null) {
+      if (other.origin != null)
+        return false;
+    } else if (!origin.equals(other.origin))
+      return false;
+    if (receiver == null) {
+      if (other.receiver != null)
+        return false;
+    } else if (!receiver.equals(other.receiver))
+      return false;
+    if (trailerPatent == null) {
+      if (other.trailerPatent != null)
+        return false;
+    } else if (!trailerPatent.equals(other.trailerPatent))
+      return false;
+    if (transporter == null) {
+      if (other.transporter != null)
+        return false;
+    } else if (!transporter.equals(other.transporter))
+      return false;
+    if (truckPatent == null) {
+      if (other.truckPatent != null)
+        return false;
+    } else if (!truckPatent.equals(other.truckPatent))
+      return false;
+    if (truckWeight != other.truckWeight)
+      return false;
+    if (waybill == null) {
+      if (other.waybill != null)
+        return false;
+    } else if (!waybill.equals(other.waybill))
+      return false;
+    if (waybillOwner == null) {
+      if (other.waybillOwner != null)
+        return false;
+    } else if (!waybillOwner.equals(other.waybillOwner))
+      return false;
+    return true;
+  }
+  
 }

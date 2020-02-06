@@ -1,13 +1,19 @@
 package com.enano.cloudbean.entities;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table( name = "mercaderia")
@@ -31,15 +37,34 @@ public class Commodity {
   private Integer gramaje;
   @Column(name="obs")
   private String obs;
-  @Column(name="proceso_id")
-  private Long processId;
-
-  public Commodity() {
-  }
+  @OneToOne
+  @JoinColumn(name = "grano_especie_id")
+  private GrainType grainType;
+  @Column(name="cosecha")
+  private String harvesting;
+  @Column(name="propietario")
+  private Long owner;
   
+  
+  @ManyToMany(mappedBy = "commodities")
+  @JsonIgnore
+  private Set<Outcome> outcomes = new HashSet<>();
+  
+  @ManyToMany(mappedBy = "commodities")
+  @JsonIgnore
+  private Set<Income> incomes = new HashSet<>();
+  
+  @ManyToMany(mappedBy = "commoditiesToProcess")
+  @JsonIgnore
+  private Set<Process> commoditiesToProcess = new HashSet<>();
+  
+  @ManyToMany(mappedBy = "commoditiesProcessed")
+  @JsonIgnore
+  private Set<Process> commoditiesProcessed = new HashSet<>();
+
   public Commodity(Long id, QualityType qualityType, PackagingType packagingType,
       Integer bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-      Long processId) {
+      GrainType grainType, String harvesting, Long owner) {
     this.id = id;
     this.qualityType = qualityType;
     this.packagingType = packagingType;
@@ -48,15 +73,20 @@ public class Commodity {
     this.locationInPlant = locationInPlant;
     this.gramaje = gramaje;
     this.obs = obs;
-    this.processId = processId;
+    this.grainType = grainType;
+    this.harvesting = harvesting;
+    this.owner = owner;
   }
 
+  public Commodity() {
+  }
+  
   public Long getId() {
     return (id != null && id > 0) ? id : null;
   }
 
   public void setId(Long id) {
-    this.id = id;
+    this.id = (id != null && id < 0) ? null : id;
   }
 
   public QualityType getQualityType() {
@@ -115,12 +145,52 @@ public class Commodity {
     this.obs = obs;
   }
 
-  public Long getProcessId() {
-    return processId;
+  public GrainType getGrainType() {
+    return grainType;
   }
 
-  public void setProcessId(Long processId) {
-    this.processId = processId;
+  public void setGrainType(GrainType grainType) {
+    this.grainType = grainType;
+  }
+
+  public String getHarvesting() {
+    return harvesting;
+  }
+
+  public void setHarvesting(String harvesting) {
+    this.harvesting = harvesting;
+  }
+
+  public Long getOwner() {
+    return owner;
+  }
+
+  public void setOwner(Long owner) {
+    this.owner = owner;
+  }
+
+  public Set<Outcome> getOutcomes() {
+    return outcomes;
+  }
+
+  public void setOutcomes(Set<Outcome> outcomes) {
+    this.outcomes = outcomes;
+  }
+
+  public Set<Income> getIncomes() {
+    return incomes;
+  }
+
+  public void setIncomes(Set<Income> incomes) {
+    this.incomes = incomes;
+  }
+
+  @Override
+  public String toString() {
+    return "Commodity [id=" + id + ", qualityType=" + qualityType + ", packagingType="
+        + packagingType + ", bagQuantity=" + bagQuantity + ", amount=" + amount
+        + ", locationInPlant=" + locationInPlant + ", gramaje=" + gramaje + ", obs=" + obs
+        + ", grainType=" + grainType + ", harvesting=" + harvesting + ", owner=" + owner + "]";
   }
 
   @Override
@@ -129,12 +199,14 @@ public class Commodity {
     int result = 1;
     result = prime * result + ((amount == null) ? 0 : amount.hashCode());
     result = prime * result + ((bagQuantity == null) ? 0 : bagQuantity.hashCode());
+    result = prime * result + ((grainType == null) ? 0 : grainType.hashCode());
     result = prime * result + ((gramaje == null) ? 0 : gramaje.hashCode());
+    result = prime * result + ((harvesting == null) ? 0 : harvesting.hashCode());
     result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((locationInPlant == null) ? 0 : locationInPlant.hashCode());
     result = prime * result + ((obs == null) ? 0 : obs.hashCode());
+    result = prime * result + ((owner == null) ? 0 : owner.hashCode());
     result = prime * result + ((packagingType == null) ? 0 : packagingType.hashCode());
-    result = prime * result + ((processId == null) ? 0 : processId.hashCode());
     result = prime * result + ((qualityType == null) ? 0 : qualityType.hashCode());
     return result;
   }
@@ -158,10 +230,20 @@ public class Commodity {
         return false;
     } else if (!bagQuantity.equals(other.bagQuantity))
       return false;
+    if (grainType == null) {
+      if (other.grainType != null)
+        return false;
+    } else if (!grainType.equals(other.grainType))
+      return false;
     if (gramaje == null) {
       if (other.gramaje != null)
         return false;
     } else if (!gramaje.equals(other.gramaje))
+      return false;
+    if (harvesting == null) {
+      if (other.harvesting != null)
+        return false;
+    } else if (!harvesting.equals(other.harvesting))
       return false;
     if (id == null) {
       if (other.id != null)
@@ -178,15 +260,15 @@ public class Commodity {
         return false;
     } else if (!obs.equals(other.obs))
       return false;
+    if (owner == null) {
+      if (other.owner != null)
+        return false;
+    } else if (!owner.equals(other.owner))
+      return false;
     if (packagingType == null) {
       if (other.packagingType != null)
         return false;
     } else if (!packagingType.equals(other.packagingType))
-      return false;
-    if (processId == null) {
-      if (other.processId != null)
-        return false;
-    } else if (!processId.equals(other.processId))
       return false;
     if (qualityType == null) {
       if (other.qualityType != null)
@@ -194,13 +276,5 @@ public class Commodity {
     } else if (!qualityType.equals(other.qualityType))
       return false;
     return true;
-  }
-
-  @Override
-  public String toString() {
-    return "Commodity [id=" + id + ", qualityType=" + qualityType + ", packagingType="
-        + packagingType + ", bagQuantity=" + bagQuantity + ", amount=" + amount
-        + ", locationInPlant=" + locationInPlant + ", gramaje=" + gramaje + ", obs=" + obs
-        + ", processId=" + processId + "]";
   }
 }

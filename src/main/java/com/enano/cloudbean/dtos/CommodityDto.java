@@ -1,5 +1,8 @@
 package com.enano.cloudbean.dtos;
 
+import com.enano.cloudbean.entities.Commodity;
+import com.enano.cloudbean.entities.CommodityStock;
+import com.enano.cloudbean.entities.GrainType;
 import com.enano.cloudbean.entities.PackagingType;
 import com.enano.cloudbean.entities.QualityType;
 
@@ -12,7 +15,7 @@ public class CommodityDto {
   private String locationInPlant;
   private Integer gramaje;
   private String obs;
-  private Long processId;
+  private GrainType grainType;
   private Boolean editable = true;
 
   public CommodityDto() {
@@ -20,7 +23,7 @@ public class CommodityDto {
   
   public CommodityDto(Long id, QualityType qualityType, PackagingType packagingType,
       Integer bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-      Long processId, Boolean editable) {
+      Long processId, GrainType grainType, Boolean editable) {
     this.id = id;
     this.qualityType = qualityType;
     this.packagingType = packagingType;
@@ -29,11 +32,26 @@ public class CommodityDto {
     this.locationInPlant = locationInPlant;
     this.gramaje = gramaje;
     this.obs = obs;
-    this.processId = processId;
     if (editable == null) {
       this.editable = true;
     }
     this.editable = editable;
+  }
+  
+  public static CommodityStock From(Commodity commodity) {
+    CommodityStock stock = new CommodityStock();
+    stock.setOwner(commodity.getOwner());
+    stock.setAmount(commodity.getAmount());
+    stock.setBagQuantity(Integer.valueOf(commodity.getBagQuantity()));
+    stock.setLocationInPlant(commodity.getLocationInPlant());
+    stock.setObs(commodity.getObs());
+    stock.setPackagingType(commodity.getPackagingType());
+    stock.setQualityType(commodity.getQualityType());
+    stock.setGrainType(commodity.getGrainType());
+    stock.setGramaje(commodity.getGramaje());
+    stock.setHarvesting(commodity.getHarvesting());
+    stock.setCommodityId(commodity.getId());
+    return stock;
   }
 
   public Long getId() {
@@ -100,14 +118,6 @@ public class CommodityDto {
     this.obs = obs;
   }
 
-  public Long getProcessId() {
-    return processId;
-  }
-
-  public void setProcessId(Long processId) {
-    this.processId = processId;
-  }
-
   public Boolean isEditable() {
     if (editable == null) {
       this.editable = true;
@@ -134,7 +144,6 @@ public class CommodityDto {
     result = prime * result + ((locationInPlant == null) ? 0 : locationInPlant.hashCode());
     result = prime * result + ((obs == null) ? 0 : obs.hashCode());
     result = prime * result + ((packagingType == null) ? 0 : packagingType.hashCode());
-    result = prime * result + ((processId == null) ? 0 : processId.hashCode());
     result = prime * result + ((qualityType == null) ? 0 : qualityType.hashCode());
     return result;
   }
@@ -144,7 +153,7 @@ public class CommodityDto {
     return "Commodity [id=" + id + ", qualityType=" + qualityType + ", packagingType="
         + packagingType + ", bagQuantity=" + bagQuantity + ", amount=" + amount
         + ", locationInPlant=" + locationInPlant + ", gramaje=" + gramaje + ", obs=" + obs
-        + ", processId=" + processId + ", editable=" + editable + "]";
+        + ", editable=" + editable + "]";
   }
 
   @Override
@@ -193,17 +202,20 @@ public class CommodityDto {
         return false;
     } else if (!packagingType.equals(other.packagingType))
       return false;
-    if (processId == null) {
-      if (other.processId != null)
-        return false;
-    } else if (!processId.equals(other.processId))
-      return false;
     if (qualityType == null) {
       if (other.qualityType != null)
         return false;
     } else if (!qualityType.equals(other.qualityType))
       return false;
     return true;
+  }
+
+  public GrainType getGrainType() {
+    return grainType;
+  }
+
+  public void setGrainType(GrainType grainType) {
+    this.grainType = grainType;
   }
 
 }

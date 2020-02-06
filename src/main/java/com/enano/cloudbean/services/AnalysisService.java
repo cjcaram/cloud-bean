@@ -25,11 +25,11 @@ public class AnalysisService {
   
   public Analysis save(Analysis analysis) {
     analysis.setId(null);
+    analysis.setAnalysisDate(new Date());
     return repo.saveAndFlush(analysis);
   }
   
   public Analysis edit(Analysis analysis) {
-    analysis.setModificationDate(new Date());
     return repo.saveAndFlush(analysis);
   }
 }

@@ -51,7 +51,7 @@ public class ProcessController extends BaseController {
     try {
       List<CommodityDto> notEditableCommodities = validationProcessSrv.checkIfCommodityIsEditable(processDto);
       if (notEditableCommodities.isEmpty()) {
-        response = ResponseEntity.ok(processService.editProcess(processDto));
+        // response = ResponseEntity.ok(processService.editProcess(processDto));
       } else {
         response = new ResponseEntity<>(notEditableCommodities, HttpStatus.BAD_REQUEST);
       }

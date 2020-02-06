@@ -74,11 +74,11 @@ public class Outcome {
   
   @ManyToMany(cascade = { CascadeType.ALL })
   @JoinTable(
-      name = "mercaderia_stock_salida", 
+      name = "mercaderia_salida", 
       joinColumns = { @JoinColumn(name = "salida_id") }, 
-      inverseJoinColumns = { @JoinColumn(name = "mercaderia_stock_id") }
+      inverseJoinColumns = { @JoinColumn(name = "mercaderia_id") }
   )
-  Set<CommodityStock> commodityStocks = new HashSet<>();
+  Set<Commodity> commodities = new HashSet<>();
  
   public Outcome() {
   }
@@ -88,7 +88,7 @@ public class Outcome {
       ComercialEntity commercialSender, String deliveryRepresentative, ComercialEntity receiver,
       int bagQuantity, PackagingType packagingType, int grossWeight, int truckWeight, String obs,
       Location destiny, ComercialEntity carrier, String driverName, String truckPatent,
-      String trailerPatent, Integer distanceToTravel, HashSet<CommodityStock> commodityStocks) {
+      String trailerPatent, Integer distanceToTravel, HashSet<Commodity> commodities) {
     this.id = id;
     this.outcomeNumber = outcomeNumber;
     this.analysisId = analysisId;
@@ -111,7 +111,7 @@ public class Outcome {
     this.truckPatent = truckPatent;
     this.trailerPatent = trailerPatent;
     this.distanceToTravel = distanceToTravel;
-    this.commodityStocks = commodityStocks;
+    this.commodities = commodities;
   }
   
   public Long getId() {
@@ -290,11 +290,11 @@ public class Outcome {
     this.packagingType = packagingType;
   }
 
-  public Set<CommodityStock> getCommodityStocks() {
-    return commodityStocks;
+  public Set<Commodity> getCommodities() {
+    return commodities;
   }
 
-  public void setCommodityStocks(Set<CommodityStock> commodityStocks) {
-    this.commodityStocks = commodityStocks;
+  public void setCommodities(Set<Commodity> commodities) {
+    this.commodities = commodities;
   }
 }

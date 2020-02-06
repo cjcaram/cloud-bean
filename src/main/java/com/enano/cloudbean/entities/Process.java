@@ -1,12 +1,18 @@
 package com.enano.cloudbean.entities;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,6 +35,22 @@ public class Process {
     @Column(name="obs")
     private String obs;
     
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "mercaderia_proceso_in", 
+        joinColumns = { @JoinColumn(name = "proceso_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "mercaderia_id") }
+    )
+    Set<Commodity> commoditiesToProcess = new HashSet<>();
+    
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+        name = "mercaderia_proceso_out", 
+        joinColumns = { @JoinColumn(name = "proceso_id") }, 
+        inverseJoinColumns = { @JoinColumn(name = "mercaderia_id") }
+    )
+    Set<Commodity> commoditiesProcessed = new HashSet<>();
+    
     public Process(){
     }
     
@@ -40,6 +62,19 @@ public class Process {
       this.date = date;
       this.modificationDate = modificationDate;
       this.obs = obs;
+    }
+    
+    public Process(Long id, int processNumber, String referenceName, Date date,
+        Date modificationDate, String obs, Set<Commodity> commoditiesToProcess,
+        Set<Commodity> commoditiesProcessed) {
+      this.id = id;
+      this.processNumber = processNumber;
+      this.referenceName = referenceName;
+      this.date = date;
+      this.modificationDate = modificationDate;
+      this.obs = obs;
+      this.commoditiesToProcess = commoditiesToProcess;
+      this.commoditiesProcessed = commoditiesProcessed;
     }
 
     public Long getId() {
@@ -90,6 +125,22 @@ public class Process {
       this.obs = obs;
     }
 
+    public Set<Commodity> getCommoditiesToProcess() {
+      return commoditiesToProcess;
+    }
+
+    public void setCommoditiesToProcess(Set<Commodity> commoditiesToProcess) {
+      this.commoditiesToProcess = commoditiesToProcess;
+    }
+
+    public Set<Commodity> getCommoditiesProcessed() {
+      return commoditiesProcessed;
+    }
+
+    public void setCommoditiesProcessed(Set<Commodity> commoditiesProcessed) {
+      this.commoditiesProcessed = commoditiesProcessed;
+    }
+    
     @Override
     public String toString() {
       return "Process [id=" + id + ", processNumber=" + processNumber + ", referenceName="

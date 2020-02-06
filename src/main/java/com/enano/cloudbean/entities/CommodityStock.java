@@ -1,19 +1,13 @@
 package com.enano.cloudbean.entities;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table( name = "mercaderia_stock")
@@ -39,23 +33,20 @@ public class CommodityStock{
     private Integer gramaje;
     @Column(name="obs")
     private String obs;
-    @Column(name="proceso_id")
-    private Long processId;
     @OneToOne
     @JoinColumn(name = "grano_especie_id")
     private GrainType grainType;
     @Column(name="cosecha")
     private String harvesting;
+    @Column(name="proceso_id")
+    private Long processId;
     @Column(name="entrada_id")
     private Long incomeId;
     @Column(name="salida_id")
     private Long outcomeId;
     @Column(name="mercaderia_id")
     private Long commodityId;
-    
-    @ManyToMany(mappedBy = "commodityStocks")
-    @JsonIgnore
-    private Set<Outcome> outcomes = new HashSet<>();
+   
     
     public CommodityStock() {
     }
@@ -63,7 +54,7 @@ public class CommodityStock{
     public CommodityStock(Long id, Long owner, QualityType qualityType, PackagingType packagingType,
         Integer bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
         Long processId, GrainType grainType, String harvesting, Long incomeId, Long outcomeId,
-        Long commodityId, Set<Outcome> outcomes) {
+        Long commodityId) {
       this.id = id;
       this.owner = owner;
       this.qualityType = qualityType;
@@ -79,7 +70,6 @@ public class CommodityStock{
       this.incomeId = incomeId;
       this.outcomeId = outcomeId;
       this.commodityId = commodityId;
-      this.outcomes = outcomes;
     }
 
     public Long getId() {
@@ -211,12 +201,5 @@ public class CommodityStock{
           + harvesting + ", incomeId=" + incomeId + ", outcomeId=" + outcomeId + ", commodityId="
           + commodityId + "]";
     }
-
-    public Set<Outcome> getOutcomes() {
-      return outcomes;
-    }
-
-    public void setOutcomes(Set<Outcome> outcomes) {
-      this.outcomes = outcomes;
-    }
+   
 }

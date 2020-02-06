@@ -78,7 +78,7 @@ public class Analysis {
   @Column(name = "humedad")
   private Float humedad;
   @Column(name = "gramaje")
-  private Float gramaje;
+  private Integer gramaje;
   @Column(name = "hidratacion")
   private Float hidratacion;
   @Column(name = "fecha_realizacion")
@@ -94,7 +94,7 @@ public class Analysis {
       Float picadoCampo, Float contrastante, Float leveA, Float leveB, Float descorticado,
       Float cascado, Float arrugado, Float revolcado, Float manchadoMaquina, Float puntaChaucha,
       Float pinto, Float bolita, Float oxidado, Float quebrado, Float brotado, Float venoso,
-      Float decolorido, Float humedad, Float gramaje, Float hidratacion, Date analysisDate,
+      Float decolorido, Float humedad, Integer gramaje, Float hidratacion, Date analysisDate,
       Date modificationDate) {
     this.id = id;
     this.zaranda = zaranda;
@@ -136,7 +136,7 @@ public class Analysis {
   }
 
   public void setId(Long id) {
-    this.id = id;
+    this.id = (id != null && id < 0) ? null : id;
   }
 
   public Float getZaranda() {
@@ -363,11 +363,11 @@ public class Analysis {
     this.humedad = humedad;
   }
 
-  public Float getGramaje() {
-    return (gramaje != null) ? gramaje : 0F;
+  public Integer getGramaje() {
+    return (gramaje != null) ? gramaje : -1;
   }
 
-  public void setGramaje(Float gramaje) {
+  public void setGramaje(Integer gramaje) {
     this.gramaje = gramaje;
   }
 
@@ -391,13 +391,245 @@ public class Analysis {
     return modificationDate;
   }
 
-  public void setModificationDate(Date modificationDate) {
-    this.modificationDate = modificationDate;
+  public void setModificationDate() {
+    this.modificationDate = new Date();
   }
 
   public Float getCaida() {
     return (getIncomestible() + getTerron() + getCaidaZaranda() + getManchado() + getPartido()
         + getHelado() + getChuzo() + getRoido() + getPicadoCampo() + getContrastante()
         + getDescorticado() + getQuebrado() + getBrotado() + getRevolcado() + getLeveA());
+  }
+
+  @Override
+  public String toString() {
+    return "Analysis [id=" + id + ", zaranda=" + zaranda + ", caidaZaranda=" + caidaZaranda
+        + ", incomestible=" + incomestible + ", terron=" + terron + ", manchado=" + manchado
+        + ", partido=" + partido + ", helado=" + helado + ", chuzo=" + chuzo + ", tiempoCoccion="
+        + tiempoCoccion + ", roido=" + roido + ", picadoCampo=" + picadoCampo + ", contrastante="
+        + contrastante + ", leveA=" + leveA + ", leveB=" + leveB + ", descorticado=" + descorticado
+        + ", cascado=" + cascado + ", arrugado=" + arrugado + ", revolcado=" + revolcado
+        + ", manchadoMaquina=" + manchadoMaquina + ", puntaChaucha=" + puntaChaucha + ", pinto="
+        + pinto + ", bolita=" + bolita + ", oxidado=" + oxidado + ", quebrado=" + quebrado
+        + ", brotado=" + brotado + ", venoso=" + venoso + ", decolorido=" + decolorido
+        + ", humedad=" + humedad + ", gramaje=" + gramaje + ", hidratacion=" + hidratacion
+        + ", analysisDate=" + analysisDate + ", modificationDate=" + modificationDate + "]";
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((analysisDate == null) ? 0 : analysisDate.hashCode());
+    result = prime * result + ((arrugado == null) ? 0 : arrugado.hashCode());
+    result = prime * result + ((bolita == null) ? 0 : bolita.hashCode());
+    result = prime * result + ((brotado == null) ? 0 : brotado.hashCode());
+    result = prime * result + ((caidaZaranda == null) ? 0 : caidaZaranda.hashCode());
+    result = prime * result + ((cascado == null) ? 0 : cascado.hashCode());
+    result = prime * result + ((chuzo == null) ? 0 : chuzo.hashCode());
+    result = prime * result + ((contrastante == null) ? 0 : contrastante.hashCode());
+    result = prime * result + ((decolorido == null) ? 0 : decolorido.hashCode());
+    result = prime * result + ((descorticado == null) ? 0 : descorticado.hashCode());
+    result = prime * result + ((gramaje == null) ? 0 : gramaje.hashCode());
+    result = prime * result + ((helado == null) ? 0 : helado.hashCode());
+    result = prime * result + ((hidratacion == null) ? 0 : hidratacion.hashCode());
+    result = prime * result + ((humedad == null) ? 0 : humedad.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((incomestible == null) ? 0 : incomestible.hashCode());
+    result = prime * result + ((leveA == null) ? 0 : leveA.hashCode());
+    result = prime * result + ((leveB == null) ? 0 : leveB.hashCode());
+    result = prime * result + ((manchado == null) ? 0 : manchado.hashCode());
+    result = prime * result + ((manchadoMaquina == null) ? 0 : manchadoMaquina.hashCode());
+    result = prime * result + ((modificationDate == null) ? 0 : modificationDate.hashCode());
+    result = prime * result + ((oxidado == null) ? 0 : oxidado.hashCode());
+    result = prime * result + ((partido == null) ? 0 : partido.hashCode());
+    result = prime * result + ((picadoCampo == null) ? 0 : picadoCampo.hashCode());
+    result = prime * result + ((pinto == null) ? 0 : pinto.hashCode());
+    result = prime * result + ((puntaChaucha == null) ? 0 : puntaChaucha.hashCode());
+    result = prime * result + ((quebrado == null) ? 0 : quebrado.hashCode());
+    result = prime * result + ((revolcado == null) ? 0 : revolcado.hashCode());
+    result = prime * result + ((roido == null) ? 0 : roido.hashCode());
+    result = prime * result + ((terron == null) ? 0 : terron.hashCode());
+    result = prime * result + ((tiempoCoccion == null) ? 0 : tiempoCoccion.hashCode());
+    result = prime * result + ((venoso == null) ? 0 : venoso.hashCode());
+    result = prime * result + ((zaranda == null) ? 0 : zaranda.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Analysis other = (Analysis) obj;
+    if (analysisDate == null) {
+      if (other.analysisDate != null)
+        return false;
+    } else if (!analysisDate.equals(other.analysisDate))
+      return false;
+    if (arrugado == null) {
+      if (other.arrugado != null)
+        return false;
+    } else if (!arrugado.equals(other.arrugado))
+      return false;
+    if (bolita == null) {
+      if (other.bolita != null)
+        return false;
+    } else if (!bolita.equals(other.bolita))
+      return false;
+    if (brotado == null) {
+      if (other.brotado != null)
+        return false;
+    } else if (!brotado.equals(other.brotado))
+      return false;
+    if (caidaZaranda == null) {
+      if (other.caidaZaranda != null)
+        return false;
+    } else if (!caidaZaranda.equals(other.caidaZaranda))
+      return false;
+    if (cascado == null) {
+      if (other.cascado != null)
+        return false;
+    } else if (!cascado.equals(other.cascado))
+      return false;
+    if (chuzo == null) {
+      if (other.chuzo != null)
+        return false;
+    } else if (!chuzo.equals(other.chuzo))
+      return false;
+    if (contrastante == null) {
+      if (other.contrastante != null)
+        return false;
+    } else if (!contrastante.equals(other.contrastante))
+      return false;
+    if (decolorido == null) {
+      if (other.decolorido != null)
+        return false;
+    } else if (!decolorido.equals(other.decolorido))
+      return false;
+    if (descorticado == null) {
+      if (other.descorticado != null)
+        return false;
+    } else if (!descorticado.equals(other.descorticado))
+      return false;
+    if (gramaje == null) {
+      if (other.gramaje != null)
+        return false;
+    } else if (!gramaje.equals(other.gramaje))
+      return false;
+    if (helado == null) {
+      if (other.helado != null)
+        return false;
+    } else if (!helado.equals(other.helado))
+      return false;
+    if (hidratacion == null) {
+      if (other.hidratacion != null)
+        return false;
+    } else if (!hidratacion.equals(other.hidratacion))
+      return false;
+    if (humedad == null) {
+      if (other.humedad != null)
+        return false;
+    } else if (!humedad.equals(other.humedad))
+      return false;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (incomestible == null) {
+      if (other.incomestible != null)
+        return false;
+    } else if (!incomestible.equals(other.incomestible))
+      return false;
+    if (leveA == null) {
+      if (other.leveA != null)
+        return false;
+    } else if (!leveA.equals(other.leveA))
+      return false;
+    if (leveB == null) {
+      if (other.leveB != null)
+        return false;
+    } else if (!leveB.equals(other.leveB))
+      return false;
+    if (manchado == null) {
+      if (other.manchado != null)
+        return false;
+    } else if (!manchado.equals(other.manchado))
+      return false;
+    if (manchadoMaquina == null) {
+      if (other.manchadoMaquina != null)
+        return false;
+    } else if (!manchadoMaquina.equals(other.manchadoMaquina))
+      return false;
+    if (modificationDate == null) {
+      if (other.modificationDate != null)
+        return false;
+    } else if (!modificationDate.equals(other.modificationDate))
+      return false;
+    if (oxidado == null) {
+      if (other.oxidado != null)
+        return false;
+    } else if (!oxidado.equals(other.oxidado))
+      return false;
+    if (partido == null) {
+      if (other.partido != null)
+        return false;
+    } else if (!partido.equals(other.partido))
+      return false;
+    if (picadoCampo == null) {
+      if (other.picadoCampo != null)
+        return false;
+    } else if (!picadoCampo.equals(other.picadoCampo))
+      return false;
+    if (pinto == null) {
+      if (other.pinto != null)
+        return false;
+    } else if (!pinto.equals(other.pinto))
+      return false;
+    if (puntaChaucha == null) {
+      if (other.puntaChaucha != null)
+        return false;
+    } else if (!puntaChaucha.equals(other.puntaChaucha))
+      return false;
+    if (quebrado == null) {
+      if (other.quebrado != null)
+        return false;
+    } else if (!quebrado.equals(other.quebrado))
+      return false;
+    if (revolcado == null) {
+      if (other.revolcado != null)
+        return false;
+    } else if (!revolcado.equals(other.revolcado))
+      return false;
+    if (roido == null) {
+      if (other.roido != null)
+        return false;
+    } else if (!roido.equals(other.roido))
+      return false;
+    if (terron == null) {
+      if (other.terron != null)
+        return false;
+    } else if (!terron.equals(other.terron))
+      return false;
+    if (tiempoCoccion == null) {
+      if (other.tiempoCoccion != null)
+        return false;
+    } else if (!tiempoCoccion.equals(other.tiempoCoccion))
+      return false;
+    if (venoso == null) {
+      if (other.venoso != null)
+        return false;
+    } else if (!venoso.equals(other.venoso))
+      return false;
+    if (zaranda == null) {
+      if (other.zaranda != null)
+        return false;
+    } else if (!zaranda.equals(other.zaranda))
+      return false;
+    return true;
   }
 }

@@ -28,6 +28,7 @@ public class CommodityService {
   
   private ModelMapper modelMapper = new ModelMapper();
   
+  /*
   public List<CommodityDto> getCommoditiesByProcessId (Long processId) {
     List<Commodity> commodities = commodityRepo.findByProcessId(processId);
     List<CommodityDto> commoditiesDto = new ArrayList<>();
@@ -43,6 +44,7 @@ public class CommodityService {
     }
     return commoditiesDto;
   }
+  */
   
   public List<Commodity> saveAllCommodities(List<Commodity> commodityList) {
     List<Commodity> savedCommodities = null;
@@ -58,6 +60,7 @@ public class CommodityService {
     return savedCommodities;
   }
   
+  /*
   public List<Commodity> removeCommoditiesIfNoLongerExist(List<Commodity> commodityList, Long processId) {
     List<Commodity> previousCommodities = new ArrayList<>();
     try {
@@ -73,5 +76,6 @@ public class CommodityService {
     
     return previousCommodities;
   }
+  */
 
 }
