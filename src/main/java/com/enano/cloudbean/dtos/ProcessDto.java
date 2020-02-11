@@ -11,12 +11,12 @@ public class ProcessDto {
   private Date date;
   private String obs;
   private List<CommodityDto> processedCommodities;
-  private List<BasicIncomeInfoDto> naturalCommodities;
+  private List<CommodityDto> naturalCommodities;
 
   public ProcessDto () {}
 
   public ProcessDto(Long id, int processNumber, String referenceName, Date date, String obs,
-      List<CommodityDto> processedCommodities, List<BasicIncomeInfoDto> naturalCommodities) {
+      List<CommodityDto> processedCommodities, List<CommodityDto> naturalCommodities) {
     this.id = id;
     this.processNumber = processNumber;
     this.referenceName = referenceName;
@@ -74,11 +74,11 @@ public class ProcessDto {
     this.processedCommodities = processedCommodities;
   }
 
-  public List<BasicIncomeInfoDto> getNaturalCommodities() {
+  public List<CommodityDto> getNaturalCommodities() {
     return naturalCommodities;
   }
 
-  public void setNaturalCommodities(List<BasicIncomeInfoDto> naturalCommodities) {
+  public void setNaturalCommodities(List<CommodityDto> naturalCommodities) {
     this.naturalCommodities = naturalCommodities;
   }
 

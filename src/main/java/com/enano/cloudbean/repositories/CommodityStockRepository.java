@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import com.enano.cloudbean.entities.CommodityStock;
 
 @Repository
-public interface CommodityStockRepository extends JpaRepository<CommodityStock, Long>{
+public interface CommodityStockRepository extends JpaRepository<CommodityStock, Long>, CommodityStockRepositoryCustom{
   
   public CommodityStock findByIncomeId(Long incomeId);
   

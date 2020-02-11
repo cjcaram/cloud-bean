@@ -12,17 +12,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.enano.cloudbean.dtos.BasicIncomeInfoDto;
 import com.enano.cloudbean.dtos.CommodityDto;
 import com.enano.cloudbean.dtos.ProcessDto;
 import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.entities.GrainType;
 import com.enano.cloudbean.entities.Income;
-import com.enano.cloudbean.entities.Outcome;
 import com.enano.cloudbean.repositories.CommodityStockRepository;
-import com.enano.cloudbean.utils.CommodityQuality;
-import com.enano.cloudbean.validations.AnalysisValidation;
 
 @Service
 public class CommodityStockService {
@@ -202,7 +198,7 @@ public class CommodityStockService {
   
   private void removingNaturalStocks(ProcessDto processDto) {
     for (int i = 0; i < processDto.getNaturalCommodities().size(); i++) {
-      BasicIncomeInfoDto income = processDto.getNaturalCommodities().get(i);
+      CommodityDto income = processDto.getNaturalCommodities().get(i);
       CommodityStock currentStock = commodityStockRepo.findByIncomeId(income.getId());
       if (currentStock != null && currentStock.getId() > 0) {
         commodityStockRepo.delete(currentStock);

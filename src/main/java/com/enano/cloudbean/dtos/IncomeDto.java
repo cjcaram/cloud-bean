@@ -4,13 +4,10 @@ import java.util.Date;
 
 import com.enano.cloudbean.entities.Analysis;
 import com.enano.cloudbean.entities.Commodity;
-import com.enano.cloudbean.entities.GrainType;
-import com.enano.cloudbean.entities.PackagingType;
 
-public class IncomeDto {
-  private Integer id;
+public class IncomeDto extends BasicIncomeDto {
+  
   private Analysis analysis;
-  private Integer incomeNo;
   private String waybill;
   private String depositCertificate;
   private String ctg;
@@ -33,22 +30,20 @@ public class IncomeDto {
   public IncomeDto() {
   }
   
-  public IncomeDto(Integer id, Analysis analysis, Integer incomeNo, String waybill) {
-    this.id = id;
+  public IncomeDto(Long id, Analysis analysis, Integer incomeNo, String waybill) {
+    super(id, incomeNo);
     this.analysis = analysis;
-    this.incomeNo = incomeNo;
     this.waybill = waybill;
   }
   
-  public IncomeDto(Integer id, Analysis analysis, Integer incomeNo, String waybill,
+  public IncomeDto(Long id, Analysis analysis, String waybill, Integer incomeNo,
       String depositCertificate, String ctg, Integer grossWeight, Integer truckWeight,
       String driverName, String truckPatent, String trailerPatent, BaseCompanyDto waybillOwner,
       BaseCompanyDto commercialSender, BaseCompanyDto receiver, BaseCompanyDto transporter,
       BaseLocationDto origin, Date downloadDate, Date modificationDate, String obs, String imgDir,
       Commodity commodity) {
-    this.id = id;
+    super(id, incomeNo);
     this.analysis = analysis;
-    this.incomeNo = incomeNo;
     this.waybill = waybill;
     this.depositCertificate = depositCertificate;
     this.ctg = ctg;
@@ -69,24 +64,10 @@ public class IncomeDto {
     this.commodity = commodity;
   }
 
-  public Integer getId() {
-    return (id != null && id > 0) ? id : null;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
+  
+  
   public Analysis getAnalysis() {
     return analysis;
-  }
-
-  public Integer getIncomeNo() {
-    return incomeNo;
-  }
-
-  public void setIncomeNo(Integer incomeNo) {
-    this.incomeNo = incomeNo;
   }
 
   public String getWaybill() {

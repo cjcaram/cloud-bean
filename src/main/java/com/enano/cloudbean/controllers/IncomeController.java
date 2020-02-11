@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.enano.cloudbean.dtos.IncomeDto;
-import com.enano.cloudbean.dtos.IncomeFiltersDto;
+import com.enano.cloudbean.dtos.CommodityFilterDto;
 import com.enano.cloudbean.entities.Income;
 import com.enano.cloudbean.services.IncomeService;
 import com.enano.cloudbean.validations.IncomeValidation;
@@ -57,7 +56,7 @@ public class IncomeController extends BaseController {
   }
   
   @PostMapping(value = "/filter")
-  public ResponseEntity<?> getFilteredIncomes(@RequestBody IncomeFiltersDto filters) {
+  public ResponseEntity<?> getFilteredIncomes(@RequestBody CommodityFilterDto filters) {
     ResponseEntity<?> response = null;
     try {
       LOGGER.info("[Method]: getFilteredIncomes - " + ZUtils.FETCHING_ENTITIES_MSG);
@@ -68,13 +67,12 @@ public class IncomeController extends BaseController {
     return response;
   }
   
-  @GetMapping(value = "/not-processed-list")
-  public ResponseEntity<?> getNotProcessedIncomes() {
+  @GetMapping(value = "/income-number-list")
+  public ResponseEntity<?> getIncomeNumberList() {
     ResponseEntity<?> response = null;
     try {
-      LOGGER.info("[Method]: getNotProcessedIncomes - " + ZUtils.FETCHING_ENTITIES_MSG);
-      response = ResponseEntity.ok("working on it");
-      // response = ResponseEntity.ok(incomeService.listNotProcessedIncomes());
+      LOGGER.info("[Method]: getIncomeNumberList - " + ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(incomeService.listAllBasicIncomeDto());
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
     }

@@ -13,9 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.enano.cloudbean.dtos.BasicIncomeInfoDto;
+import com.enano.cloudbean.dtos.BasicIncomeDto;
+import com.enano.cloudbean.dtos.CommodityDto;
 import com.enano.cloudbean.dtos.IncomeDto;
-import com.enano.cloudbean.dtos.IncomeFiltersDto;
+import com.enano.cloudbean.dtos.CommodityFilterDto;
 import com.enano.cloudbean.entities.Analysis;
 import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.Income;
@@ -117,21 +118,20 @@ public class IncomeService {
    * 
    * @return List of incomes
    */
-  /*
-  public List<BasicIncomeInfoDto> listNotProcessedIncomes() {
-    List<BasicIncomeInfoDto> incomeDtoList = null;
+  public List<BasicIncomeDto> listAllBasicIncomeDto() {
+    List<BasicIncomeDto> basicIncomeDtoList = null;
     List<Income> incomeList = null;
     try {
-      incomeList = repo.listNotProcessedIncomes();
-      incomeDtoList = incomeList.stream()
-          .map(item -> getNoProcessedIncomeDtoFromIncomeEntity(item))
+      incomeList = repo.findAll();
+      basicIncomeDtoList = incomeList.stream()
+          .map(item -> new BasicIncomeDto(item.getId(), item.getIncomeNo()))
           .collect(Collectors.toList());
     } catch (Exception error) {
-      LOGGER.error("[Method: listNotProcessedIncomes] - "+ error);
+      LOGGER.error("[Method: listAllBasicIncomeDto] - "+ error);
       throw error;
     }
-    return incomeDtoList;
-  }*/
+    return basicIncomeDtoList;
+  }
   
   /** List of incomes associated to specific process
    * 
@@ -159,7 +159,7 @@ public class IncomeService {
    * @param filters
    * @return Filtered incomes
    */
-  public List<IncomeDto> listIncomesByFilter( IncomeFiltersDto filters) {
+  public List<IncomeDto> listIncomesByFilter(CommodityFilterDto filters) {
     List<Income> incomeList = repo.findIncomesUsingFilters(filters);
     return incomeListToIncomeDtoList(incomeList);
   }
@@ -178,25 +178,6 @@ public class IncomeService {
         .map(item -> getIncomeDtoFromIncomeEntity(item))
         .collect(Collectors.toList());
     return incomeDtoList;
-  }
-  
-  private BasicIncomeInfoDto getNoProcessedIncomeDtoFromIncomeEntity (Income item) {
-    BasicIncomeInfoDto noProcessedIncomeDto = new BasicIncomeInfoDto();
-    noProcessedIncomeDto.setId(item.getId());
-    noProcessedIncomeDto.setDestinatario(item.getCommercialSender().getName());
-    noProcessedIncomeDto.setCp(item.getWaybill());
-    if (AnalysisValidation.isValidAnalysis(item.getAnalysis())) {
-      noProcessedIncomeDto.setGramaje(item.getAnalysis().getGramaje().toString());
-      noProcessedIncomeDto.setCaida(item.getAnalysis().getCaida());
-    } else {
-      noProcessedIncomeDto.setGramaje("Analisis Pendiente");
-      noProcessedIncomeDto.setCaida(null);
-    }
-    noProcessedIncomeDto.setDownloadDate(item.getDownloadDate());
-    noProcessedIncomeDto.setIngresoNro(item.getIncomeNo());
-    noProcessedIncomeDto.setProcedencia(item.getOrigin().getName());
-    noProcessedIncomeDto.setKilogramos(item.getGrossWeight() - item.getTruckWeight());
-    return noProcessedIncomeDto;
   }
   
   private IncomeDto getIncomeDtoFromIncomeEntity(Income item) {

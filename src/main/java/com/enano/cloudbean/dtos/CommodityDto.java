@@ -17,13 +17,15 @@ public class CommodityDto {
   private String obs;
   private GrainType grainType;
   private Boolean editable = true;
+  private String harvesting;
+  private Long owner;
 
   public CommodityDto() {
   }
   
   public CommodityDto(Long id, QualityType qualityType, PackagingType packagingType,
       Integer bagQuantity, Integer amount, String locationInPlant, Integer gramaje, String obs,
-      Long processId, GrainType grainType, Boolean editable) {
+      Long processId, GrainType grainType, String harvesting, Boolean editable, Long owner) {
     this.id = id;
     this.qualityType = qualityType;
     this.packagingType = packagingType;
@@ -32,10 +34,9 @@ public class CommodityDto {
     this.locationInPlant = locationInPlant;
     this.gramaje = gramaje;
     this.obs = obs;
-    if (editable == null) {
-      this.editable = true;
-    }
-    this.editable = editable;
+    this.harvesting = harvesting;
+    this.owner = owner;
+    this.editable = (editable == null) ? true : editable;
   }
   
   public static CommodityStock From(Commodity commodity) {
@@ -132,90 +133,28 @@ public class CommodityDto {
     this.editable = editable;
   }
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((amount == null) ? 0 : amount.hashCode());
-    result = prime * result + ((bagQuantity == null) ? 0 : bagQuantity.hashCode());
-    result = prime * result + (editable ? 1231 : 1237);
-    result = prime * result + ((gramaje == null) ? 0 : gramaje.hashCode());
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    result = prime * result + ((locationInPlant == null) ? 0 : locationInPlant.hashCode());
-    result = prime * result + ((obs == null) ? 0 : obs.hashCode());
-    result = prime * result + ((packagingType == null) ? 0 : packagingType.hashCode());
-    result = prime * result + ((qualityType == null) ? 0 : qualityType.hashCode());
-    return result;
-  }
-
-  @Override
-  public String toString() {
-    return "Commodity [id=" + id + ", qualityType=" + qualityType + ", packagingType="
-        + packagingType + ", bagQuantity=" + bagQuantity + ", amount=" + amount
-        + ", locationInPlant=" + locationInPlant + ", gramaje=" + gramaje + ", obs=" + obs
-        + ", editable=" + editable + "]";
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    CommodityDto other = (CommodityDto) obj;
-    if (amount == null) {
-      if (other.amount != null)
-        return false;
-    } else if (!amount.equals(other.amount))
-      return false;
-    if (bagQuantity == null) {
-      if (other.bagQuantity != null)
-        return false;
-    } else if (!bagQuantity.equals(other.bagQuantity))
-      return false;
-    if (editable != other.editable)
-      return false;
-    if (gramaje == null) {
-      if (other.gramaje != null)
-        return false;
-    } else if (!gramaje.equals(other.gramaje))
-      return false;
-    if (id == null) {
-      if (other.id != null)
-        return false;
-    } else if (!id.equals(other.id))
-      return false;
-    if (locationInPlant == null) {
-      if (other.locationInPlant != null)
-        return false;
-    } else if (!locationInPlant.equals(other.locationInPlant))
-      return false;
-    if (obs == null) {
-      if (other.obs != null)
-        return false;
-    } else if (!obs.equals(other.obs))
-      return false;
-    if (packagingType == null) {
-      if (other.packagingType != null)
-        return false;
-    } else if (!packagingType.equals(other.packagingType))
-      return false;
-    if (qualityType == null) {
-      if (other.qualityType != null)
-        return false;
-    } else if (!qualityType.equals(other.qualityType))
-      return false;
-    return true;
-  }
-
   public GrainType getGrainType() {
     return grainType;
   }
 
   public void setGrainType(GrainType grainType) {
     this.grainType = grainType;
+  }
+
+  public String getHarvesting() {
+    return harvesting;
+  }
+
+  public void setHarvesting(String harvesting) {
+    this.harvesting = harvesting;
+  }
+
+  public Long getOwner() {
+    return owner;
+  }
+
+  public void setOwner(Long owner) {
+    this.owner = owner;
   }
 
 }
