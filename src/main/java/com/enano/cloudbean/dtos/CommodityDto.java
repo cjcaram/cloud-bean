@@ -54,13 +54,36 @@ public class CommodityDto {
     stock.setCommodityId(commodity.getId());
     return stock;
   }
-
+  
+  public static Commodity From(CommodityDto item) {
+    Commodity commodity = new Commodity();
+    commodity.setId(item.getId());
+    commodity.setAmount(item.getAmount());
+    commodity.setBagQuantity(item.getBagQuantity());
+    commodity.setGrainType(item.getGrainType());
+    commodity.setGramaje(item.getGramaje());
+    commodity.setHarvesting(item.getHarvesting());
+    commodity.setLocationInPlant(item.getLocationInPlant());
+    commodity.setOwner(item.getOwner());
+    commodity.setPackagingType(item.getPackagingType());
+    commodity.setQualityType(item.getQualityType());
+    commodity.setObs(item.getObs());
+    return commodity;
+  }
+  
+  public static Commodity From(CommodityDto commoditydto, GrainType grainType, String harvesting, Long owner) {
+    commoditydto.setGrainType(grainType);
+    commoditydto.setHarvesting(harvesting);
+    commoditydto.setOwner(owner);
+    return From(commoditydto);
+  }
+  
   public Long getId() {
     return (id != null && id > 0) ? id : null;
   }
 
   public void setId(Long id) {
-    this.id = id;
+    this.id = (id != null && id < 0) ? null : id;
   }
 
   public QualityType getQualityType() {

@@ -109,7 +109,7 @@ public class CommodityFilterDto {
   public Long[] getIncomeId() {
     return incomeId;
   }
-
+  
   public void setIncomeId(Long[] incomeId) {
     this.incomeId = incomeId;
   }

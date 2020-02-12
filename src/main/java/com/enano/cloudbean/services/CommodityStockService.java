@@ -1,11 +1,13 @@
 package com.enano.cloudbean.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,8 +18,8 @@ import com.enano.cloudbean.dtos.CommodityDto;
 import com.enano.cloudbean.dtos.ProcessDto;
 import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.CommodityStock;
-import com.enano.cloudbean.entities.GrainType;
 import com.enano.cloudbean.entities.Income;
+import com.enano.cloudbean.entities.Process;
 import com.enano.cloudbean.repositories.CommodityStockRepository;
 
 @Service
@@ -25,13 +27,8 @@ public class CommodityStockService {
   
   private Logger LOGGER = LogManager.getLogger(CommodityStockService.class);
 
-  private ModelMapper modelMapper = new ModelMapper();
-
   @Autowired
   private CommodityStockRepository commodityStockRepo;
-
-  @Autowired
-  private IncomeService incomeService;
 
   /** Adding stock when new incomes are saved
    * 
@@ -39,6 +36,7 @@ public class CommodityStockService {
    */
   public void addNewIncome(Income income) throws Exception {
     try {
+      LOGGER.info("[Method: addNewIncome] - adding stock from new income");
       CommodityStock stock = CommodityDto.From(income.getCommodities().iterator().next());
       stock.setId(null);
       stock.setIncomeId(income.getId());
@@ -55,6 +53,7 @@ public class CommodityStockService {
    */
   public void editCommodityAccordingNewAnalysis(Income income) throws Exception {
     try {
+      LOGGER.info("[Method: editCommodityAccordingNewAnalysis] - editing stock according new analysis");
       CommodityStock oldStock = commodityStockRepo.findByIncomeId(income.getId());
       CommodityStock newStock = CommodityDto.From(income.getCommodities().iterator().next());
       newStock.setId(oldStock.getId());
@@ -72,14 +71,16 @@ public class CommodityStockService {
   /** Calculate and save Stock when new Process is added to db
    * 
    * @param processId
-   * @param processDto
+   * @param process
    */
-  public void addNewProcess(ProcessDto processDto) {
+  public void addNewProcess(Process process) {
+    LOGGER.info("[Method: addNewProcess] - modifying stock from new process");
     try {
-      removingNaturalStocks(processDto);
-      addingNewStocks(processDto);
+      removeProcessedStock(process);
+      addProcessedStock(process);
     } catch (Exception e) {
       LOGGER.error("[addNewProcess] - Error updating stock.");
+      throw e;
     }
   }
   
@@ -132,7 +133,7 @@ public class CommodityStockService {
    * @param removedIncomeProcess
    */
   public void editProcess(ProcessDto processDto, List<Commodity> removedCommodities) {
-    removingNaturalStocks(processDto);
+    //removingNaturalStocks(processDto);
     /*if (removedIncomeProcess != null && !removedIncomeProcess.isEmpty()) {
       removedIncomeProcess.forEach(item -> {
         Income income = incomeService.getIncomeById(item.getIncomeId());
@@ -140,7 +141,7 @@ public class CommodityStockService {
       });
     }*/
     removeStocksByCommodities(removedCommodities);
-    addingNewStocks(processDto);
+    //addingNewStocks(processDto);
   }
   
   private void removeStocksByCommodities(List<Commodity> removedCommodities) {
@@ -156,54 +157,31 @@ public class CommodityStockService {
     }
   }
 
-  private Long getOwnerId(Income income) {
-    Long ownerId = null;
-    if (income.getCommercialSender() != null) {
-      ownerId = income.getCommercialSender().getId();
-    } else if (income.getWaybillOwner() != null) {
-      ownerId = income.getWaybillOwner().getId();
+  private void addProcessedStock(Process process) {
+    LOGGER.info("[Method: addProcessedStock] - adding stock from process");
+    Set<CommodityStock> newStocks = new HashSet<>();
+    Iterator<Commodity> commoditiesToAdd = process.getCommoditiesProcessed().iterator();
+    while (commoditiesToAdd.hasNext()) {
+      Commodity commodity = commoditiesToAdd.next();
+      CommodityStock stockItem = CommodityDto.From(commodity);
+      stockItem.setProcessId(process.getId());;
+      newStocks.add(stockItem);
     }
-    return ownerId;
+    commodityStockRepo.saveAll(newStocks);
   }
   
-  private void addingNewStocks(ProcessDto processDto) {
-    Long ownerId = null;
-    String harvesting = null;
-    GrainType grainType = null;
-    for (int i = 0; i < processDto.getNaturalCommodities().size(); i++) {
-      Income income =
-          incomeService.getIncomeById(processDto.getNaturalCommodities().get(i).getId());
-      if (income != null) {
-        ownerId = (ownerId == null) ? getOwnerId(income) : ownerId;
-      }
-      if (ownerId != null && grainType != null) {
-        break;
-      }
-    }
-
-    List<CommodityStock> commodityStockList = new ArrayList<>();
-    for (int i = 0; i < processDto.getProcessedCommodities().size(); i++) {
-      CommodityDto item = processDto.getProcessedCommodities().get(i);
-      CommodityStock stockItem = new CommodityStock();
-      stockItem = modelMapper.map(item, CommodityStock.class);
-      stockItem.setOwner(ownerId);
-      stockItem.setGrainType(grainType);
-      stockItem.setHarvesting(harvesting);
-      stockItem.setProcessId(processDto.getId());
-      stockItem.setCommodityId(item.getId());
-      commodityStockList.add(stockItem);
-    }
-    commodityStockRepo.saveAll(commodityStockList);
-  }
-  
-  private void removingNaturalStocks(ProcessDto processDto) {
-    for (int i = 0; i < processDto.getNaturalCommodities().size(); i++) {
-      CommodityDto income = processDto.getNaturalCommodities().get(i);
-      CommodityStock currentStock = commodityStockRepo.findByIncomeId(income.getId());
+  private void removeProcessedStock(Process process) {
+    LOGGER.info("[Method: removeProcessedStock] - remove stock (from income) taken by process");
+    Iterator<Commodity> commoditiesToRemove = process.getCommoditiesToProcess().iterator();
+    Set<CommodityStock> stocksToRemove = new HashSet<>();
+    while (commoditiesToRemove.hasNext()) {
+      Commodity commodity = commoditiesToRemove.next();
+      CommodityStock currentStock = commodityStockRepo.findByCommodityId(commodity.getId());
       if (currentStock != null && currentStock.getId() > 0) {
-        commodityStockRepo.delete(currentStock);
+        stocksToRemove.add(currentStock);
       }
     }
+    commodityStockRepo.deleteAll(stocksToRemove);
   }
   
 }

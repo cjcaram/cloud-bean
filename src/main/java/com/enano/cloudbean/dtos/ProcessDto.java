@@ -2,6 +2,11 @@ package com.enano.cloudbean.dtos;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.enano.cloudbean.entities.Commodity;
+import com.enano.cloudbean.entities.GrainType;
 
 public class ProcessDto {
   
@@ -77,9 +82,29 @@ public class ProcessDto {
   public List<CommodityDto> getNaturalCommodities() {
     return naturalCommodities;
   }
-
+  
   public void setNaturalCommodities(List<CommodityDto> naturalCommodities) {
     this.naturalCommodities = naturalCommodities;
+  }
+  
+  public Set<Commodity> getCommoditiesToProcess() {
+    Set<Commodity> commodities = this.naturalCommodities.stream()
+        .map(item -> CommodityDto.From(item))
+        .collect(Collectors.toSet());
+    return commodities;
+  }
+  
+  public Set<Commodity> getCommoditiesProcessed() {
+    CommodityDto auxValues = this.naturalCommodities.iterator().next();
+    
+    GrainType auxGrainType = auxValues.getGrainType();
+    String auxHarvesting = auxValues.getHarvesting();
+    Long auxOwner = auxValues.getOwner();
+    
+    Set<Commodity> commodities = this.processedCommodities.stream()
+        .map(item -> CommodityDto.From(item, auxGrainType, auxHarvesting, auxOwner))
+        .collect(Collectors.toSet());
+    return commodities;
   }
 
   @Override

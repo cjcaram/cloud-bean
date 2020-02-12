@@ -35,7 +35,7 @@ public class Process {
     @Column(name="obs")
     private String obs;
     
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(
         name = "mercaderia_proceso_in", 
         joinColumns = { @JoinColumn(name = "proceso_id") }, 

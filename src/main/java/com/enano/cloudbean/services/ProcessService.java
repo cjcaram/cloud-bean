@@ -63,29 +63,15 @@ public class ProcessService {
     processDto.setId(null);
     try {
       process = getProcessEntityFromDto(processDto);
+      process.setCommoditiesToProcess(processDto.getCommoditiesToProcess());
+      process.setCommoditiesProcessed(processDto.getCommoditiesProcessed());
       process = processRepo.save(process);
-      processDto.setId(process.getId());
-      List<Commodity> commodityList = getCommoditiesFromDto(processDto);
-      commodityList = commodityService.saveAllCommodities(commodityList);
-      processDto.setProcessedCommodities(getCommodityListDto(commodityList));
-      commodityStockService.addNewProcess(processDto);
-
+      commodityStockService.addNewProcess(process);
     } catch (Exception e) {
       LOGGER.error("Error Trying to save process: " + processDto.toString());
       throw e;
     }
     return process;
-  }
-
-  private List<Commodity> getCommoditiesFromDto(ProcessDto processDto) {
-    List<Commodity> commoditiesList = new ArrayList<>();
-    processDto.getProcessedCommodities().forEach(dto -> {
-      Commodity entity = new Commodity();
-      entity = modelMapper.map(dto, Commodity.class);
-      entity.setId(dto.getId());
-      commoditiesList.add(entity);
-    });
-    return commoditiesList;
   }
 
   private Process getProcessEntityFromDto(ProcessDto dto) {
@@ -94,15 +80,6 @@ public class ProcessService {
   }
 
 
-  private List<CommodityDto> getCommodityListDto(List<Commodity> commodityList) {
-    List <CommodityDto> commoditiesDto = new ArrayList<>(); 
-    for (Commodity item : commodityList) {
-      CommodityDto itemDto = modelMapper.map(item, CommodityDto.class);
-      commoditiesDto.add(itemDto);
-    }
-    return commoditiesDto;
-  }
-  
   public List<Process> getBasicProcessList() {
     return processRepo.findAll();
   }
