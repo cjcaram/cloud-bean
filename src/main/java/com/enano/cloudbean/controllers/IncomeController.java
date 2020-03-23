@@ -1,5 +1,7 @@
 package com.enano.cloudbean.controllers;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,18 @@ public class IncomeController extends BaseController {
     try {
       LOGGER.info("[Method]: getFilteredIncomes - " + ZUtils.FETCHING_ENTITIES_MSG);
       response = ResponseEntity.ok(incomeService.listIncomesByFilter(filters));
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+    }
+    return response;
+  }
+  
+  @PostMapping(value = "/find-by-commodity")
+  public ResponseEntity<?> getIncomesByCommoditiesAttached(@RequestBody List<Long> commodityIdList) {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info("[Method]: getIncomesByCommoditiesAttached - " + ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(incomeService.getIncomesByCommoditiesAttached(commodityIdList));
     }catch(Exception e) {
       response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
     }

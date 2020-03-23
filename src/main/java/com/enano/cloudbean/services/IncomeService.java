@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.enano.cloudbean.dtos.BasicIncomeDto;
-import com.enano.cloudbean.dtos.CommodityDto;
 import com.enano.cloudbean.dtos.IncomeDto;
 import com.enano.cloudbean.dtos.CommodityFilterDto;
 import com.enano.cloudbean.entities.Analysis;
@@ -33,9 +32,6 @@ public class IncomeService {
   
   @Autowired
   private CommodityStockService stockSrv;
-  
-  @Autowired
-  private AnalysisService analisysSrv;
   
   private ModelMapper modelMapper = new ModelMapper();
 
@@ -189,6 +185,11 @@ public class IncomeService {
    }
    incomeDto.setCommodity(modelMapper.map(item.getCommodities().iterator().next(), Commodity.class));
    return incomeDto;
+  }
+
+  public List<IncomeDto> getIncomesByCommoditiesAttached(List<Long> commodityIdList) {
+    List<Income> incomeList = repo.findByCommodityIds(commodityIdList);
+    return incomeListToIncomeDtoList(incomeList);
   }
 
   

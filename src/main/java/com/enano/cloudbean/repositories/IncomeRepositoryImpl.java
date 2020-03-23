@@ -23,13 +23,6 @@ public class IncomeRepositoryImpl {
   @SuppressWarnings("unchecked")
   public List<Income> findIncomesUsingFilters(CommodityFilterDto filters) {
     Query query = entityManager.createNativeQuery(buildQuery(filters), Income.class);
-    /*for (int i = 0; i < paramValues.size(); i++) {
-      //if (paramValues.get(i) instanceof Long[]) {
-      //  query.setParameter(position, value)
-      //} else {
-        query.setParameter(i+1, paramValues.get(i));
-      //}
-    }*/
     for (Map.Entry<String, Object> entry : paramValues.entrySet()) {
       String key = entry.getKey();
       Object value = entry.getValue();

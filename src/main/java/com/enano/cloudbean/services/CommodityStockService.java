@@ -1,10 +1,11 @@
 package com.enano.cloudbean.services;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.enano.cloudbean.dtos.CommodityDto;
-import com.enano.cloudbean.dtos.ProcessDto;
 import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.entities.Income;
@@ -97,11 +97,11 @@ public class CommodityStockService {
 //        outcome.getGrossWeight() - outcome.getTruckWeight());
 //  }
 
-  private CommodityStock withdrawCommodityStock(CommodityStock actualCommodityStock,
-      int withdrawAmt) {
-    actualCommodityStock.setAmount(actualCommodityStock.getAmount() - withdrawAmt);
-    return commodityStockRepo.save(actualCommodityStock);
-  }
+//  private CommodityStock withdrawCommodityStock(CommodityStock actualCommodityStock,
+//      int withdrawAmt) {
+//    actualCommodityStock.setAmount(actualCommodityStock.getAmount() - withdrawAmt);
+//    return commodityStockRepo.save(actualCommodityStock);
+//  }
 
   public Page<CommodityStock> listAll(Integer pageNumber, Integer processId) {
     Pageable page = null;
@@ -129,32 +129,20 @@ public class CommodityStockService {
 
   /** Change stock according process edition
    * 
-   * @param processDto
-   * @param removedIncomeProcess
+   * @param process
    */
-  public void editProcess(ProcessDto processDto, List<Commodity> removedCommodities) {
-    //removingNaturalStocks(processDto);
-    /*if (removedIncomeProcess != null && !removedIncomeProcess.isEmpty()) {
-      removedIncomeProcess.forEach(item -> {
-        Income income = incomeService.getIncomeById(item.getIncomeId());
-        addNewIncome(income);
-      });
-    }*/
-    removeStocksByCommodities(removedCommodities);
-    //addingNewStocks(processDto);
+  @Transactional
+  public void editProcess(Process process) {
+    removeProcessedStock(process);
+    removeOldStockNotModifiedByOutcome(process.getId());
+    
+    addProcessedStock(process);
   }
   
-  private void removeStocksByCommodities(List<Commodity> removedCommodities) {
-    if (removedCommodities != null && !removedCommodities.isEmpty()) {
-      List<CommodityStock> commodityStockToRemove = new ArrayList<>();
-      for (int i = 0; i < removedCommodities.size(); i++) {
-        CommodityStock stockItem = commodityStockRepo.findByCommodityId(removedCommodities.get(i).getId());
-        commodityStockToRemove.add(stockItem);
-      }
-      if (!commodityStockToRemove.isEmpty()) {
-        commodityStockRepo.deleteAll(commodityStockToRemove);
-      }
-    }
+  private void removeOldStockNotModifiedByOutcome(Long processId) {
+    List<CommodityStock> oldStock = commodityStockRepo.
+        findByProcessIdAndOutcomeIdIsNull(processId);
+    commodityStockRepo.deleteAll(oldStock);
   }
 
   private void addProcessedStock(Process process) {

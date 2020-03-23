@@ -184,7 +184,7 @@ public class Commodity {
   public void setIncomes(Set<Income> incomes) {
     this.incomes = incomes;
   }
-
+  
   @Override
   public String toString() {
     return "Commodity [id=" + id + ", qualityType=" + qualityType + ", packagingType="

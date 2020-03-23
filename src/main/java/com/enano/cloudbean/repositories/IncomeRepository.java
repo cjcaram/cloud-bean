@@ -8,11 +8,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.enano.cloudbean.dtos.IncomeDto;
 import com.enano.cloudbean.entities.Income;
 
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, Long>, IncomeRepositoryCustom {
+
+  @Query(value = "SELECT e.* FROM entrada e " + 
+                 " JOIN mercaderia_entrada me on e.id = me.entrada_id " + 
+                 " WHERE me.mercaderia_id IN :commodityIds", 
+      nativeQuery = true)
+  List<Income> findByCommodityIds(@Param(value = "commodityIds") List<Long> commodityIdList);
   
   
   /*  

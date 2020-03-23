@@ -34,54 +34,58 @@ public class ProcessController extends BaseController {
   
   @PostMapping(value = "/save")
   public ResponseEntity<?> AddProcess(@RequestBody ProcessDto processDto) {
+    final String METHOD_NAME = "[Method]: AddProcess - ";
     ResponseEntity<?> response = null;
-    LOGGER.info("[Method]: AddProcess - " + ZUtils.ADDING_ENTITY_MSG);
+    LOGGER.info(METHOD_NAME + ZUtils.ADDING_ENTITY_MSG);
     try {
       response = ResponseEntity.ok(processService.addProcess(processDto));
     } catch (Exception e) {
-      response = getErrorResponseAndLog(e, ZUtils.ADDING_ENTITY_MSG);
+      response = getErrorResponseAndLog(e, METHOD_NAME + ZUtils.ADDING_ENTITY_MSG);
     }
     return response;
   }
   
   @PutMapping(value = "/edit")
   public ResponseEntity<?> editProcess(@RequestBody ProcessDto processDto){
+    final String METHOD_NAME = "[Method]: editProcess - ";
     ResponseEntity<?> response = null;
-    LOGGER.info("[Method]: editProcess - " + ZUtils.EDITING_ENTITY_MSG);
+    LOGGER.info(METHOD_NAME + ZUtils.EDITING_ENTITY_MSG);
     try {
-      List<CommodityDto> notEditableCommodities = validationProcessSrv.checkIfCommodityIsEditable(processDto);
-      if (notEditableCommodities.isEmpty()) {
-        // response = ResponseEntity.ok(processService.editProcess(processDto));
+      List<CommodityDto> notEditableCommodities = validationProcessSrv.getListOfNoEditableCommodities(processDto);
+      if (!validationProcessSrv.isUpdatingNoEditableCommodity(processDto, notEditableCommodities)) {
+        response = ResponseEntity.ok(processService.editProcess(processDto));
       } else {
+        LOGGER.warn(METHOD_NAME + "Trying to modify NO editable Commodities");
         response = new ResponseEntity<>(notEditableCommodities, HttpStatus.BAD_REQUEST);
       }
     } catch (Exception e) {
-      response = getErrorResponseAndLog(e, ZUtils.EDITING_ENTITY_MSG);
+      response = getErrorResponseAndLog(e, METHOD_NAME + ZUtils.EDITING_ENTITY_MSG);
     }
     return response;
-    
   }
   
   @GetMapping(value = "/list")
   public ResponseEntity<?> getBasicProcessList() {
+    final String METHOD_NAME = "[Method]: getProcess - ";
     ResponseEntity<?> response = null;
-    LOGGER.info("[Method]: getProcess - " + ZUtils.FETCHING_ENTITIES_MSG);
+    LOGGER.info(METHOD_NAME + ZUtils.FETCHING_ENTITIES_MSG);
     try {
       response = ResponseEntity.ok(processService.getBasicProcessList());
     }catch(Exception e) {
-      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+      response = getErrorResponseAndLog(e, METHOD_NAME + ZUtils.ERROR_FETCHING_ENTITIES_MSG);
     }
     return response;
   }
   
   @GetMapping(value = "/{id}")
   public ResponseEntity<?> getProcessById(@PathVariable Long id) {
+    final String METHOD_NAME = "[Method]: getProcessById - ";
     ResponseEntity<?> response = null;
-    LOGGER.info("[Method]: getProcessById - " + ZUtils.FETCHING_ENTITY_MSG);
+    LOGGER.info(METHOD_NAME + ZUtils.FETCHING_ENTITY_MSG);
     try {
       response = ResponseEntity.ok(processService.getProcessById(id));
     }catch(Exception e) {
-      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITY_MSG);
+      response = getErrorResponseAndLog(e, METHOD_NAME + ZUtils.ERROR_FETCHING_ENTITY_MSG);
     }
     return response;
   }

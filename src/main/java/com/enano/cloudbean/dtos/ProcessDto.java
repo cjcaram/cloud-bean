@@ -1,7 +1,7 @@
 package com.enano.cloudbean.dtos;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,13 +15,13 @@ public class ProcessDto {
   private String referenceName;
   private Date date;
   private String obs;
-  private List<CommodityDto> processedCommodities;
-  private List<CommodityDto> naturalCommodities;
+  private Set<CommodityDto> processedCommodities;
+  private Set<CommodityDto> naturalCommodities;
 
   public ProcessDto () {}
 
   public ProcessDto(Long id, int processNumber, String referenceName, Date date, String obs,
-      List<CommodityDto> processedCommodities, List<CommodityDto> naturalCommodities) {
+      Set<CommodityDto> processedCommodities, Set<CommodityDto> naturalCommodities) {
     this.id = id;
     this.processNumber = processNumber;
     this.referenceName = referenceName;
@@ -30,7 +30,7 @@ public class ProcessDto {
     this.processedCommodities = processedCommodities;
     this.naturalCommodities = naturalCommodities;
   }
-
+  
   public Long getId() {
     return (id != null && id > 0) ? id : null;
   }
@@ -71,21 +71,23 @@ public class ProcessDto {
     this.obs = obs;
   }
 
-  public List<CommodityDto> getProcessedCommodities() {
+  public Set<CommodityDto> getProcessedCommodities() {
     return processedCommodities;
   }
 
-  public void setProcessedCommodities(List<CommodityDto> processedCommodities) {
+  public void setProcessedCommodities(Set<CommodityDto> processedCommodities) {
     this.processedCommodities = processedCommodities;
   }
-
-  public List<CommodityDto> getNaturalCommodities() {
+  
+  public Set<CommodityDto> getNaturalCommodities() {
     return naturalCommodities;
   }
   
-  public void setNaturalCommodities(List<CommodityDto> naturalCommodities) {
+  public void setNaturalCommodities(Set<CommodityDto> naturalCommodities) {
     this.naturalCommodities = naturalCommodities;
   }
+  
+  
   
   public Set<Commodity> getCommoditiesToProcess() {
     Set<Commodity> commodities = this.naturalCommodities.stream()
@@ -101,9 +103,11 @@ public class ProcessDto {
     String auxHarvesting = auxValues.getHarvesting();
     Long auxOwner = auxValues.getOwner();
     
-    Set<Commodity> commodities = this.processedCommodities.stream()
-        .map(item -> CommodityDto.From(item, auxGrainType, auxHarvesting, auxOwner))
-        .collect(Collectors.toSet());
+    Set<Commodity> commodities = new HashSet<>();
+    for(CommodityDto processedItem : processedCommodities) {
+      commodities.add(CommodityDto.From(processedItem, auxGrainType, auxHarvesting, auxOwner));
+    }
+    
     return commodities;
   }
 

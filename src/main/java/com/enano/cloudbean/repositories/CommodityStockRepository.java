@@ -21,4 +21,6 @@ public interface CommodityStockRepository extends JpaRepository<CommodityStock, 
   
   public List<CommodityStock> findByProcessIdAndOutcomeIdIsNotNull(Long processId);
   
+  public List<CommodityStock> findByProcessIdAndOutcomeIdIsNull(Long processId);
+  
 }

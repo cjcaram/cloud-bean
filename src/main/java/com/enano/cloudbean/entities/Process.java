@@ -16,9 +16,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="proceso")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Process {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

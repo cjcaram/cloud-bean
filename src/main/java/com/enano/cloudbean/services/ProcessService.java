@@ -1,8 +1,9 @@
 package com.enano.cloudbean.services;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -27,28 +28,31 @@ public class ProcessService {
   private ProcessRepository processRepo;
 
   @Autowired
-  private IncomeService incomeService;
-
-  @Autowired
-  private CommodityService commodityService;
-
-  @Autowired
   private CommodityStockService commodityStockService;
-
+  
   private ModelMapper modelMapper = new ModelMapper();
 
   /** Get all Process´s information by Id
    * 
    * @param id the process id
-   * @return Process Dto
+   * @return Process
    */
   public ProcessDto getProcessById(Long id) {
-    LOGGER.info("Fetching Process with ID: " + id);
+    LOGGER.info("Fetching Process by ID: " + id);
     ProcessDto processDto = new ProcessDto();
-    processDto = modelMapper.map(processRepo.getOne(id), ProcessDto.class);
-    // processDto.setNaturalCommodities(incomeService.getIncomesByProcessId(id));
-    //processDto.setProcessedCommodities(commodityService.getCommoditiesByProcessId(id));
+    Process process = processRepo.getOne(id);
+    processDto = modelMapper.map(process, ProcessDto.class);
+    processDto.setNaturalCommodities(CommodityToDto(process.getCommoditiesToProcess()));
+    processDto.setProcessedCommodities(CommodityToDto(process.getCommoditiesProcessed()));
     return processDto;
+  }
+  
+  private Set<CommodityDto> CommodityToDto(Set<Commodity> commodities) {
+    Set<CommodityDto> commoditiesDto = new HashSet<>();
+    for (Commodity commodity : commodities) {
+      commoditiesDto.add(modelMapper.map(commodity, CommodityDto.class));
+    }
+    return commoditiesDto;
   }
 
   /** Add a new Process to database
@@ -59,6 +63,7 @@ public class ProcessService {
   @Transactional
   public Process addProcess(ProcessDto processDto) {
     LOGGER.info("[Method: addProcess]");
+
     Process process = new Process();
     processDto.setId(null);
     try {
@@ -73,6 +78,32 @@ public class ProcessService {
     }
     return process;
   }
+  
+  /** Edit Process 
+   * 
+   * @param processDto
+   * @return Edited process entity
+   */
+  @Transactional
+  public Process editProcess(ProcessDto processDto) {
+    LOGGER.info("[Method: editProcess]");
+    Process processToEdit = processRepo.getOne(processDto.getId());
+    Process editedProcess = new Process();
+    try {
+      processToEdit.setModificationDate(new Date());
+      processToEdit.setObs(processDto.getObs());
+      processToEdit.setProcessNumber(processDto.getProcessNumber());
+      processToEdit.setReferenceName(processDto.getReferenceName());
+      processToEdit.setCommoditiesToProcess(processDto.getCommoditiesToProcess());
+      processToEdit.setCommoditiesProcessed(processDto.getCommoditiesProcessed());
+      editedProcess = processRepo.save(processToEdit);
+      commodityStockService.editProcess(editedProcess);
+    } catch (Exception e) {
+      LOGGER.error("Error Trying to edit process: " + processDto.toString());
+      throw e;
+    }
+    return editedProcess;
+  }
 
   private Process getProcessEntityFromDto(ProcessDto dto) {
     return new Process(dto.getId(), dto.getProcessNumber(), dto.getReferenceName(), dto.getDate(),
@@ -83,5 +114,5 @@ public class ProcessService {
   public List<Process> getBasicProcessList() {
     return processRepo.findAll();
   }
-
+  
 }
