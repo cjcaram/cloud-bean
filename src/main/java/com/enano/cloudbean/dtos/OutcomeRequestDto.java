@@ -1,10 +1,13 @@
 package com.enano.cloudbean.dtos;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.enano.cloudbean.entities.Analysis;
 import com.enano.cloudbean.entities.ComercialEntity;
+import com.enano.cloudbean.entities.Commodity;
+import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.entities.Location;
 import com.enano.cloudbean.entities.Outcome;
 import com.enano.cloudbean.entities.PackagingType;
@@ -13,7 +16,7 @@ public class OutcomeRequestDto {
   private Long id;
   private int outcomeNumber;
   private Analysis analysisId;
-  private List<Long> commodityStockIds;
+  private Set<CommodityStock> commodityStock;
   private String imgPath;
   private String waybill;
   private String ctg;
@@ -59,14 +62,25 @@ public class OutcomeRequestDto {
     outcome.setTruckWeight(requestDto.getTruckWeight());
     outcome.setWaybill(requestDto.getWaybill());
     outcome.setWaybillOwner(requestDto.getWaybillOwner());
+    outcome.setCommodities(getCommoditiesToWithdraw(requestDto.getCommodityStock(), (outcome.getId() != null)));
     
     return outcome; 
+  }
+  
+  public static Set<Commodity> getCommoditiesToWithdraw(Set<CommodityStock> stocks, boolean isEdition) {
+    Set<Commodity> commodities = stocks.stream()
+        .map(item -> {
+          if (!isEdition) item.setId(null);
+          return CommodityDto.From(item);
+        })
+        .collect(Collectors.toSet());
+    return commodities;
   }
  
   public OutcomeRequestDto() { }
   
   public OutcomeRequestDto(Long id, int outcomeNumber, Analysis analysisId,
-      List<Long> commodityStockIds, String imgPath, String waybill, String ctg, Date loadingDate,
+      Set<CommodityStock> commodityStock, String imgPath, String waybill, String ctg, Date loadingDate,
       ComercialEntity waybillOwner, ComercialEntity commercialSender, String deliveryRepresentative,
       ComercialEntity receiver, int bagQuantity, PackagingType packagingType, int grossWeight,
       int truckWeight, String obs, Location destiny, ComercialEntity carrier, String driverName,
@@ -74,7 +88,7 @@ public class OutcomeRequestDto {
     this.id = id;
     this.outcomeNumber = outcomeNumber;
     this.analysisId = analysisId;
-    this.commodityStockIds = commodityStockIds;
+    this.commodityStock = commodityStock;
     this.imgPath = imgPath;
     this.waybill = waybill;
     this.ctg = ctg;
@@ -97,7 +111,7 @@ public class OutcomeRequestDto {
   }
 
   public Long getId() {
-    return id;
+    return (id != null && id > 0) ? id : null;
   }
 
   public void setId(Long id) {
@@ -120,12 +134,12 @@ public class OutcomeRequestDto {
     this.analysisId = analysisId;
   }
 
-  public List<Long> getCommodityStockIds() {
-    return commodityStockIds;
+  public Set<CommodityStock> getCommodityStock() {
+    return commodityStock;
   }
 
-  public void setCommodityStockIds(List<Long> commodityStockIds) {
-    this.commodityStockIds = commodityStockIds;
+  public void setCommodityStock(Set<CommodityStock> commodityStock) {
+    this.commodityStock = commodityStock;
   }
 
   public String getImgPath() {

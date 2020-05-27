@@ -3,7 +3,9 @@ package com.enano.cloudbean.services;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -87,21 +89,55 @@ public class CommodityStockService {
   /** Removing stock when an outcome is produced  
    * 
    * @param outcome
-   * @return the commodityStock modified
+   * @throws Exception if commodity is not present in stock
    */
-//  public CommodityStock withdrawCommodityStock(Outcome outcome) {
-//    CommodityStock actualCommodityStock =
-//        commodityStockRepo.getOne(outcome.getCommodityStock().getId());
-//    actualCommodityStock.setOutcomeId(outcome.getId());
-//    return withdrawCommodityStock(actualCommodityStock,
-//        outcome.getGrossWeight() - outcome.getTruckWeight());
-//  }
+  public void withdrawCommodityStock(Long outcomeId, Set<CommodityStock> commodityStockToWithdraw) throws Exception {
+    LOGGER.info("[Method: withdrawCommodityStock] - Removing stock when an outcome is produced");
+    Set<Long> stocksIds = commodityStockToWithdraw.stream()
+        .map(CommodityStock::getId)
+        .collect(Collectors.toSet());
+    List<CommodityStock> actualCommodityStock =
+        commodityStockRepo.findAllById(stocksIds);
+    
+    CommodityStock stock = null;
+    try {
+      for (int i = 0; i < actualCommodityStock.size(); i++) {
+        stock = actualCommodityStock.get(i);
+        actualCommodityStock.get(i).setOutcomeId(outcomeId);
+        actualCommodityStock.set(i, withdrawBagQtyAndAmt(actualCommodityStock.get(i), commodityStockToWithdraw));
+      }
+    } catch (Exception e) {
+      LOGGER.debug(e.getMessage() + "stock id: " + stock.getId());
+      throw e;
+    }
+    removeCommodityStockIfAmountIsZero(actualCommodityStock);
+    actualCommodityStock.removeIf(x -> (x.getAmount() == null || x.getAmount() == 0));
+    commodityStockRepo.saveAll(actualCommodityStock);
+  }
 
-//  private CommodityStock withdrawCommodityStock(CommodityStock actualCommodityStock,
-//      int withdrawAmt) {
-//    actualCommodityStock.setAmount(actualCommodityStock.getAmount() - withdrawAmt);
-//    return commodityStockRepo.save(actualCommodityStock);
-//  }
+  private CommodityStock withdrawBagQtyAndAmt(CommodityStock stock, Set<CommodityStock> withdrawedCommodities) throws Exception {
+    Optional<CommodityStock> withdrawedCommodity = 
+        withdrawedCommodities.stream()
+          .filter(x -> x.getId() == stock.getId())
+          .findFirst();
+    
+    if (withdrawedCommodity.isPresent()) {
+      stock.setAmount(stock.getAmount() - withdrawedCommodity.get().getAmount());
+      stock.setBagQuantity(stock.getBagQuantity() - withdrawedCommodity.get().getBagQuantity());
+    } else {
+      throw new Exception("Una de las mercaderías que esta intentando retirar no esta presente en el stock."); 
+    }
+    return stock;
+  }
+
+  private void removeCommodityStockIfAmountIsZero(List<CommodityStock> actualCommodityStock) {
+    Set<CommodityStock> stocksToRemove = actualCommodityStock.stream()
+        .filter(x -> (x.getAmount() == null || x.getAmount() == 0))
+        .collect(Collectors.toSet());
+    if (stocksToRemove != null && stocksToRemove.size() > 0) {
+      commodityStockRepo.deleteInBatch(stocksToRemove);
+    }
+  }
 
   public Page<CommodityStock> listAll(Integer pageNumber, Integer processId) {
     Pageable page = null;

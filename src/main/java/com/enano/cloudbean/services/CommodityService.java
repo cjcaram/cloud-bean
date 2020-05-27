@@ -1,6 +1,5 @@
 package com.enano.cloudbean.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,9 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.enano.cloudbean.dtos.CommodityDto;
 import com.enano.cloudbean.entities.Commodity;
-import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.repositories.CommodityRepository;
 import com.enano.cloudbean.repositories.CommodityStockRepository;
 
