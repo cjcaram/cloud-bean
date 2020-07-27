@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.enano.cloudbean.dtos.CommodityDto;
+import com.enano.cloudbean.dtos.CommodityFilterDto;
 import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.entities.Income;
@@ -206,6 +207,10 @@ public class CommodityStockService {
       }
     }
     commodityStockRepo.deleteAll(stocksToRemove);
+  }
+  
+  public List<CommodityStock> findStockUsingFilters(CommodityFilterDto filters) {
+    return commodityStockRepo.findStockUsingFilters(filters);
   }
   
 }

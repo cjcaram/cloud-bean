@@ -35,7 +35,7 @@ public class CommodityFilterDto {
   }
 
   public Long getOriginId() {
-    return originId;
+    return (originId != null && originId > 0) ? originId : null;
   }
 
   public void setOriginId(Long originId) {
@@ -43,7 +43,7 @@ public class CommodityFilterDto {
   }
 
   public Long getOwnerId() {
-    return ownerId;
+    return (ownerId != null && ownerId > 0) ? ownerId : null;
   }
 
   public void setOwnerId(Long ownerId) {
@@ -51,7 +51,7 @@ public class CommodityFilterDto {
   }
 
   public String getNumCP() {
-    return numCP;
+    return (numCP != null && numCP.length() > 0) ? numCP : null;
   }
 
   public void setNumCP(String numCP) {
@@ -59,7 +59,7 @@ public class CommodityFilterDto {
   }
 
   public Long getGrainTypeId() {
-    return grainTypeId;
+    return (grainTypeId != null && grainTypeId > 0) ? grainTypeId : null;
   }
 
   public void setGrainTypeId(Long grainTypeId) {
@@ -67,7 +67,7 @@ public class CommodityFilterDto {
   }
 
   public Integer getGmgMin() {
-    return gmgMin;
+    return (gmgMin != null && gmgMin > 0) ? gmgMin : null;
   }
 
   public void setGmgMin(Integer gmgMin) {
@@ -75,7 +75,7 @@ public class CommodityFilterDto {
   }
 
   public Integer getGmgMax() {
-    return gmgMax;
+    return (gmgMax != null && gmgMax > 0) ? gmgMax : null;
   }
 
   public void setGmgMax(Integer gmgMax) {
@@ -83,7 +83,7 @@ public class CommodityFilterDto {
   }
 
   public String getHarvesting() {
-    return harvesting;
+    return (harvesting != null && harvesting.length() > 0) ? harvesting : null;
   }
 
   public void setHarvesting(String harvesting) {
@@ -91,7 +91,7 @@ public class CommodityFilterDto {
   }
 
   public Long getQualityTypeId() {
-    return qualityTypeId;
+    return (qualityTypeId != null && qualityTypeId > 0) ? qualityTypeId : null;
   }
 
   public void setQualityTypeId(Long qualityTypeId) {
@@ -99,7 +99,7 @@ public class CommodityFilterDto {
   }
 
   public String getLocationInPlant() {
-    return locationInPlant;
+    return (locationInPlant != null && locationInPlant.length() > 0) ? locationInPlant : null;
   }
 
   public void setLocationInPlant(String locationInPlant) {
@@ -107,7 +107,7 @@ public class CommodityFilterDto {
   }
 
   public Long[] getIncomeId() {
-    return incomeId;
+    return (incomeId != null && incomeId.length > 0) ? incomeId : null;
   }
   
   public void setIncomeId(Long[] incomeId) {
@@ -115,7 +115,7 @@ public class CommodityFilterDto {
   }
 
   public Long[] getOutcomeId() {
-    return outcomeId;
+    return (outcomeId != null && outcomeId.length > 0) ? outcomeId : null;
   }
 
   public void setOutcomeId(Long[] outcomeId) {
@@ -123,7 +123,7 @@ public class CommodityFilterDto {
   }
 
   public Long[] getProcessId() {
-    return processId;
+    return (processId != null && processId.length > 0) ? processId : null;
   }
 
   public void setProcessId(Long[] processId) {

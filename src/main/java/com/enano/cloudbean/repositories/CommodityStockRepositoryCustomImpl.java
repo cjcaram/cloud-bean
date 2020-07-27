@@ -10,8 +10,7 @@ import javax.persistence.Query;
 import com.enano.cloudbean.dtos.CommodityFilterDto;
 import com.enano.cloudbean.entities.CommodityStock;
 
-public class CommodityStockRepositoryImpl {
-
+public class CommodityStockRepositoryCustomImpl implements CommodityStockRepositoryCustom{
   
 List<Object> paramValues;
   
@@ -26,7 +25,6 @@ List<Object> paramValues;
     }
     return query.getResultList();
   }
-  
   
   private String buildQuery(CommodityFilterDto filters) {
     paramValues = new ArrayList<>();

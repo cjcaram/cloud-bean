@@ -1,6 +1,5 @@
 package com.enano.cloudbean.repositories;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,11 @@ public class IncomeRepositoryImpl {
   
   private String buildQuery(CommodityFilterDto filters) {
     paramValues = new HashMap<>();
-    String query = "SELECT e.* FROM entrada as e JOIN analisis a on e.analisis_id = a.id WHERE 1=1";
+    String query = "SELECT e.* FROM entrada as e "
+        + "JOIN analisis a on e.analisis_id = a.id "
+        + "JOIN mercaderia_entrada me on e.id = me.entrada_id  "
+        + "JOIN mercaderia m on m.id = me.mercaderia_id "
+        + "WHERE 1=1 ";
     if (filters.getGmgMin() != null) {
       query += " AND a.gramaje > :gramajeMin";
       paramValues.put("gramajeMin", filters.getGmgMin());
@@ -46,20 +49,20 @@ public class IncomeRepositoryImpl {
       paramValues.put("titularCP", filters.getOwnerId());
     }
     if ((filters.getNumCP() != null) && (filters.getNumCP().length() > 0)) {
-      query += " AND e.carta_de_porte LIKE CONCAT('%', :cpNum, '%')";
+      query += " AND e.carta_de_porte LIKE concat(concat('%', :cpNum), '%')";
       paramValues.put("cpNum", filters.getNumCP());
     }
     if (filters.getGrainTypeId() != null) {
-      query += " AND e.grano_especie_id = :grainType";
+      query += " AND m.grano_especie_id = :grainType";
       paramValues.put("grainType", filters.getGrainTypeId());
     }
     if (filters.getOriginId() != null) {
       query += " AND e.procedencia = :originId";
       paramValues.put("originId", filters.getOriginId());
     }
-    if (filters.getIncomeId().length > 0) {
-      query += " AND e.id IN :incomeIdList";
-      paramValues.put("incomeIdList", Arrays.asList(filters.getIncomeId()));
+    if (filters.getHarvesting() != null) {
+      query += " AND m.cosecha = :cosecha";
+      paramValues.put("cosecha", filters.getHarvesting());
     }
     query += " ORDER BY e.id desc";
     return query;
