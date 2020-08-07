@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -13,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.enano.cloudbean.dtos.BasicProcessDto;
 import com.enano.cloudbean.dtos.CommodityDto;
 import com.enano.cloudbean.dtos.ProcessDto;
 import com.enano.cloudbean.repositories.ProcessRepository;
@@ -113,6 +115,25 @@ public class ProcessService {
 
   public List<Process> getBasicProcessList() {
     return processRepo.findAll();
+  }
+  
+  /** List of process without associations with other entities
+   * 
+   * @return List of process
+   */
+  public List<BasicProcessDto> listAllBasicProcessDto() {
+    List<BasicProcessDto> basicProcessDtoList = null;
+    List<Process> processList = null;
+    try {
+      processList = processRepo.findAll();
+      basicProcessDtoList = processList.stream()
+          .map(item -> new BasicProcessDto(item.getId(), item.getProcessNumber(), item.getReferenceName()))
+          .collect(Collectors.toList());
+    } catch (Exception error) {
+      LOGGER.error("[Method: listAllBasicProcessDto] - "+ error);
+      throw error;
+    }
+    return basicProcessDtoList;
   }
   
 }

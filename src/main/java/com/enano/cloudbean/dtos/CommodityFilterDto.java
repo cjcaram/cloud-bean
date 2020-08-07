@@ -14,12 +14,18 @@ public class CommodityFilterDto {
   private Long[] outcomeId;
   private Long[] processId;
   private String locationInPlant;
+  private int incomeNo;
+  private int outcomeNo;
+  private int processNo;
+  private PaginationInfo paginationInfo;
+  
   
   public CommodityFilterDto () {}
   
-  public CommodityFilterDto(Long originId, Long ownerId, String numCP, 
-      Long grainTypeId, Integer gmgMin, Integer gmgMax, String harvesting, Long qualityTypeId,
-      Integer incomeNumber, Long[] incomeId, Long[] outcomeId, Long[] processId, String locationInPlant) {
+  public CommodityFilterDto(Long originId, Long ownerId, String numCP, Long grainTypeId,
+      Integer gmgMin, Integer gmgMax, String harvesting, Long qualityTypeId, Long[] incomeId,
+      Long[] outcomeId, Long[] processId, String locationInPlant, int incomeNo, int outcomeNo,
+      int processNo, PaginationInfo paginationInfo) {
     this.originId = originId;
     this.ownerId = ownerId;
     this.numCP = numCP;
@@ -32,6 +38,10 @@ public class CommodityFilterDto {
     this.outcomeId = outcomeId;
     this.processId = processId;
     this.locationInPlant = locationInPlant;
+    this.incomeNo = incomeNo;
+    this.outcomeNo = outcomeNo;
+    this.processNo = processNo;
+    this.paginationInfo = paginationInfo;
   }
 
   public Long getOriginId() {
@@ -130,6 +140,38 @@ public class CommodityFilterDto {
     this.processId = processId;
   }
 
+  public int getIncomeNo() {
+    return incomeNo;
+  }
+
+  public void setIncomeNo(int incomeNo) {
+    this.incomeNo = incomeNo;
+  }
+
+  public int getOutcomeNo() {
+    return outcomeNo;
+  }
+
+  public void setOutcomeNo(int outcomeNo) {
+    this.outcomeNo = outcomeNo;
+  }
+
+  public int getProcessNo() {
+    return processNo;
+  }
+
+  public void setProcessNo(int processNo) {
+    this.processNo = processNo;
+  }
+
+  public PaginationInfo getPaginationInfo() {
+    return paginationInfo;
+  }
+
+  public void setPaginationInfo(PaginationInfo paginationInfo) {
+    this.paginationInfo = paginationInfo;
+  }
+  
   public Object getIncomeIdAsString() {
     String result = "";
     for (int i = 0; i < this.incomeId.length; i++) {

@@ -1,5 +1,6 @@
 package com.enano.cloudbean.services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -13,12 +14,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.enano.cloudbean.dtos.CommodityDto;
 import com.enano.cloudbean.dtos.CommodityFilterDto;
+import com.enano.cloudbean.dtos.PaginationInfo;
 import com.enano.cloudbean.entities.Commodity;
 import com.enano.cloudbean.entities.CommodityStock;
 import com.enano.cloudbean.entities.Income;
@@ -209,8 +212,22 @@ public class CommodityStockService {
     commodityStockRepo.deleteAll(stocksToRemove);
   }
   
-  public List<CommodityStock> findStockUsingFilters(CommodityFilterDto filters) {
-    return commodityStockRepo.findStockUsingFilters(filters);
+  public Page<CommodityStock> findStockUsingFilters(CommodityFilterDto filters) {
+    
+    PaginationInfo page = filters.getPaginationInfo();
+    PageRequest pageRequest = PageRequest.of(page.getPage()-1, page.getRowsPerPage());
+    List<CommodityStock> stock = commodityStockRepo.findStockUsingFilters(filters);
+
+    int total = stock.size();
+    int start = new Long(pageRequest.getOffset()).intValue();
+    int end = Math.min((start + pageRequest.getPageSize()), total);
+
+    List<CommodityStock> output = new ArrayList<>();
+
+    if (start <= end) {
+        output = stock.subList(start, end);
+    }
+
+    return new PageImpl<>(output, pageRequest, total);
   }
-  
 }

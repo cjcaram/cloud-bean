@@ -89,5 +89,16 @@ public class ProcessController extends BaseController {
     }
     return response;
   }
-
+  
+  @GetMapping(value = "/process-number-list")
+  public ResponseEntity<?> getProcessNumberList() {
+    ResponseEntity<?> response = null;
+    try {
+      LOGGER.info("[Method]: getProcessNumberList - " + ZUtils.FETCHING_ENTITIES_MSG);
+      response = ResponseEntity.ok(processService.listAllBasicProcessDto());
+    }catch(Exception e) {
+      response = getErrorResponseAndLog(e, ZUtils.ERROR_FETCHING_ENTITIES_MSG);
+    }
+    return response;
+  }
 }

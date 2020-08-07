@@ -12,7 +12,7 @@ import com.enano.cloudbean.entities.CommodityStock;
 
 public class CommodityStockRepositoryCustomImpl implements CommodityStockRepositoryCustom{
   
-List<Object> paramValues;
+  List<Object> paramValues;
   
   @PersistenceContext
   EntityManager entityManager;
@@ -50,7 +50,7 @@ List<Object> paramValues;
       paramValues.add(filters.getQualityTypeId());
     }
     if (filters.getLocationInPlant() != null) {
-      query += " AND cs.locationInPlant = ?";
+      query += " AND cs.ubicacion = ?";
       paramValues.add(filters.getLocationInPlant());
     }
     if (filters.getHarvesting() != null) {
