@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -24,7 +23,7 @@ public class ComercialEntity {
   private String name;
   @Column(name="cuit")
   private String cuit;
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name = "ubicacion")
   private Location location;
   @Column(name="telefono")

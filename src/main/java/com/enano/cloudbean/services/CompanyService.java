@@ -49,6 +49,7 @@ public class CompanyService {
   }
 
   public ComercialEntity save(ComercialEntity company) {
+    company.setId(null);
     return repo.saveAndFlush(company);
   }
 
