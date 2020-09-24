@@ -1,6 +1,7 @@
 package com.enano.cloudbean.repositories;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -58,20 +59,37 @@ public class CommodityStockRepositoryCustomImpl implements CommodityStockReposit
       paramValues.add(filters.getHarvesting());
     }
     if (filters.getIncomeId() != null) {
-      query += " AND cs.entrada_id = ?";
-      paramValues.add(filters.getIncomeId());
+      List<Long> ids = Arrays.asList(filters.getIncomeId());
+      query += " AND cs.entrada_id IN " + getWhereClauseForList(ids.size());
+      setPramValueForList(ids);
     }
     if (filters.getProcessId() != null) {
-      query += " AND cs.proceso_id = ?";
-      paramValues.add(filters.getProcessId());
+      List<Long> ids = Arrays.asList(filters.getProcessId());
+      query += " AND cs.proceso_id IN " + getWhereClauseForList(ids.size());
+      setPramValueForList(ids);
     }
     if (filters.getOutcomeId() != null) {
-      query += " AND cs.salida_id = ?";
-      paramValues.add(filters.getOutcomeId());
+      List<Long> ids = Arrays.asList(filters.getOutcomeId());
+      query += " AND cs.salida_id IN " + getWhereClauseForList(ids.size());
+      setPramValueForList(ids);
     }
     
     query += " ORDER BY id desc";
     return query;
     
+  }
+
+  private void setPramValueForList(List<Long> ids) {
+    for(int i = 0; i < ids.size(); i++) {
+      paramValues.add(ids.get(i));
+    }
+  }
+
+  private String getWhereClauseForList(int size) {
+    String whereList = "(";
+    for(int i = 0; i < size - 1; i++) {
+      whereList += "?, ";
+    }
+    return whereList + "?) ";
   }
 }
